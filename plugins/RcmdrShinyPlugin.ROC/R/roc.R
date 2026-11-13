@@ -102,31 +102,36 @@ build_roc_ci_commands <- function(options, name = "roc.obj",
     threshold <- roc_threshold(options$ci_thresholds %||% "local maximas", custom)
     commands <- c(
       commands,
-      sprintf("%s <- ci(%s, of='thresholds', thresholds=%s%s)",
+      sprintf("%s <- pROC::ci(%s, of='thresholds', thresholds=%s%s)",
               ci_name, name, threshold, args),
-      sprintf("plot(%s, type='%s', col='%sAA')", ci_name,
-              options$ci_plot_type %||% "shape", options$color %||% "#1c61b6")
+      paste("plot.new()",
+            sprintf("plot(%s, type='%s', col='%sAA')", ci_name,
+                    options$ci_plot_type %||% "shape",
+                    options$color %||% "#1c61b6"),
+            sep = "\n")
     )
   } else {
     if (identical(ci_type, "auc")) {
       commands <- c(
         commands,
-        sprintf("%s <- ci(%s, of='auc'%s)", ci_name, name, args),
+        sprintf("%s <- pROC::ci(%s, of='auc'%s)", ci_name, name, args),
         ci_name
       )
     } else {
       key <- if (identical(ci_type, "sp")) "sensitivities" else "specificities"
       commands <- c(
         commands,
-        sprintf("%s <- ci(%s, of='%s', %s=%s%s)",
+        sprintf("%s <- pROC::ci(%s, of='%s', %s=%s%s)",
                 ci_name, name, ci_type, key, values, args)
       )
     }
     commands <- c(
       commands,
-      sprintf("plot(%s, type='%s', col='%sAA')", ci_name,
-              options$ci_plot_type %||% "shape",
-              options$color %||% "#1c61b6")
+      paste("plot.new()",
+            sprintf("plot(%s, type='%s', col='%sAA')", ci_name,
+                    options$ci_plot_type %||% "shape",
+                    options$color %||% "#1c61b6"),
+            sep = "\n")
     )
   }
   commands
@@ -144,7 +149,7 @@ build_roc_smoothing <- function(options, name = "roc.obj") {
                     options$distribution_cases %||% "normal",
                     options$distribution_controls %||% "normal")
   }
-  sprintf("lines(smooth(%s, method = '%s'%s), col='%s', lty='dotdash')",
+  sprintf("lines(pROC::smooth(%s, method = '%s'%s), col='%s', lty='dotdash')",
           name, method, args, options$color %||% "#1c61b6")
 }
 
@@ -159,10 +164,17 @@ roc_cleanup <- function(options, names) {
   cleanup
 }
 
+roc_plot_block <- function(parts) {
+  parts <- parts[nzchar(parts)]
+  if (length(parts) == 0L) return(character())
+  if (length(parts) == 1L) return(parts)
+  paste0("{
+", paste(parts, collapse = "\n"), "\n}")
+}
+
 build_roc_single_commands <- function(dataset, prediction, label,
                                       options = list()) {
-  commands <- c(
-    build_roc_call(dataset, prediction, label, options),
+  plot_parts <- c(
     if (isTRUE(options$plot)) {
       build_roc_plot(options = options,
                      threshold = options$print_thresholds %||% "no",
@@ -171,10 +183,14 @@ build_roc_single_commands <- function(dataset, prediction, label,
     } else {
       character()
     },
+    build_roc_smoothing(options)
+  )
+  commands <- c(
+    build_roc_call(dataset, prediction, label, options),
+    roc_plot_block(plot_parts),
     "roc.obj$levels[1] # The controls are:",
     "roc.obj$levels[2] # The cases are:",
     build_roc_ci_commands(options),
-    build_roc_smoothing(options),
     if (isTRUE(options$values)) roc_values_commands() else character(),
     "remove(roc.obj)"
   )
@@ -189,8 +205,22 @@ build_roc_comparison_commands <- function(dataset, prediction1, prediction2,
                                           paired = TRUE,
                                           options = list()) {
   if (is.null(label2) || !nzchar(label2)) label2 <- label1
+  method <- options$test_method %||% "auto"
+  method_arg <- if (identical(method, "auto")) "" else {
+    sprintf(", method='%s'", method)
+  }
   commands <- c(
     build_roc_call(dataset, prediction1, label1, options),
+    build_roc_call(dataset, prediction2, label2, options, name = "roc.obj2"),
+    sprintf(
+      "roc.test.obj <- pROC::roc.test(roc.obj, roc.obj2, paired=%s%s, alternative='%s', boot.n=%d)",
+      roc_logical(paired), method_arg,
+      options$test_alternative %||% "two.sided",
+      as.integer(roc_number(options$test_boot_n, 2000))
+    )
+  )
+
+  plot_parts <- c(
     if (isTRUE(options$plot)) {
       build_roc_plot(options = options, add = FALSE,
                      threshold = options$print_thresholds %||% "no",
@@ -199,9 +229,6 @@ build_roc_comparison_commands <- function(dataset, prediction1, prediction2,
     } else {
       character()
     },
-    "roc.obj$levels[1] # The controls are:",
-    "roc.obj$levels[2] # The cases are:",
-    build_roc_call(dataset, prediction2, label2, options, name = "roc.obj2"),
     if (isTRUE(options$plot)) {
       build_roc_plot(name = "roc.obj2", options = options, add = TRUE,
                      y_auc = 40, threshold_adj = "c(1,0.5)",
@@ -211,28 +238,17 @@ build_roc_comparison_commands <- function(dataset, prediction1, prediction2,
     } else {
       character()
     },
-    "roc.obj2$levels[1] # The controls are:",
-    "roc.obj2$levels[2] # The cases are:"
-  )
-
-  method <- options$test_method %||% "auto"
-  method_arg <- if (identical(method, "auto")) "" else {
-    sprintf(", method='%s'", method)
-  }
-  commands <- c(
-    commands,
-    sprintf(
-      "roc.test.obj <- roc.test(roc.obj, roc.obj2, paired=%s%s, alternative='%s', boot.n=%d)",
-      roc_logical(paired), method_arg,
-      options$test_alternative %||% "two.sided",
-      as.integer(roc_number(options$test_boot_n, 2000))
-    ),
     if (isTRUE(options$pvalue)) {
       "text(ifelse(roc.obj$percent, 50, .5), ifelse(roc.obj$percent, 50, .5), labels=paste('p-value = ', format.pval(roc.test.obj$p.value), sep=''), adj=c(0, .5))"
     } else {
       character()
     },
-    "roc.test.obj",
+    if (isTRUE(options$smooth)) {
+      c(build_roc_smoothing(options, "roc.obj"),
+        build_roc_smoothing(options, "roc.obj2"))
+    } else {
+      character()
+    },
     sprintf("legend('bottomright', legend=c('%s', '%s'), col=c('%s', '%s'), lwd=2, lty=c('%s', '%s'))",
             gsub("'", "\\\\'", roc_legend(options$legend1, label1, prediction1)),
             gsub("'", "\\\\'", roc_legend(options$legend2, label2, prediction2)),
@@ -240,6 +256,15 @@ build_roc_comparison_commands <- function(dataset, prediction1, prediction2,
             options$color2 %||% "#008600",
             options$lty %||% "solid",
             options$lty2 %||% "solid")
+  )
+  commands <- c(
+    commands,
+    roc_plot_block(plot_parts),
+    "roc.obj$levels[1] # The controls are:",
+    "roc.obj$levels[2] # The cases are:",
+    "roc.obj2$levels[1] # The controls are:",
+    "roc.obj2$levels[2] # The cases are:",
+    "roc.test.obj"
   )
 
   if (isTRUE(options$ci_compute) && isTRUE(options$ci_plot)) {
@@ -255,13 +280,6 @@ build_roc_comparison_commands <- function(dataset, prediction1, prediction2,
                               "c(0.5, 1, 10, 100)")
     )
   }
-  if (isTRUE(options$smooth)) {
-    commands <- c(
-      commands,
-      build_roc_smoothing(options, "roc.obj"),
-      build_roc_smoothing(options, "roc.obj2")
-    )
-  }
   if (isTRUE(options$values)) {
     commands <- c(commands, roc_values_commands("roc.obj"),
                   roc_values_commands("roc.obj2"))
@@ -274,16 +292,7 @@ build_roc_comparison_commands <- function(dataset, prediction1, prediction2,
 }
 
 build_roc_lr_commands <- function(model, dataset, options = list()) {
-  commands <- c(
-    sprintf("summary(%s)", model),
-    sprintf("glm.prediction <- predict(%s, type=c('response'))", model),
-    sprintf(".depname <- as.character((attr(%s$terms, 'variables')[2]))", model),
-    sprintf(".outcome <- ifelse(%s$.depname == levels(as.factor(%s$.depname))[2], 1, 0)",
-            dataset, dataset),
-    build_roc_call(dataset, "glm.prediction", ".outcome", options)
-  )
-  commands <- c(
-    commands,
+  plot_parts <- c(
     if (isTRUE(options$plot)) {
       build_roc_plot(options = options,
                      threshold = options$print_thresholds %||% "no",
@@ -292,10 +301,19 @@ build_roc_lr_commands <- function(model, dataset, options = list()) {
     } else {
       character()
     },
+    build_roc_smoothing(options)
+  )
+  commands <- c(
+    sprintf("summary(%s)", model),
+    sprintf("glm.prediction <- predict(%s, type=c('response'))", model),
+    sprintf(".depname <- as.character((attr(%s$terms, 'variables')[2]))", model),
+    sprintf(".outcome <- ifelse(%s[[.depname]] == levels(as.factor(%s[[.depname]]))[2], 1, 0)",
+            dataset, dataset),
+    build_roc_call(dataset, "glm.prediction", ".outcome", options),
+    roc_plot_block(plot_parts),
     "roc.obj$levels[1] # The controls are:",
     "roc.obj$levels[2] # The cases are:",
     build_roc_ci_commands(options),
-    build_roc_smoothing(options),
     if (isTRUE(options$values)) roc_values_commands() else character(),
     "remove(roc.obj)", "remove(glm.prediction)", "remove(.depname)",
     "remove(.outcome)"
@@ -312,7 +330,7 @@ build_hosmer_lemeshow_commands <- function(model, dataset, bins = 10L,
   bins <- as.integer(roc_number(bins, 10L))
   commands <- c(
     sprintf(".depname <- as.character((attr(%s$terms, 'variables')[2]))", model),
-    sprintf(".outcome <- ifelse(%s$.depname == levels(as.factor(%s$.depname))[2], 1, 0)",
+    sprintf(".outcome <- ifelse(%s[[.depname]] == levels(as.factor(%s[[.depname]]))[2], 1, 0)",
             dataset, dataset),
     sprintf(".matrix <- cbind(.outcome, fitted(%s))", model),
     ".matrix <- .matrix[complete.cases(.matrix),]",

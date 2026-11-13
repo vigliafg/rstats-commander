@@ -411,7 +411,11 @@ uca_predict_new_dialog <- function() {
       for (name in predictors) {
         value <- input[[ns(name)]]
         if (!is.null(frame) && name %in% names(frame)) {
-          if (!is.numeric(frame[[name]])) value <- as.character(value)
+          if (is.numeric(frame[[name]])) {
+            value <- suppressWarnings(as.numeric(value))
+          } else {
+            value <- as.character(value)
+          }
         }
         values[[name]] <- value
       }

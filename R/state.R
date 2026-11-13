@@ -22,6 +22,7 @@ AppState <- function(env = globalenv()) {
   state$log <- character()
   state$output <- character()
   state$output_stack <- list()
+  .output_stack$values <- list()
   state$messages <- character()
   state$warnings <- character()
   state$last_error <- NULL

@@ -111,3 +111,23 @@ test_that("a QC dialog returns a qcc command", {
   expect_match(result$commands, "qcc::qcc")
   expect_match(result$commands, 'type = "p"', fixed = TRUE)
 })
+
+test_that("the prediction dialog converts numeric inputs", {
+  RcmdrShiny::unload_plugins()
+  on.exit(RcmdrShiny::unload_plugins(), add = TRUE)
+  rcmdrshiny_plugin()
+  state <- RcmdrShiny::AppState(env = new.env())
+  data <- mtcars
+  data$am <- factor(data$am)
+  assign("data", data, envir = state$env)
+  RcmdrShiny::active_dataset(state, "data")
+  RcmdrShiny::run_command(
+    state, "model1 <- glm(am ~ mpg + hp, data=data, family=binomial)"
+  )
+  RcmdrShiny::active_model(state, "model1")
+  spec <- RcmdrShiny::get_dialog("input2predict")
+  result <- spec$on_ok(list(input2predict_mpg = "20", input2predict_hp = "100"),
+                       state)
+  expect_equal(result$commands,
+               "predict(model1, newdata=data.frame(mpg = 20, hp = 100))")
+})
