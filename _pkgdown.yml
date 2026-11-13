@@ -28,6 +28,8 @@ reference:
       - plugin-helpers
       - plugin-widgets
       - menus
+      - get_dialog
+      - popOutput
 
 articles:
   - title: User guide

@@ -21,6 +21,7 @@ AppState <- function(env = globalenv()) {
 
   state$log <- character()
   state$output <- character()
+  state$output_stack <- list()
   state$messages <- character()
   state$warnings <- character()
   state$last_error <- NULL
@@ -46,6 +47,7 @@ AppState <- function(env = globalenv()) {
     edit_threshold = 10000L,
     max_output_lines = 20000L,
     max_plots = 50L,
+    output_stack_length = 10L,
     dt_server_threshold = 5000L,
     use_markdown = FALSE,
     use_knitr = FALSE,

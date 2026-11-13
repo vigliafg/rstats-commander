@@ -1,3 +1,41 @@
+# Last printed objects -------------------------------------------------------
+#
+# Rcmdr keeps a stack of printed objects so that plugins (notably Export) can
+# retrieve the object behind the last output.  The stack is mirrored in the
+# application state and in a package-level environment used by popOutput(),
+# which generated commands call at run time.
+
+.output_stack <- new.env(parent = emptyenv())
+.output_stack$values <- list()
+
+#' Retrieve the last printed object
+#'
+#' Mirrors Rcmdr's `popOutput()`: returns the most recent object printed by
+#' [run_command()] and optionally removes it from the stack.
+#'
+#' @param keep Keep the object in the stack.
+#' @return The last printed object, or `NA` when the stack is empty.
+#' @export
+popOutput <- function(keep = FALSE) {
+  stack <- .output_stack$values
+  if (length(stack) == 0L) return(NA)
+  value <- stack[[1L]]
+  if (!isTRUE(keep)) {
+    .output_stack$values <- c(stack[-1L], list(NA))
+  }
+  value
+}
+
+#' @keywords internal
+push_output <- function(state, value) {
+  if (is.null(value)) return(invisible(NULL))
+  limit <- state$options$output_stack_length %||% 10L
+  stack <- c(list(value), state$output_stack %||% list())
+  state$output_stack <- utils::head(stack, limit)
+  .output_stack$values <- state$output_stack
+  invisible(NULL)
+}
+
 # Command runner ------------------------------------------------------------
 #
 # This is the Shiny counterpart of Rcmdr's doItAndPrint()/justDoIt(): the
@@ -108,6 +146,7 @@ eval_code <- function(state, code, echo = TRUE) {
       value <- local_value$value
       visible <- local_visible
       remember_assignment(state, expr, value, visible)
+      if (isTRUE(visible)) push_output(state, value)
     }
   }
 
@@ -236,11 +275,23 @@ required_packages <- function(code) {
   if (grepl("sem::", code, fixed = TRUE)) {
     packages <- c(packages, "sem")
   }
+  if (grepl("\\bxtable\\s*\\(", code)) {
+    packages <- c(packages, "xtable")
+  }
+  if (grepl("\\b(latex|latex\\.list|format\\.df|latexTranslate)\\s*\\(", code)) {
+    packages <- c(packages, "Hmisc")
+  }
+  if (grepl("\\b(findFn|grepFn|writeFindFn2xls)\\s*\\(", code)) {
+    packages <- c(packages, "sos")
+  }
+  if (grepl("\\bPcaHubert\\s*\\(", code)) {
+    packages <- c(packages, "rrcov")
+  }
+  if (grepl("\\bhoslem\\.test\\s*\\(", code)) {
+    packages <- c(packages, "ResourceSelection")
+  }
   if (grepl("\\b(glht|cld)\\s*\\(", code)) {
     packages <- c(packages, "multcomp")
-  }
-  if (grepl("\\bsigma\\.test\\s*\\(", code)) {
-    packages <- c(packages, "TeachingDemos")
   }
   if (grepl("\\b(indexplot|Hist|Dotplot|Barplot|piechart|lineplot|plotMeans|discretePlot|stepwise|plotBoot|DeltaMethod)\\s*\\(",
             code)) {
@@ -271,7 +322,7 @@ plot_call_pattern <- paste0(
   "stripchart|stem|stem\\.leaf|scatterplot|scatterplotMatrix|plotMeans|plotmeans|indexplot|lineplot|",
   "xyplot|bwplot|densityplot|histogram|qqplot|qplot|ggplot|discretePlot|symbox|",
   "scatter3d|rgl\\.(points|lines|planes|spheres|surface3d)|monitor|",
-  "plotModel|crPlots|avPlots|influencePlot",
+  "plotModel|crPlots|avPlots|influencePlot|screeplot|biplot|qcc|paretochart",
   ")[[:space:]]*\\("
 )
 

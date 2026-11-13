@@ -30,11 +30,11 @@ RcmdrShiny::run(plugins = c(
 
 | Plugin | Wave | Status |
 |---|---|---|
-| RcmdrShinyPlugin.Export | 1 | planned |
-| RcmdrShinyPlugin.sos | 1 | planned |
-| RcmdrShinyPlugin.PcaRobust | 1 | planned |
-| RcmdrShinyPlugin.ROC | 1 | planned |
-| RcmdrShinyPlugin.UCA | 1 | planned |
+| RcmdrShinyPlugin.Export | 1 | done |
+| RcmdrShinyPlugin.sos | 1 | done |
+| RcmdrShinyPlugin.PcaRobust | 1 | done |
+| RcmdrShinyPlugin.ROC | 1 | done |
+| RcmdrShinyPlugin.UCA | 1 | done |
 | RcmdrShinyPlugin.TeachingDemos | 2 | planned |
 | RcmdrShinyPlugin.HH | 2 | planned |
 | RcmdrShinyPlugin.KMggplot2 | 2 | planned |

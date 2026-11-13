@@ -1,3 +1,22 @@
+# RcmdrShiny 1.2.0
+
+## Plugin Wave 1
+
+- Added `RcmdrShinyPlugin.Export`: xtable/HTML export, Hmisc LaTeX export and
+  `format.df`, with a compatible last-output stack.
+- Added `RcmdrShinyPlugin.sos`: R help search with multiple terms, union or
+  intersection, column filtering and spreadsheet output.
+- Added `RcmdrShinyPlugin.PcaRobust`: robust PCA with ROBPCA, loadings, scores
+  and the five diagnostic plots.
+- Added `RcmdrShinyPlugin.ROC`: single, paired and unpaired ROC curves,
+  logistic-model ROC curves and Hosmer-Lemeshow tests.
+- Added `RcmdrShinyPlugin.UCA`: variance and randomness tests, predictions,
+  Pareto charts and 21 quality-control charts.
+- Core additions for plugins: `popOutput()`, `get_dialog()`, `glmP()`/`lmP()`
+  activation predicates, lazy attachment of optional plugin packages and plot
+  capture for `screeplot`, `biplot`, `qcc` and `paretochart`.
+- Plugin packages are versioned 0.1.0 and tested with `R CMD check`.
+
 # RcmdrShiny 1.1.0
 
 ## Plugin infrastructure (Wave 0)

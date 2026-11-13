@@ -1,0 +1,26 @@
+Package: RcmdrShinyPlugin.sos
+Type: Package
+Title: Search R Help Pages from RcmdrShiny
+Version: 0.1.0
+Authors@R: c(
+    person("RcmdrShiny", "Contributors", role = c("aut", "cre"),
+           email = "vigliafg@gmail.com"),
+    person("Liviu", "Andronic", role = "ctb",
+           comment = "Author of RcmdrPlugin.sos")
+  )
+Description: RcmdrShiny interface to the 'sos' package.  It searches R help
+    pages, supports multiple terms with union or intersection, filters results
+    by column and optionally writes them to a spreadsheet.  Derived from
+    RcmdrPlugin.sos 0.3-0.
+License: GPL (>= 2)
+Encoding: UTF-8
+Depends: R (>= 4.1.0)
+Imports:
+    RcmdrShiny (>= 1.1.0),
+    htmltools
+Suggests:
+    testthat (>= 3.0.0),
+    sos
+Config/testthat/edition: 3
+URL: https://github.com/vigliafg/rstats-commander
+BugReports: https://github.com/vigliafg/rstats-commander/issues

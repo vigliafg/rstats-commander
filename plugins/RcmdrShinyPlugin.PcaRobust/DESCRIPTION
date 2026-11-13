@@ -1,0 +1,27 @@
+Package: RcmdrShinyPlugin.PcaRobust
+Type: Package
+Title: Robust Principal Component Analysis for RcmdrShiny
+Version: 0.1.0
+Authors@R: c(
+    person("RcmdrShiny", "Contributors", role = c("aut", "cre"),
+           email = "vigliafg@gmail.com"),
+    person("Monalisa", "Sipahutar", role = "ctb",
+           comment = "Author of RcmdrPlugin.PcaRobust"),
+    person("Achmad Fauzi", "Bagus F", role = "ctb",
+           comment = "Author of RcmdrPlugin.PcaRobust")
+  )
+Description: RcmdrShiny dialog for robust principal component analysis with
+    the ROBPCA method from rrcov.  Derived from RcmdrPlugin.PcaRobust 1.1.4.
+License: GPL (>= 2)
+Encoding: UTF-8
+Depends: R (>= 4.1.0)
+Imports:
+    RcmdrShiny (>= 1.1.0),
+    htmltools
+Suggests:
+    testthat (>= 3.0.0),
+    rrcov,
+    robustbase
+Config/testthat/edition: 3
+URL: https://github.com/vigliafg/rstats-commander
+BugReports: https://github.com/vigliafg/rstats-commander/issues

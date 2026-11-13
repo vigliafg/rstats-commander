@@ -137,3 +137,15 @@ test_that("plugin_formula builds formula strings", {
                "y ~ x + (a * b)")
   expect_equal(plugin_formula("y", character()), "y ~ 1")
 })
+
+test_that("printed objects are available through popOutput", {
+  unload_plugins()
+  state <- AppState(env = new.env())
+  run_command(state, "summary(1:10)")
+  object <- popOutput(keep = TRUE)
+  expect_true(inherits(object, "summaryDefault"))
+  expect_equal(popOutput(keep = TRUE), object)
+  expect_equal(popOutput(), object)
+  expect_true(is.na(popOutput()))
+})
+

@@ -169,6 +169,8 @@ activation_environment <- function(state) {
     length(discrete_numeric_variables(state)) >= n
   }
   env$modelsP <- function(n = 1) length(list_all_models(state)) >= n
+  env$glmP <- function() inherits(active_model_object(state), "glm")
+  env$lmP <- function() inherits(active_model_object(state), "lm")
   env$hclustSolutionsP <- function(n = 1) {
     count_objects(state, function(x) inherits(x, "hclust")) >= n
   }

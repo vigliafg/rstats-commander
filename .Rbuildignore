@@ -12,6 +12,7 @@
 ^PHASE6-CHECKLIST\.md$
 ^PHASE7-CHECKLIST\.md$
 ^PLUGIN-WAVE0-CHECKLIST\.md$
+^PLUGIN-WAVE1-CHECKLIST\.md$
 ^RELEASE-CHECKLIST\.md$
 ^cran-comments\.md$
 ^_pkgdown\.yml$

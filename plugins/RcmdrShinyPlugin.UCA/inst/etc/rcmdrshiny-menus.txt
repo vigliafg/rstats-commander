@@ -1,0 +1,76 @@
+# RcmdrShinyPlugin.UCA menu definitions
+#
+# type    menu            kind       label                                            command              activation               install
+    item    variancesMenu     command    "Single-Sample Variance Test..."                 sigmaTest            "numericP()"             ""
+    item    nonparametricMenu command   "Randomness test for two level factor..."        randomnessFTest      "twoLevelFactorsP()"     ""
+    item    nonparametricMenu command   "Randomness test for numeric variable..."        randomnessNTest      "numericP()"             ""
+
+    item    modelsMenu        separator  ""                                               modelsGraphsMenu     ""                       ""
+    menu    predictMenu       modelsMenu ""                                               ""                   ""                       ""
+    item    modelsMenu        cascade    "Predict using active model"                     predictMenu          "activeModelP()"         ""
+    item    predictMenu       command    "Input data and predict..."                      input2predict        "activeModelP()"         ""
+    item    predictMenu       command    "Predict values for existing dataset..."         predict4dataset      "activeModelP()"         ""
+
+### Quality control
+    menu    QCMenu            topMenu    ""                                               ""                   ""                       ""
+    item    topMenu           cascade    "Quality Control"                                QCMenu               ""                       ""
+    item    QCMenu            command    "Pareto chart"                                   paretochartMenu      "factorsP()"             ""
+
+# Attributes - Binomial models
+    menu    QCAMenu           QCMenu     ""                                               ""                   ""                       ""
+    item    QCMenu            cascade    "Attributes"                                     QCAMenu              "numericP()"             ""
+
+    menu    pchartMenu       QCAMenu    ""                                               ""                   ""                       ""
+    item    QCAMenu           cascade    "p-chart (proportion)"                           pchartMenu           ""                       ""
+    item    pchartMenu        command    "Phase I..."                                     pchart1Menu          "numericP()"             ""
+    item    pchartMenu        command    "Phase II from data..."                          pchart2Menu          "numericP()"             ""
+    item    pchartMenu        command    "Phase II from parameter..."                     pchartpMenu          "numericP()"             ""
+
+    menu    npchartMenu      QCAMenu    ""                                               ""                   ""                       ""
+    item    QCAMenu           cascade    "np-chart (count)"                               npchartMenu          ""                       ""
+    item    npchartMenu       command    "Phase I..."                                     npchart1Menu         "numericP()"             ""
+    item    npchartMenu       command    "Phase II from data..."                          npchart2Menu         "numericP()"             ""
+    item    npchartMenu       command    "Phase II from parameter..."                     npchartpMenu         "numericP()"             ""
+
+# Counts - Poisson models
+    menu    QCCMenu           QCMenu     ""                                               ""                   ""                       ""
+    item    QCMenu            cascade    "Counts"                                         QCCMenu              "numericP()"             ""
+
+    menu    uchartMenu       QCCMenu    ""                                               ""                   ""                       ""
+    item    QCCMenu           cascade    "u-chart (average rate)"                         uchartMenu           ""                       ""
+    item    uchartMenu        command    "Phase I..."                                     uchart1Menu          "numericP()"             ""
+    item    uchartMenu        command    "Phase II from data..."                          uchart2Menu          "numericP()"             ""
+    item    uchartMenu        command    "Phase II from parameter..."                     uchartpMenu          "numericP()"             ""
+
+    menu    cchartMenu       QCCMenu    ""                                               ""                   ""                       ""
+    item    QCCMenu           cascade    "c-chart (rate)"                                 cchartMenu           ""                       ""
+    item    cchartMenu        command    "Phase I..."                                     cchart1Menu          "numericP()"             ""
+    item    cchartMenu        command    "Phase II from data..."                          cchart2Menu          "numericP()"             ""
+    item    cchartMenu        command    "Phase II from parameter..."                     cchartpMenu          "numericP()"             ""
+
+# Continuous variables
+    menu    QCVMenu           QCMenu     ""                                               ""                   ""                       ""
+    item    QCMenu            cascade    "Continuous"                                     QCVMenu              "numericP()"             ""
+
+    menu    qcmeansMenu       QCVMenu    ""                                               ""                   ""                       ""
+    item    QCVMenu           cascade    "Means"                                          qcmeansMenu          ""                       ""
+    item    qcmeansMenu       command    "Phase I (multiple columns)..."                  xbar1mcMenu          "numericP()"             ""
+    item    qcmeansMenu       command    "Phase II from data (multiple columns)..."       xbar2mcMenu          "numericP()"             ""
+    item    qcmeansMenu       command    "Phase II from parameters (multiple columns)..." xbarpmcMenu          "numericP()"             ""
+
+    menu    qcRMenu           QCVMenu    ""                                               ""                   ""                       ""
+    item    QCVMenu           cascade    "Range"                                          qcRMenu              ""                       ""
+    item    qcRMenu           command    "Phase I (multiple columns)..."                  R1mcMenu             "numericP()"             ""
+    item    qcRMenu           command    "Phase II from data (multiple columns)..."       R2mcMenu             "numericP()"             ""
+    item    qcRMenu           command    "Phase II from parameters (multiple columns)..." RpmcMenu             "numericP()"             ""
+
+    menu    qcSMenu           QCVMenu    ""                                               ""                   ""                       ""
+    item    QCVMenu           cascade    "Standard deviation"                             qcSMenu              ""                       ""
+    item    qcSMenu           command    "Phase I (multiple columns)..."                  S1mcMenu             "numericP()"             ""
+    item    qcSMenu           command    "Phase II from data (multiple columns)..."       S2mcMenu             "numericP()"             ""
+    item    qcSMenu           command    "Phase II from parameters (multiple columns)..." SpmcMenu             "numericP()"             ""
+
+# Help
+    item    helpMenu          command    "R-UCA project website"                          browseRUCAWebsite    ""                       ""
+    item    helpMenu          command    "RcmdrPlugin.UCA package website"                browseRcmdrPluginUCA ""                       ""
+    item    helpMenu          command    "Check R-UCA package version"                    checkRUCAversion     ""                       ""

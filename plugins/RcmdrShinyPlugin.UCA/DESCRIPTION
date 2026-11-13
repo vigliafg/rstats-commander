@@ -1,0 +1,31 @@
+Package: RcmdrShinyPlugin.UCA
+Type: Package
+Title: Teaching Statistics Extensions for RcmdrShiny
+Version: 0.1.0
+Authors@R: c(
+    person("RcmdrShiny", "Contributors", role = c("aut", "cre"),
+           email = "vigliafg@gmail.com"),
+    person("Manuel", "Munoz-Marquez", role = "ctb",
+           comment = "Author of RcmdrPlugin.UCA")
+  )
+Description: RcmdrShiny extensions used in teaching statistics at the
+    University of Cadiz: variance and randomness tests, predictions from the
+    active model, Pareto charts and quality-control charts.  Derived from
+    RcmdrPlugin.UCA 5.1-4.
+License: GPL (>= 3)
+Encoding: UTF-8
+Depends: R (>= 4.1.0)
+Imports:
+    RcmdrShiny (>= 1.1.0),
+    htmltools
+Suggests:
+    testthat (>= 3.0.0),
+    IQCC,
+    qcc,
+    qicharts2,
+    randtests,
+    TeachingDemos,
+    tseries
+Config/testthat/edition: 3
+URL: https://github.com/vigliafg/rstats-commander
+BugReports: https://github.com/vigliafg/rstats-commander/issues

@@ -21,7 +21,7 @@
 .base_predicate_names <- c(
   "activeDataSetP", "activeModelP", "dataSetsP", "numericP",
   "numericPositiveP", "factorsP", "characterP", "twoLevelFactorsP",
-  "discreteNumericP", "modelsP", "hclustSolutionsP", "modelCapability",
+  "discreteNumericP", "modelsP", "glmP", "lmP", "hclustSolutionsP", "modelCapability",
   "CoefficientsP", "PredictorsP", "packageAvailable", "getRcmdr",
   "listPlugins", "rglLoaded", "rgl.cur", "dev.cur", "MarkdownP", "knitrP",
   "manualTranslationP"

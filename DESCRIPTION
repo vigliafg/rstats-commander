@@ -1,7 +1,7 @@
 Package: RcmdrShiny
 Type: Package
 Title: A Shiny Version of the R Commander
-Version: 1.1.0
+Version: 1.2.0
 Authors@R: c(
     person("RcmdrShiny", "Contributors", role = c("aut", "cre"),
            email = "vigliafg@gmail.com"),

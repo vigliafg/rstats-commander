@@ -1,0 +1,8 @@
+# RcmdrShinyPlugin.Export menu definitions
+#
+# type    menu          kind      label                              command        activation    install
+    menu    exportMenu    topMenu   ""                                 ""             ""            ""
+    item    exportMenu    command   "LaTeX or HTML... (xtable)"        xtableExport   ""            "packageAvailable('xtable')"
+    item    exportMenu    command   "LaTeX... (Hmisc)"                 latexExport    ""            "packageAvailable('Hmisc')"
+    item    exportMenu    command   "Format data frame or matrix..."   formatdfExport ""            "packageAvailable('Hmisc')"
+    item    topMenu       cascade   "Export"                           exportMenu     ""            ""

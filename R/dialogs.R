@@ -49,7 +49,17 @@ dialog_catalog <- function() {
 }
 
 #' @keywords internal
-get_dialog_spec <- function(id) {
+get_dialog_spec <- function(id) get_dialog(id)
+
+#' Retrieve a dialog specification
+#'
+#' Exposes the dialog registry to plugin packages so their tests can call
+#' `on_ok()` with a synthetic input.
+#'
+#' @param id Command name used in the menu file.
+#' @return A dialog specification, or `NULL`.
+#' @export
+get_dialog <- function(id) {
   dialog_catalog()[[id]]
 }
 

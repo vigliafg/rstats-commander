@@ -1,0 +1,4 @@
+# RcmdrShinyPlugin.PcaRobust menu definitions
+#
+# type    menu              kind      label                                  command      activation                       install
+    item    dimensionalMenu   command   "Robust Principal Component Analysis"   pcaRobust    "activeDataSetP() && numericP(2)"   "packageAvailable('rrcov')"

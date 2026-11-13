@@ -1,0 +1,4 @@
+# RcmdrShinyPlugin.sos menu definitions
+#
+# type    menu        kind      label                              command    activation    install
+    item    helpMenu    command   "Search R help system... (sos)"    sosInit    ""            "packageAvailable('sos')"

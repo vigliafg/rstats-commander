@@ -1,0 +1,26 @@
+Package: RcmdrShinyPlugin.ROC
+Type: Package
+Title: ROC Curves and Hosmer-Lemeshow Tests for RcmdrShiny
+Version: 0.1.0
+Authors@R: c(
+    person("RcmdrShiny", "Contributors", role = c("aut", "cre"),
+           email = "vigliafg@gmail.com"),
+    person("Daniel-Corneliu", "Leucuta", role = "ctb",
+           comment = "Author of RcmdrPlugin.ROC")
+  )
+Description: RcmdrShiny dialogs for ROC curves from pROC and for the
+    Hosmer-Lemeshow goodness-of-fit test from ResourceSelection.  Derived from
+    RcmdrPlugin.ROC 1.0-19.
+License: GPL (>= 2)
+Encoding: UTF-8
+Depends: R (>= 4.1.0)
+Imports:
+    RcmdrShiny (>= 1.1.0),
+    htmltools
+Suggests:
+    testthat (>= 3.0.0),
+    pROC,
+    ResourceSelection
+Config/testthat/edition: 3
+URL: https://github.com/vigliafg/rstats-commander
+BugReports: https://github.com/vigliafg/rstats-commander/issues

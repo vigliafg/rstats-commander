@@ -1,0 +1,14 @@
+# RcmdrShinyPlugin.ROC menu definitions
+#
+# type    menu        kind      label                                                command             activation                              install
+    menu    rocMenu      topMenu   ""                                                   ""                  ""                                      ""
+    item    topMenu      cascade   "ROC"                                                rocMenu             ""                                      ""
+
+    menu    pROCMenu     rocMenu   ""                                                   ""                  ""                                      ""
+    item    rocMenu      cascade   "pROC"                                               pROCMenu            ""                                      ""
+
+    item    pROCMenu     command   "Plot ROC curve for data..."                         fncvpROC            "numericP() && twoLevelFactorsP()"        "packageAvailable('pROC')"
+    item    pROCMenu     command   "Paired ROC curves comparison..."                    fncPairedpROC       "numericP(2) && twoLevelFactorsP()"       "packageAvailable('pROC')"
+    item    pROCMenu     command   "Unpaired ROC curves comparison..."                  fncUnpairedpROC     "numericP(2) && twoLevelFactorsP(2)"      "packageAvailable('pROC')"
+    item    pROCMenu     command   "Hosmer-Lemeshow GOF test..."                        fndHosmerLemeshow   "glmP()"                                  "packageAvailable('ResourceSelection')"
+    item    pROCMenu     command   "Plot ROC curve for logistic regression model..."    fncLRpROC           "glmP()"                                  "packageAvailable('pROC')"
