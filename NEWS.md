@@ -1,3 +1,28 @@
+# RcmdrShiny 1.13.0
+
+## Document authoring (D1-D5)
+
+- The **Script** tab now edits three kinds of buffer: a plain R script, an
+  **R Markdown** document and a **knitr** document.  Switching mode converts
+  the buffer without losing code.
+- Dialogs append their commands as code chunks in document mode; the new
+  **Section**, **Remove block** and **Remove section** buttons edit the
+  document structure.
+- New commands and dialogs: `loadRmd`, `loadRnw`, `saveRmd`, `saveRnw`,
+  `saveRmdAs`, `saveRnwAs`, `newRmd`, `newRnw`, `editMarkdown`, `editKnitr`,
+  `removeLastRmdBlock`, `removeLastRmdSection`, `removeLastRnwBlock`,
+  `insertSection` and `compileRmd`.
+- **File > Knit document...** renders the document in the session environment
+  to HTML, PDF or Word; a knitr document is converted with `knitr::knit()` and
+  LaTeX.  The result opens in the new **Report** tab and can be downloaded.
+- The **Run chunk** button executes the chunk under the cursor.
+- **Options** exposes the R Markdown and knitr command visibility.
+- New help topic `document-authoring`, new vignette *Writing reports with
+  R Markdown and knitr*, and a screenshot of document mode.
+- With document authoring implemented, the core has 13 disabled menu entries
+  left: three lifecycle commands, the nine browser-delegated Edit actions and
+  `Identify3D`.
+
 # RcmdrShiny 1.12.0
 
 ## Residual features (plan F1-F12)

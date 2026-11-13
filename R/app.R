@@ -120,6 +120,14 @@ app_js <- function(lang = current_language()) {
       var el = document.getElementById(id);
       if (el) el.focus();
     });
+    function rcmdrRunChunk() {
+      var element = document.querySelector('.ace_editor');
+      if (!element) return;
+      var editor = ace.edit(element);
+      var position = editor.getCursorPosition();
+      Shiny.setInputValue('run_chunk_at',
+        {row: position.row, column: position.column}, {priority: 'event'});
+    }
     document.addEventListener('click', function(event) {
       var link = event.target.closest('[data-help-topic]');
       if (!link) return;
@@ -145,18 +153,50 @@ script_pane_ui <- function() {
   htmltools::tagList(
     htmltools::div(
       class = "d-flex gap-2 align-items-center mb-2 flex-wrap",
+      selectInput(
+        "document_mode", NULL,
+        choices = stats::setNames(
+          c("r", "rmd", "rnw"),
+          c(tr("R script"), tr("R Markdown"), tr("knitr"))
+        ),
+        selected = "r", width = "140px"
+      ),
+      actionButton("document_new", tr("New"), class = "btn-sm btn-outline-secondary"),
+      actionButton("document_open", tr("Open"), class = "btn-sm btn-outline-secondary"),
+      actionButton("document_save", tr("Save"), class = "btn-sm btn-outline-secondary"),
+      actionButton("document_save_as", tr("Save as"), class = "btn-sm btn-outline-secondary"),
+      actionButton("document_section", tr("Section"), class = "btn-sm btn-outline-secondary"),
+      actionButton("document_chunk", tr("Chunk"), class = "btn-sm btn-outline-secondary"),
+      actionButton("document_remove_block", tr("Remove block"),
+                   class = "btn-sm btn-outline-secondary"),
+      actionButton("document_remove_section", tr("Remove section"),
+                   class = "btn-sm btn-outline-secondary"),
+      actionButton("document_knit", tr("Knit"), class = "btn-sm btn-primary")
+    ),
+    htmltools::div(
+      class = "d-flex gap-2 align-items-center mb-2 flex-wrap",
       actionButton("run_selection", tr("Run selection"), class = "btn-sm btn-primary"),
       actionButton("run_all", tr("Run all"), class = "btn-sm btn-outline-primary"),
+      actionButton("run_chunk", tr("Run chunk"), class = "btn-sm btn-outline-primary",
+                   onclick = "rcmdrRunChunk();"),
       actionButton("clear_script", tr("Clear"), class = "btn-sm btn-outline-secondary"),
-      downloadButton("download_script", tr("Download .R"),
+      downloadButton("download_script", tr("Download"),
                      class = "btn-sm btn-outline-secondary"),
       checkboxInput("auto_append", tr("Append generated commands"), value = TRUE)
     ),
-    shinyAce::aceEditor(
-      "script", value = "", mode = "r", theme = "textmate",
-      height = "460px", fontSize = 13, selectionId = "script_selection",
-      autoComplete = "enabled"
-    )
+    uiOutput("script_editor_ui")
+  )
+}
+
+report_pane_ui <- function() {
+  htmltools::tagList(
+    htmltools::div(
+      class = "d-flex gap-2 mb-2 flex-wrap",
+      downloadButton("download_knit", tr("Download report"),
+                     class = "btn-sm btn-outline-secondary"),
+      actionButton("knit_refresh", tr("Refresh"), class = "btn-sm btn-outline-secondary")
+    ),
+    uiOutput("report_pane")
   )
 }
 
@@ -285,6 +325,7 @@ app_ui <- function() {
             tabPanel(tr("Output"), output_pane_ui()),
             tabPanel(tr("Messages"), messages_pane_ui()),
             tabPanel(tr("Plots"), plots_pane_ui()),
+            tabPanel(tr("Report"), report_pane_ui()),
             tabPanel(tr("Data"), data_pane_ui()),
             tabPanel(tr("Environment"), uiOutput("environment_pane")),
             tabPanel(tr("Help"), help_center_ui())
@@ -321,6 +362,7 @@ app_server <- function(env = globalenv()) {
     menu_revision <- reactiveVal(0L)
     dialog_revision <- reactiveVal(0L)
     script_value <- reactiveVal("")
+    editor_mode <- reactiveVal(state$document$mode %||% "r")
     plot_selected <- reactiveVal(NULL)
     last_plot_count <- reactiveVal(0L)
     state$notify <- function() tick(tick() + 1L)
@@ -329,6 +371,23 @@ app_server <- function(env = globalenv()) {
       script_value(value)
       shinyAce::updateAceEditor(session, "script", value = value)
     }
+
+    sync_editor <- function() {
+      value <- document_text(state)
+      script_value(value)
+      shinyAce::updateAceEditor(session, "script", value = value)
+      invisible(value)
+    }
+    state$sync_document <- sync_editor
+
+    # Read the editor content even when a tick-driven observer runs before the
+    # input binding has propagated the latest keystrokes.
+    current_document_text <- function() {
+      value <- isolate(input$script)
+      if (!is.null(value)) document_set_text(state, value)
+      document_text(state)
+    }
+    state$current_document_text <- current_document_text
     state$show_tab <- function(label) {
       session$sendCustomMessage("rcmdr-tab", label)
     }
@@ -341,6 +400,12 @@ app_server <- function(env = globalenv()) {
     state$plot_dir <- plot_dir
     state$plot_prefix <- paste0("rcmdr-plots-", session$token)
     try(addResourcePath(state$plot_prefix, plot_dir), silent = TRUE)
+
+    knit_dir <- file.path(tempdir(), paste0("rcmdrshiny-knit-", session$token))
+    dir.create(knit_dir, showWarnings = FALSE, recursive = TRUE)
+    state$knit_dir <- knit_dir
+    state$knit_prefix <- paste0("rcmdr-knit-", session$token)
+    try(addResourcePath(state$knit_prefix, knit_dir), silent = TRUE)
 
     tree <- menu_tree()
     leaves <- menu_leaves(tree)
@@ -361,6 +426,22 @@ app_server <- function(env = globalenv()) {
       dialog_revision(dialog_revision() + 1L)
       showModal(dialog_modal(spec))
     }
+
+    state$open_dialog <- function(id) {
+      spec <- get_dialog_spec(id)
+      if (!is.null(spec)) open_dialog(spec)
+      invisible(NULL)
+    }
+
+    output$script_editor_ui <- renderUI({
+      mode <- editor_mode()
+      shinyAce::aceEditor(
+        "script", value = isolate(script_value()),
+        mode = document_ace_mode(mode), theme = "textmate",
+        height = "460px", fontSize = 13, selectionId = "script_selection",
+        autoComplete = "enabled"
+      )
+    })
 
     launch <- function(command) {
       if (!command_enabled(state, command)) {
@@ -767,8 +848,51 @@ app_server <- function(env = globalenv()) {
       }
     )
 
+    output$report_pane <- renderUI({
+      tick()
+      result <- state$knit_result
+      if (is.null(result)) {
+        return(htmltools::tags$p(
+          class = "text-muted",
+          tr("No report yet. Use Knit to build one.")
+        ))
+      }
+      if (identical(result$format, "word")) {
+        return(htmltools::tagList(
+          htmltools::tags$p(tr("The Word document is ready for download.")),
+          htmltools::tags$p(basename(result$file))
+        ))
+      }
+      htmltools::tags$iframe(
+        src = result$url %||% "",
+        style = "width:100%;height:70vh;border:1px solid #dde2e8;"
+      )
+    })
+
+    output$download_knit <- downloadHandler(
+      filename = function() {
+        if (is.null(state$knit_result)) {
+          "report.html"
+        } else {
+          basename(state$knit_result$file)
+        }
+      },
+      content = function(file) {
+        req(state$knit_result)
+        file.copy(state$knit_result$file, file, overwrite = TRUE)
+      }
+    )
+
+    observeEvent(input$knit_refresh, {
+      tick(tick() + 1L)
+    }, ignoreInit = TRUE)
+
     output$download_script <- downloadHandler(
-      filename = function() "RcmdrShiny-script.R",
+      filename = function() {
+        mode <- document_mode(state)
+        paste0("RcmdrShiny-script-", Sys.Date(),
+               ".", document_extension(mode))
+      },
       content = function(file) {
         writeLines(isolate(script_value()), file)
       }
@@ -912,14 +1036,31 @@ app_server <- function(env = globalenv()) {
     observeEvent(input$script, {
       if (!identical(isolate(script_value()), input$script)) {
         script_value(input$script %||% "")
+        if (!identical(document_mode(state), "r")) {
+          document_set_text(state, input$script %||% "")
+        }
       }
     }, ignoreInit = TRUE)
+
+    observeEvent(tick(), {
+      mode <- document_mode(state)
+      if (!identical(mode, isolate(editor_mode()))) {
+        editor_mode(mode)
+        script_value(document_text(state))
+      }
+    }, ignoreInit = FALSE)
 
     append_log_to_script <- function() {
       if (!isTRUE(input$auto_append)) return(invisible(NULL))
       if (length(state$log) <= state$script_consumed) return(invisible(NULL))
       new_commands <- state$log[seq.int(state$script_consumed + 1L, length(state$log))]
       state$script_consumed <- length(state$log)
+      if (!identical(document_mode(state), "r")) {
+        current_document_text()
+        for (command in new_commands) document_append_chunk(state, command)
+        sync_editor()
+        return(invisible(NULL))
+      }
       value <- paste(c(isolate(script_value()), new_commands), collapse = "\n")
       script_value(value)
       shinyAce::updateAceEditor(session, "script", value = value)
@@ -947,16 +1088,91 @@ app_server <- function(env = globalenv()) {
       invisible(NULL)
     }
 
-    observeEvent(input$run_all, run_script(script_value()), ignoreInit = TRUE)
+    observeEvent(input$run_all, {
+      code <- isolate(script_value())
+      mode <- document_mode(state)
+      if (!identical(mode, "r")) {
+        code <- document_script_from_chunks(code, mode)
+      }
+      run_script(code)
+    }, ignoreInit = TRUE)
 
     observeEvent(input$run_selection, {
       selection <- input$script_selection %||% ""
       run_script(if (nzchar(trimws(selection))) selection else script_value())
     }, ignoreInit = TRUE)
 
+    observeEvent(input$run_chunk_at, {
+      position <- input$run_chunk_at
+      row <- position$row %||% 0
+      code <- document_chunk_at(current_document_text(), row,
+                                document_mode(state))
+      if (nzchar(trimws(code))) run_script(code)
+    }, ignoreInit = TRUE)
+
     observeEvent(input$clear_script, {
+      if (!identical(document_mode(state), "r")) {
+        document_set_text(state, "")
+      }
       script_value("")
       shinyAce::updateAceEditor(session, "script", value = "")
+    }, ignoreInit = TRUE)
+
+    observeEvent(input$document_mode, {
+      mode <- input$document_mode %||% "r"
+      if (!identical(mode, document_mode(state))) {
+        document_switch_mode(state, mode)
+        editor_mode(mode)
+        sync_editor()
+        menu_revision(menu_revision() + 1L)
+      }
+    }, ignoreInit = TRUE)
+
+    observeEvent(input$document_new, {
+      state$open_dialog(
+        if (identical(document_mode(state), "rnw")) "newRnw" else "newRmd"
+      )
+    }, ignoreInit = TRUE)
+
+    observeEvent(input$document_open, {
+      document_open_current(state, document_mode(state))
+    }, ignoreInit = TRUE)
+
+    observeEvent(input$document_save, {
+      current_document_text()
+      document_save_current(state)
+    }, ignoreInit = TRUE)
+
+    observeEvent(input$document_save_as, {
+      current_document_text()
+      state$open_dialog(
+        if (identical(document_mode(state), "rnw")) "saveRnwAs" else "saveRmdAs"
+      )
+    }, ignoreInit = TRUE)
+
+    observeEvent(input$document_knit, {
+      current_document_text()
+      document_knit_current(state)
+    }, ignoreInit = TRUE)
+
+    observeEvent(input$document_section, {
+      state$open_dialog("insertSection")
+    }, ignoreInit = TRUE)
+
+    observeEvent(input$document_chunk, {
+      state$open_dialog("insertChunk")
+    }, ignoreInit = TRUE)
+
+    observeEvent(input$document_remove_block, {
+      current_document_text()
+      removed <- document_remove_current_chunk(state)
+      if (isTRUE(removed)) sync_editor()
+    }, ignoreInit = TRUE)
+
+    observeEvent(input$document_remove_section, {
+      current_document_text()
+      removed <- document_remove_current_section(state)
+      if (isTRUE(removed)) sync_editor()
     }, ignoreInit = TRUE)
   }
 }

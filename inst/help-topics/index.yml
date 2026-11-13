@@ -550,6 +550,10 @@ topics:
     file: topics/writing-plugins.md
     category: plugins
     order: 100
+  - id: document-authoring
+    file: topics/document-authoring.md
+    category: help
+    order: 40
   - id: keyboard-shortcuts
     file: topics/keyboard-shortcuts.md
     category: help

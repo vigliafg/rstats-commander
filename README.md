@@ -10,14 +10,14 @@ RcmdrShiny is a fork of the Rcmdr 2.15.0 engine: it keeps the R command
 generation semantics of Rcmdr, so every action in the graphical interface
 produces a reproducible command in the script log and in the output pane.
 
-> **Status: 1.12 residual features complete.** The core exposes 205 dialogs
-> and, with all 15 plugins loaded, 850 of 900 menu entries are implemented.
-> The 50 disabled entries correspond to 38 distinct commands: 24 core entries
-> out of scope by design (R Markdown editor, close/restart, cut/copy/undo,
-> `identify()`, `Identify3D`), 2 EZR exit duplicates and 13 TeachStat generic
-> distribution helpers.  EZR, NMBU and DoE implement every plugin-specific
-> entry.  The package includes the
-> Shiny shell, a searchable offline help centre with 442 topics covering every dialog,
+> **Status: 1.13 document authoring.** The core exposes 213 dialogs and, with
+> all 15 plugins loaded, 863 of 900 menu entries are implemented.  The
+> Script tab edits R scripts, R Markdown documents and knitr documents, knits
+> them to HTML, PDF or Word, and shows the result in the **Report** tab.  The
+> remaining disabled core entries are the three lifecycle commands, the nine
+> browser-delegated Edit actions and `Identify3D`; EZR, NMBU and DoE implement
+> every plugin-specific entry.  The package includes the
+> Shiny shell, a searchable offline help centre with 443 topics covering every dialog,
 > interactive plotly versions of the main charts, R Markdown report export,
 > plugin command aliases, accessibility landmarks, vignettes and release
 > engineering.
@@ -89,11 +89,14 @@ RcmdrShiny::run(env = env)
 | Models: diagnostics, influence, hypotheses, model selection, effect plots | done |
 | Tools and Help menus | done |
 | Help tab: search, categories, topic pane, recent and contextual help | done |
-| Markdown help topics for the core and every plugin (442 topics, every dialog documented) | done |
+| Markdown help topics for the core and every plugin (443 topics, every dialog documented) | done |
 | Italian translations for 21 core topics, with English fallback | done |
 | Interactive plots (plotly) for histogram, boxplot, scatterplot and line graph | done |
 | Session report export (R Markdown, HTML when rmarkdown is installed) | done |
 | Plugin command aliases (`aliases = c(new = "core")`) | done |
+| R Markdown and knitr document mode, chunks, sections and knit | done |
+| Knit to HTML/PDF/Word with preview in the Report tab | done |
+| Run current chunk, document templates and options | done |
 | Help API: `help_search()`, `help_topic()`, `help_index()` and plugin registration | done |
 | Help inventory and link checker in CI | done |
 | Plugin API: menus, direct commands, Shiny dialogs | done |

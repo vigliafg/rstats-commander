@@ -28,6 +28,15 @@ AppState <- function(env = globalenv()) {
   state$last_error <- NULL
 
   state$dialog_memory <- list()
+
+  # Document authoring: the Script tab can hold a plain script or an R
+  # Markdown/knitr document.  The path, mode and text live here so dialogs and
+  # direct commands share the same buffer.
+  state$document <- list(text = "", path = NULL, mode = "r")
+  state$knit_result <- NULL
+  # Set by the Shiny server so direct commands can refresh the editor.
+  state$sync_document <- NULL
+  state$open_dialog <- NULL
   state$plots <- list()
   state$rgl_scene <- NULL
   state$rgl_widget <- NULL

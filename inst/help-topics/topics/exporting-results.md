@@ -5,7 +5,7 @@ type: task
 category: data
 keywords: [export, save, csv, write, output, table, script, report]
 aliases: [export, save-data, write-csv]
-dialogs: [exportDataSet, saveOptions, loadLog]
+dialogs: [exportDataSet, saveOptions, loadLog, exportReport]
 commands: [write.table, capture.output, xtable]
 packages: [utils]
 related: [data-import, getting-started]

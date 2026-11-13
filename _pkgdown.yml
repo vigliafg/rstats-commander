@@ -35,6 +35,14 @@ reference:
       - help_unregister
       - help_registry
       - register_plugin_help
+  - title: Reporting
+    desc: Build reports and knit documents.
+    contents:
+      - report_rmd
+      - write_report_rmd
+      - write_report_html
+      - document_knit
+      - document_modes
   - title: Diagnostics
     desc: Collect a report for bug reports.
     contents:
@@ -67,6 +75,9 @@ articles:
       - linear-models
       - graphs
       - survival
+  - title: Reporting
+    contents:
+      - documents
   - title: Specialised workflows
     contents:
       - design-of-experiments

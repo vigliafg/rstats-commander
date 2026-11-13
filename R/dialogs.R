@@ -42,6 +42,7 @@ base_dialog_catalog <- function() {
       loadLog = load_script_dialog(),
       exportReport = export_report_dialog()
     ),
+    document_dialogs(),
     phase2_dialogs(), phase3_dialogs(), phase4_dialogs(), phase5_dialogs()
   )
 }
@@ -130,6 +131,31 @@ base_direct_commands <- function() {
       ds <- active_dataset(state)
       if (is.null(ds)) return(NULL)
       run_command(state, cmd_count_missing(ds))
+    },
+    saveRmd = function(state) document_save_current(state, "rmd"),
+    saveRnw = function(state) document_save_current(state, "rnw"),
+    editMarkdown = function(state) {
+      document_switch_mode(state, "rmd")
+      invisible(NULL)
+    },
+    editKnitr = function(state) {
+      document_switch_mode(state, "rnw")
+      invisible(NULL)
+    },
+    removeLastRmdBlock = function(state) {
+      removed <- document_remove_current_chunk(state)
+      if (is.function(state$sync_document)) state$sync_document()
+      invisible(removed)
+    },
+    removeLastRmdSection = function(state) {
+      removed <- document_remove_current_section(state)
+      if (is.function(state$sync_document)) state$sync_document()
+      invisible(removed)
+    },
+    removeLastRnwBlock = function(state) {
+      removed <- document_remove_current_chunk(state)
+      if (is.function(state$sync_document)) state$sync_document()
+      invisible(removed)
     },
     convertStrings2Factors = function(state) {
       df <- dataset(state)

@@ -33,14 +33,14 @@ Date: 13 November 2026
 
 ### Content
 
-- 133 core topics: 20 hand-written, 113 generated and grouped by family for
-  the distribution dialogs and the new Gumbel family.
+- 134 core topics: the hand-written guides plus the generated topics grouped by
+  distribution family.
 - 309 plugin topics across the 15 plugins, each with an overview topic.
-- 442 topics in total (133 core, 309 plugin); every one of the 619 dialog
+- 443 topics in total (134 core, 309 plugin); every one of the 629 dialog
   entries has a documented topic, with no `draft` and no missing case.
 - Italian translations for 21 core topics; missing translations fall back to
   English.
-- Six screenshots, embedded in eight vignettes.
+- Seven screenshots, embedded in nine vignettes.
 - Ten new vignettes: data import, descriptive statistics, linear models,
   graphs, survival, design of experiments, FactoMineR, EZR, troubleshooting and
   help authoring.

@@ -53,6 +53,10 @@ app$wait_for_js("document.querySelectorAll('.rcmdr-menu-item').length > 0",
 
 capture <- function(name, path = NULL) {
   destination <- file.path(asset_dir, paste0(name, ".png"))
+  if (file.exists(destination)) unlink(destination)
+  if (file.exists(file.path(figure_dir, paste0(name, ".png")))) {
+    unlink(file.path(figure_dir, paste0(name, ".png")))
+  }
   app$get_screenshot(destination)
   file.copy(destination, file.path(figure_dir, paste0(name, ".png")),
             overwrite = TRUE)
@@ -117,5 +121,21 @@ app$wait_for_idle()
 app$wait_for_js("document.querySelector('.rcmdr-help-result') !== null",
                 timeout = 60000)
 capture("app-help")
+
+# Document mode.
+app$set_inputs(document_mode = "rmd", wait_ = FALSE)
+app$wait_for_idle(timeout = 30000)
+app$run_js(paste0(
+  "ace.edit(document.querySelector('.ace_editor')).setValue(",
+  jsonlite::toJSON(paste(
+    "---", 'title: "RcmdrShiny report"', 'output: html_document', "---", "",
+    "## Analysis", "",
+    "```{r}", "summary(mtcars)", "```", "",
+    sep = "\n"
+  ), auto_unbox = TRUE),
+  ", 1);"
+))
+app$wait_for_idle()
+capture("app-document")
 
 cat("Screenshots written to", asset_dir, "and", figure_dir, "\n")

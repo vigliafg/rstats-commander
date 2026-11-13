@@ -324,3 +324,39 @@ kv <- function(label, value) {
     htmltools::tags$span(value)
   )
 }
+
+#' Text input with a "Save as" browser
+#' @keywords internal
+file_save_input <- function(id, label, value = "", filename = "",
+                            filetypes = NULL) {
+  tagList(
+    textInput(id, label, value = value, width = "100%"),
+    shinyFiles::shinySaveButton(
+      paste0(id, "_browse"),
+      tr("Browse..."),
+      tr("Save file"),
+      filename = filename,
+      filetype = filetypes
+    )
+  )
+}
+
+#' Observers for [file_save_input()]
+#' @keywords internal
+file_save_observers <- function(input, session, id, roots,
+                                guard = function() TRUE,
+                                filetypes = NULL, defaultPath = "") {
+  browse <- paste0(id, "_browse")
+  shinyFiles::shinyFileSave(
+    input, browse, roots = roots, filetypes = filetypes,
+    defaultPath = defaultPath
+  )
+  observeEvent(input[[browse]], {
+    if (!isTRUE(guard())) return()
+    selected <- shinyFiles::parseSavePath(roots, input[[browse]])
+    if (nrow(selected) > 0L) {
+      updateTextInput(session, id, value = as.character(selected$datapath[[1L]]))
+    }
+  }, ignoreInit = TRUE)
+  invisible(NULL)
+}

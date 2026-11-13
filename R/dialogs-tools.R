@@ -10,7 +10,9 @@ options_dialog <- function() {
     digits = 7L,
     width = 80L,
     stringsAsFactors = TRUE,
-    edit_threshold = 10000L
+    edit_threshold = 10000L,
+    use_markdown = FALSE,
+    use_knitr = FALSE
   )
 
   dialog_spec(
@@ -39,7 +41,20 @@ options_dialog <- function() {
         ),
         help_text(
           tr("The editing threshold applies to the active data set; set it to 0 to disable the editor.")
-        )
+        ),
+        htmltools::tags$hr(),
+        htmltools::tags$h6(tr("Documents")),
+        checkbox_input(
+          ns("use_markdown"), tr("Show the R Markdown document commands"),
+          isTRUE(m$use_markdown)
+        ),
+        checkbox_input(
+          ns("use_knitr"), tr("Show the knitr document commands"),
+          isTRUE(m$use_knitr)
+        ),
+        help_text(tr(
+          "The document commands are always available from the Script tab; these options keep the corresponding File and Edit entries visible after a restart."
+        ))
       )
     },
     on_ok = function(input, state) {
@@ -62,6 +77,8 @@ options_dialog <- function() {
       state$options$width <- width
       state$options$edit_threshold <- threshold
       state$options$stringsAsFactors <- stringsAsFactors
+      state$options$use_markdown <- isTRUE(input[[ns("use_markdown")]])
+      state$options$use_knitr <- isTRUE(input[[ns("use_knitr")]])
       base::options(digits = digits, width = width)
       state_touch(state)
 
@@ -157,8 +174,11 @@ load_script_dialog <- function() {
       if (inherits(lines, "error")) {
         return(list(error = conditionMessage(lines)))
       }
+      text <- paste(lines, collapse = "\n")
+      document_set_text(state, text)
+      document_set_mode(state, "r")
       list(
-        script = paste(lines, collapse = "\n"),
+        script = text,
         memory = list(path = path)
       )
     }

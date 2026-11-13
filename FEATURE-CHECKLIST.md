@@ -21,6 +21,11 @@ Date: 13 November 2026
 | F10 | R Markdown/HTML report export | done |
 | F11 | Help debt, Italian translations, screenshots | done |
 | F12 | Browser flows for five plugin families | done |
+| D1 | Document mode in the Script tab (R/Rmd/Rnw) | done |
+| D2 | Chunks, sections and removal commands | done |
+| D3 | Knit to HTML/PDF/Word with the Report tab | done |
+| D4 | knitr `.Rnw` documents | done |
+| D5 | Templates, run-chunk, options and documentation | done |
 
 ## Delivered by wave
 
@@ -86,25 +91,42 @@ Date: 13 November 2026
 - `tests/testthat/test-plugins-e2e.R`: HH, survival, FactoMineR, ROC and
   TeachingDemos browser flows.
 
+### D1-D5 — document authoring
+
+- `R/document.R`: document model, chunk and section parser, mode conversion,
+  templates, knit to HTML/PDF/Word and knitr `.Rnw` support.
+- `R/document-dialogs.R`: `loadRmd`, `loadRnw`, `saveRmdAs`, `saveRnwAs`,
+  `newRmd`, `newRnw`, `insertSection`, `insertChunk`, `setBibliography` and
+  `compileRmd`.
+- Script tab: R/Rmd/Rnw mode selector, New/Open/Save/Save as/Knit, Section,
+  Remove block, Remove section, Run chunk; dialogs append chunks in document
+  mode.
+- Report tab with an iframe preview and a download button.
+- Insert-chunk dialog with label, echo/warning/message and figure size;
+  bibliography dialog that edits the YAML front matter.
+- Options expose the document command visibility.
+- Help topic `document-authoring`, vignette *Writing reports with R Markdown
+  and knitr*, document-mode screenshot.
+- `tests/testthat/test-document.R` and `test-documents-e2e.R`.
+
 ## Menu coverage
 
-| Metric | 1.6.0 | 1.12.0 |
+| Metric | 1.6.0 | 1.13.0 |
 |---|---|---|
-| Core dialogs | 200 | 205 |
-| Dialogs with all plugins | 558 | 619 |
+| Core dialogs | 200 | 213 |
+| Dialogs with all plugins | 558 | 629 |
 | Menu entries with all plugins | 900 | 900 |
-| Implemented entries | 715 | 850 |
-| Disabled entries | 185 | 50 |
-| Dialogs with a documented topic | 63 | 619 |
-| Help topics | 134 | 442 |
+| Implemented entries | 715 | 863 |
+| Disabled entries | 185 | 37 |
+| Dialogs with a documented topic | 63 | 629 |
+| Help topics | 134 | 443 |
 | Draft dialog topics | 443 | 0 |
 | Italian topics | 3 | 21 |
 
-The 50 disabled entries correspond to 38 distinct commands: 24 core entries
-out of scope by design (R Markdown/knitr editor, close/restart commander,
-cut/copy/paste/undo/find, `Identify3D`), 2 EZR close/exit duplicates and 13
-TeachStat generic-distribution helpers that the plan keeps outside the
-perimeter.
+The 37 disabled entries correspond to 28 distinct commands: 13 core entries
+(close/restart commander, the nine browser-delegated Edit actions and
+`Identify3D`), 2 EZR close/exit duplicates and 13 TeachStat
+generic-distribution helpers that the plan keeps outside the perimeter.
 
 ## Verification
 
