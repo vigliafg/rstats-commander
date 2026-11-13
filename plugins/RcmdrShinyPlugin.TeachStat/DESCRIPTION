@@ -1,0 +1,30 @@
+Package: RcmdrShinyPlugin.TeachStat
+Type: Package
+Title: Basic Statistics Teaching Toolkit for RcmdrShiny
+Version: 0.1.0
+Authors@R: c(
+    person("RcmdrShiny", "Contributors", role = c("aut", "cre"),
+           email = "vigliafg@gmail.com"),
+    person("M. A.", "Mosquera", role = "ctb",
+           comment = "Author of RcmdrPlugin.TeachStat")
+  )
+Description: RcmdrShiny teaching toolkit with descriptive statistics, index
+    numbers, random-variable dialogs, confidence intervals and hypothesis
+    tests for one and two samples.  Derived from RcmdrPlugin.TeachStat 1.1-4.
+License: GPL (>= 3)
+Encoding: UTF-8
+Depends: R (>= 4.1.0)
+Imports:
+    RcmdrShiny (>= 1.1.0),
+    htmltools
+Suggests:
+    testthat (>= 3.0.0),
+    RcmdrMisc,
+    Hmisc,
+    lme4,
+    IndexNumR,
+    randtests,
+    tseries
+Config/testthat/edition: 3
+URL: https://github.com/vigliafg/rstats-commander
+BugReports: https://github.com/vigliafg/rstats-commander/issues

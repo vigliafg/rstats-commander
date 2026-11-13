@@ -1,0 +1,24 @@
+# RcmdrShinyPlugin.TeachingDemos menu definitions
+#
+# type    menu          kind      label                                command                       activation    install
+remove  normalDistributionPlot   ""   ""   ""   ""   ""
+remove  tDistributionPlot        ""   ""   ""   ""   ""
+remove  gammaDistributionPlot    ""   ""   ""   ""   ""
+remove  discreteMenu             ""   ""   ""   ""   ""
+
+menu    demosMenu     topMenu   ""                                   ""                            ""            ""
+item    demosMenu     command   "Central limit theorem..."            centralLimitTheorem           ""            "packageAvailable('TeachingDemos')"
+item    demosMenu     command   "Confidence interval for the mean..." simulateConfidenceIntervals   ""            "packageAvailable('TeachingDemos')"
+item    demosMenu     command   "Power of the test"                   powerExample                  ""            "packageAvailable('TeachingDemos')"
+item    demosMenu     command   "Flip a coin"                         flipCoin                      ""            "packageAvailable('TeachingDemos')"
+item    demosMenu     command   "Roll a die"                          rollDie                       ""            "packageAvailable('TeachingDemos')"
+item    demosMenu     command   "Simple linear regression"            linearRegressionExample       ""            "packageAvailable('TeachingDemos')"
+item    demosMenu     command   "Simple correlation"                  correlationExample            ""            "packageAvailable('TeachingDemos')"
+item    topMenu       cascade   "Demos"                               demosMenu                     ""            "packageAvailable('TeachingDemos')"
+
+menu    visualMenu    distributionsMenu ""                           ""                            ""            ""
+item    visualMenu    command   "Binomial distributions"              visBinom                      ""            "packageAvailable('TeachingDemos')"
+item    visualMenu    command   "Normal distributions"                visNormal                     ""            "packageAvailable('TeachingDemos')"
+item    visualMenu    command   "t distributions"                     vist                          ""            "packageAvailable('TeachingDemos')"
+item    visualMenu    command   "Gamma distributions"                 visGamma                      ""            "packageAvailable('TeachingDemos')"
+item    distributionsMenu cascade "Visualize distributions"            visualMenu                    ""            "packageAvailable('TeachingDemos')"

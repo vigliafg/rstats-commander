@@ -159,6 +159,16 @@ activation_environment <- function(state) {
     length(positive) >= n
   }
   env$factorsP <- function(n = 1) length(factor_variables(state)) >= n
+  env$nonFactorsP <- function(n = 1) length(numeric_variables(state)) >= n
+  env$twoOrMoreLevelFactorsP <- function(n = 1) {
+    df <- dataset(state)
+    if (is.null(df)) return(FALSE)
+    count <- sum(vapply(df, function(x) {
+      (is.factor(x) || is.character(x) || is.logical(x)) &&
+        length(unique(x[!is.na(x)])) >= 2L
+    }, logical(1)))
+    count >= n
+  }
   env$characterP <- function(n = 1) {
     df <- dataset(state)
     if (is.null(df)) return(FALSE)
@@ -171,6 +181,15 @@ activation_environment <- function(state) {
   env$modelsP <- function(n = 1) length(list_all_models(state)) >= n
   env$glmP <- function() inherits(active_model_object(state), "glm")
   env$lmP <- function() inherits(active_model_object(state), "lm")
+  env$aovModelsP <- function(n = 1) {
+    count_objects(state, function(x) inherits(x, c("aov", "lm"))) >= n
+  }
+  env$AbscontDistrsP <- function(n = 1) {
+    count_objects(state, function(x) inherits(x, "AbscontDistribution")) >= n
+  }
+  env$DiscreteDistrsP <- function(n = 1) {
+    count_objects(state, function(x) inherits(x, "DiscreteDistribution")) >= n
+  }
   env$hclustSolutionsP <- function(n = 1) {
     count_objects(state, function(x) inherits(x, "hclust")) >= n
   }

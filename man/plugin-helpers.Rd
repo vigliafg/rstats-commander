@@ -3,6 +3,7 @@
 \alias{variables}
 \alias{numeric_variables}
 \alias{factor_variables}
+\alias{two_level_factors}
 \alias{dataset}
 \alias{plugin_formula}
 \alias{tr}
@@ -14,6 +15,8 @@ variables(state)
 numeric_variables(state)
 
 factor_variables(state)
+
+two_level_factors(state)
 
 dataset(state)
 
@@ -37,8 +40,8 @@ than one element becomes an interaction term such as \code{(a * b)}.}
 \item{...}{Pieces of a message, pasted together before translation.}
 }
 \value{
-\code{variables()}, \code{numeric_variables()} and \code{factor_variables()}
-return character vectors.  \code{dataset()} returns the active data frame or
+\code{variables()}, \code{numeric_variables()}, \code{factor_variables()} and
+\code{two_level_factors()} return character vectors.  \code{dataset()} returns the active data frame or
 \code{NULL}.  \code{plugin_formula()} returns a formula string.
 \code{tr()} returns a translated string and \code{available_languages()}
 returns the language codes shipped with RcmdrShiny.

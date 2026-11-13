@@ -1,0 +1,27 @@
+Package: RcmdrShinyPlugin.KMggplot2
+Type: Package
+Title: ggplot2 Graphics for RcmdrShiny
+Version: 0.1.0
+Authors@R: c(
+    person("RcmdrShiny", "Contributors", role = c("aut", "cre"),
+           email = "vigliafg@gmail.com"),
+    person("Kazuki", "Yoshida", role = "ctb",
+           comment = "Author of RcmdrPlugin.KMggplot2")
+  )
+Description: RcmdrShiny dialogs for ggplot2 graphics: histograms, Q-Q plots,
+    box and violin plots, scatter plots, line charts, pie and bar charts,
+    contour plots, Kaplan-Meier curves and distribution plots.  Derived from
+    RcmdrPlugin.KMggplot2 0.5-6.
+License: GPL (>= 2)
+Encoding: UTF-8
+Depends: R (>= 4.1.0)
+Imports:
+    RcmdrShiny (>= 1.1.0),
+    htmltools
+Suggests:
+    testthat (>= 3.0.0),
+    ggplot2,
+    survival
+Config/testthat/edition: 3
+URL: https://github.com/vigliafg/rstats-commander
+BugReports: https://github.com/vigliafg/rstats-commander/issues

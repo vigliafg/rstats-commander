@@ -21,7 +21,9 @@
 .base_predicate_names <- c(
   "activeDataSetP", "activeModelP", "dataSetsP", "numericP",
   "numericPositiveP", "factorsP", "characterP", "twoLevelFactorsP",
-  "discreteNumericP", "modelsP", "glmP", "lmP", "hclustSolutionsP", "modelCapability",
+  "discreteNumericP", "modelsP", "glmP", "lmP", "aovModelsP", "nonFactorsP",
+  "twoOrMoreLevelFactorsP", "AbscontDistrsP", "DiscreteDistrsP",
+  "hclustSolutionsP", "modelCapability",
   "CoefficientsP", "PredictorsP", "packageAvailable", "getRcmdr",
   "listPlugins", "rglLoaded", "rgl.cur", "dev.cur", "MarkdownP", "knitrP",
   "manualTranslationP"
@@ -135,11 +137,18 @@ RcmdrShiny.plugin <- function(name, menus = NULL, dialogs = list(),
     others <- unlist(lapply(.plugin_registry$plugins, function(plugin) {
       if (identical(plugin$name, name)) character() else names(plugin[[kind]])
     }), use.names = FALSE)
-    clashes <- intersect(names, c(base_names, others))
-    if (length(clashes) > 0L && !isTRUE(replace)) {
+    base_clashes <- intersect(names, base_names)
+    plugin_clashes <- intersect(names, others)
+    if (length(base_clashes) > 0L && !isTRUE(replace)) {
       stop(sprintf(
-        "Plugin '%s' %s already defined: %s. Use replace = TRUE to override.",
-        name, kind, paste(clashes, collapse = ", ")
+        "Plugin '%s' %s already defined by the core: %s. Use replace = TRUE to override.",
+        name, kind, paste(base_clashes, collapse = ", ")
+      ), call. = FALSE)
+    }
+    if (length(plugin_clashes) > 0L && !isTRUE(replace)) {
+      warning(sprintf(
+        "Plugin '%s' overrides %s from an earlier plugin: %s.",
+        name, kind, paste(plugin_clashes, collapse = ", ")
       ), call. = FALSE)
     }
     invisible(NULL)

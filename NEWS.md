@@ -1,3 +1,29 @@
+# RcmdrShiny 1.3.0
+
+## Plugin Wave 2
+
+- Added `RcmdrShinyPlugin.TeachingDemos`: central limit theorem, confidence
+  interval simulation, power, coin and die simulations, regression and
+  correlation demos, and distribution visualization.  The plugin removes the
+  duplicated core distribution entries.
+- Added `RcmdrShinyPlugin.KMggplot2`: ggplot2 histograms, Q-Q plots, box,
+  violin and confidence-interval plots, scatter, line, pie, bar and contour
+  plots, scatter matrices, Kaplan-Meier curves, factor conversion and 17
+  distribution plots.
+- Added `RcmdrShinyPlugin.HH`: two-way tables, best subsets, confidence
+  interval plots, predictions, scatter and lattice plots, Likert plots,
+  interaction plots, ANOVA tables, hypothesis plots, MMC and projector
+  settings.
+- Added `RcmdrShinyPlugin.TeachStat`: descriptive statistics, index numbers,
+  random-variable dialogs, confidence intervals and hypothesis tests, plus the
+  data-management menu using the core dialogs.
+- Core: `nonFactorsP()`, `twoOrMoreLevelFactorsP()`, `aovModelsP()`,
+  `AbscontDistrsP()` and `DiscreteDistrsP()` activation predicates.
+- Core: `two_level_factors()` is now part of the plugin API.
+- Core: plugin names that clash with another plugin now warn and override
+  instead of blocking the session; clashes with core still fail.
+- Ten plugins now load together (474 menu leaves).
+
 # RcmdrShiny 1.2.0
 
 ## Plugin Wave 1
