@@ -172,9 +172,18 @@ required_packages <- function(code) {
   )) {
     packages <- c(packages, "RcmdrMisc")
   }
-  if (grepl("\\b(Recode|recode|Anova|leveneTest|normalityTest|powerTransform|scatterplot|scatterplotMatrix|avPlots|crPlots|influencePlot)\\s*\\(",
+  if (grepl("\\b(Recode|recode|Anova|leveneTest|normalityTest|powerTransform|scatterplot|scatterplotMatrix|avPlots|crPlots|influencePlot|influenceIndexPlot|Confint|Boot|DeltaMethod|compareCoefs|linearHypothesis|vif|outlierTest|crPlot3d|avPlot3d)\\s*\\(",
             code)) {
     packages <- c(packages, "car")
+  }
+  if (grepl("\\b(allEffects|Effect|predictorEffects)\\s*\\(", code)) {
+    packages <- c(packages, "effects")
+  }
+  if (grepl("\\bregsubsets\\s*\\(", code)) {
+    packages <- c(packages, "leaps")
+  }
+  if (grepl("\\b(bptest|dwtest|resettest)\\s*\\(", code)) {
+    packages <- c(packages, "lmtest")
   }
   if (grepl("\\b(read\\.mtp|read\\.xport)\\s*\\(", code)) {
     packages <- c(packages, "foreign")
@@ -197,7 +206,7 @@ required_packages <- function(code) {
   if (grepl("\\bsigma\\.test\\s*\\(", code)) {
     packages <- c(packages, "TeachingDemos")
   }
-  if (grepl("\\b(indexplot|Hist|Dotplot|Barplot|piechart|lineplot|plotMeans|discretePlot)\\s*\\(",
+  if (grepl("\\b(indexplot|Hist|Dotplot|Barplot|piechart|lineplot|plotMeans|discretePlot|stepwise|plotBoot|DeltaMethod)\\s*\\(",
             code)) {
     packages <- c(packages, "RcmdrMisc")
   }

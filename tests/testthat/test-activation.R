@@ -40,7 +40,7 @@ test_that("command_status distinguishes enabled, porting, inactive and hidden", 
   state <- AppState(env = env)
 
   expect_equal(command_status(state, "readDataSet"), "enabled")
-  expect_equal(command_status(state, "anovaTable"), "porting")
+  expect_equal(command_status(state, "GumbelQuantiles"), "porting")
   expect_equal(
     command_status(state, "numericalSummaries", activation = "numericP()"),
     "inactive"

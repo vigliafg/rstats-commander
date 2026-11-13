@@ -7,14 +7,13 @@ RcmdrShiny is a fork of the Rcmdr 2.15.0 engine: it keeps the R command
 generation semantics of Rcmdr, so every action in the graphical interface
 produces a reproducible command in the script log and in the output pane.
 
-> **Status: Phase 4 (Graphs, Distributions and 3D).** The application covers
-> the Graphs and Distributions menus: the main base/RcmdrMisc/car/lattice
-> graphs, 3D scatterplots through rgl, distribution quantiles/probabilities/
-> densities/samples, plot history and export. The Phase 1 shell, Phase 2
-> File/Data workflow and Phase 3 Statistics remain in place. One hundred and
-> seven Rcmdr dialogs are ported; the remaining ones are listed in
-> [`inst/etc/dialogs-inventory.csv`](inst/etc/dialogs-inventory.csv) and are
-> disabled with an "In porting" tooltip.
+> **Status: Phase 5 (Models, Tools and Help).** The application now covers the
+> Models menu (diagnostics, influence, hypotheses, confidence intervals,
+> bootstrap, stepwise/subset selection, effect plots), the Tools menu and the
+> Help menu. All 138 user-facing Rcmdr dialogs are ported; only four internal
+> utilities in the upstream inventory remain. The Phase 1 shell, Phase 2
+> File/Data, Phase 3 Statistics and Phase 4 Graphs/Distributions remain in
+> place.
 
 ## Requirements
 
@@ -80,7 +79,9 @@ RcmdrShiny::run(env = env)
 | Graphs: base, RcmdrMisc, car and lattice dialogs | done |
 | Distributions: quantiles, probabilities, plots and samples | done |
 | 3D graphs with rgl and plot export/snapshot | done |
-| Remaining 35 dialog functions | backlog |
+| Models: diagnostics, influence, hypotheses, model selection, effect plots | done |
+| Tools and Help menus | done |
+| Remaining 4 internal utilities (no user-facing dialog) | backlog |
 | Plugin API, full i18n coverage, CRAN hardening | later phases |
 
 The inventory is regenerated from an Rcmdr source tree with:

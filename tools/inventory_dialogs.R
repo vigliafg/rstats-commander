@@ -93,7 +93,16 @@ ported <- c(
   "DensityPlot", "DiscretePlot", "Symbox", "setPalette", "saveBitmap",
   "savePDF", "saveRglGraph", "setRandomSeed", "distributionMass",
   "distributionProbabilities", "distributionQuantiles",
-  "discreteDistributionPlot", "distributionPlot", "distributionSamples"
+  "discreteDistributionPlot", "distributionPlot", "distributionSamples",
+  "selectActiveModel", "summarizeModel", "compareCoefficients",
+  "addObservationStatistics", "aic", "bic", "stepwiseRegression",
+  "subsetRegression", "confidenceIntervals", "Bootstrap", "DeltaMethodConfInt",
+  "anovaTable", "compareModels", "testLinearHypothesis", "VIF",
+  "BreuschPaganTest", "DurbinWatsonTest", "RESETtest", "OutlierTest",
+  "transformResponse", "plotModel", "residualQQPlot", "CRPlots", "CRPlot3D",
+  "AVPlots", "AVPlot3D", "InfluencePlot", "InfluenceIndexPlot",
+  "effectPlots", "predictorEffectPlots", "saveOptions", "loadPackages",
+  "loadPlugins", "appNap", "installSoftware"
 )
 inventory$status <- ifelse(
   inventory$function_name %in% ported, "ported", "todo"

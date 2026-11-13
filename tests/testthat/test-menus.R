@@ -47,8 +47,8 @@ test_that("the three Phase 0 commands are enabled only when appropriate", {
 
 test_that("unimplemented commands stay disabled", {
   state <- AppState(env = new.env())
-  expect_false(command_enabled(state, "anovaTable"))
-  expect_false(is_implemented_command("anovaTable"))
+  expect_false(command_enabled(state, "GumbelQuantiles"))
+  expect_false(is_implemented_command("GumbelQuantiles"))
 })
 
 test_that("menu rendering marks unavailable entries as disabled", {

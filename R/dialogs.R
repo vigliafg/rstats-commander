@@ -34,7 +34,7 @@ dialog_catalog <- function() {
     loadDataSet = load_dataset_dialog(),
     loadLog = load_script_dialog()
   )
-  c(base, phase2_dialogs(), phase3_dialogs(), phase4_dialogs())
+  c(base, phase2_dialogs(), phase3_dialogs(), phase4_dialogs(), phase5_dialogs())
 }
 
 #' @keywords internal
@@ -106,6 +106,64 @@ direct_commands <- function() {
     saveBitmap = function(state) request_download(state, "download_plot_png"),
     savePDF = function(state) request_download(state, "download_plot_pdf"),
     saveRglGraph = function(state) request_download(state, "download_rgl"),
+    summarizeModel = function(state) {
+      model <- active_model(state)
+      if (is.null(model)) return(NULL)
+      run_command(state, cmd_summarize_model(model))
+    },
+    aic = function(state) {
+      model <- active_model(state)
+      if (is.null(model)) return(NULL)
+      run_command(state, cmd_aic(model))
+    },
+    bic = function(state) {
+      model <- active_model(state)
+      if (is.null(model)) return(NULL)
+      run_command(state, cmd_bic(model))
+    },
+    VIF = function(state) {
+      model <- active_model(state)
+      if (is.null(model)) return(NULL)
+      for (command in cmd_vif(model)) run_command(state, command)
+    },
+    OutlierTest = function(state) {
+      model <- active_model(state)
+      if (is.null(model)) return(NULL)
+      run_command(state, cmd_outlier_test(model))
+    },
+    plotModel = function(state) {
+      model <- active_model(state)
+      if (is.null(model)) return(NULL)
+      for (command in cmd_plot_model(model)) run_command(state, command)
+    },
+    loadPlugins = function(state) {
+      showNotification(
+        tr("The plugin API is minimal in this version; legacy Tk dialogs are not supported."),
+        type = "message", duration = 8
+      )
+    },
+    appNap = function(state) {
+      showNotification(tr("App Nap management is only relevant on macOS."),
+                       type = "message", duration = 5)
+    },
+    installSoftware = function(state) {
+      showNotification(
+        tr("Auxiliary software must be installed with your system package manager."),
+        type = "message", duration = 8
+      )
+    },
+    browseManual = function(state) {
+      utils::browseURL("https://www.r-commander.com/")
+    },
+    browseEnglishManual = function(state) {
+      utils::browseURL("https://www.r-commander.com/")
+    },
+    browseRcmdrHexSticker = function(state) {
+      utils::browseURL("https://www.r-commander.com/")
+    },
+    browseRMarkdown = function(state) {
+      utils::browseURL("https://rmarkdown.rstudio.com/")
+    },
     saveOptions = function(state) {
       path <- file.path(path.expand("~"), ".RcmdrShiny-options.rds")
       saveRDS(state$options, path)

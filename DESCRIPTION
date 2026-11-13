@@ -1,7 +1,7 @@
 Package: RcmdrShiny
 Type: Package
 Title: A Shiny Version of the R Commander
-Version: 0.5.0
+Version: 0.6.0
 Authors@R: c(
     person("RcmdrShiny", "Contributors", role = c("aut", "cre"),
            email = "maintainer@example.com"),
@@ -47,6 +47,8 @@ Suggests:
     lme4,
     TeachingDemos,
     Hmisc,
+    effects,
+    boot,
     leaps,
     lmtest,
     mgcv,

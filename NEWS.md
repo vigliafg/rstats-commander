@@ -1,3 +1,24 @@
+# RcmdrShiny 0.6.0
+
+## Phase 5 — Models, Tools and Help
+
+- Complete Models menu: model selection and summaries, coefficient
+  comparison, observation statistics, AIC/BIC, stepwise and subset selection,
+  confidence intervals, bootstrap, delta method, ANOVA tables, model
+  comparison, linear hypotheses, VIF, Breusch-Pagan, Durbin-Watson, RESET,
+  outlier tests, response transformation, basic model plots, residual QQ,
+  component+residual and added-variable plots (including 3D), influence plots,
+  effect plots and predictor-effect plots.
+- Tools: load packages, options/save options, plugin notice, macOS App Nap
+  notice and auxiliary-software notice.
+- Help: quick help, about, manuals and website links, R Markdown link, R help
+  system and dataset help.
+- Lazy attachment of car, effects, leaps, lmtest, boot and RcmdrMisc for model
+  commands.
+- Golden-command and execution tests for the main model diagnostics.
+- Rendering and validation tests for every Phase 5 dialog.
+- Inventory: 138 ported / 4 internal utilities; version 0.6.0.
+
 # RcmdrShiny 0.5.0
 
 ## Phase 4 — Graphs, Distributions and 3D
