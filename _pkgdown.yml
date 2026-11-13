@@ -25,6 +25,9 @@ reference:
       - load_plugin_package
       - list_plugins
       - unload_plugins
+      - plugin-helpers
+      - plugin-widgets
+      - menus
 
 articles:
   - title: User guide

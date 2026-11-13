@@ -27,18 +27,25 @@ dialog_spec <- function(id, title, ui, on_ok, on_open = NULL,
 
 #' Available dialog specifications
 #' @keywords internal
-dialog_catalog <- function() {
-  base <- list(
-    loadPlugins = load_plugins_dialog(),
-    readDataSet = import_text_dialog(),
-    numericalSummaries = numerical_summaries_dialog(),
-    linearModel = linear_model_dialog(),
-    Options = options_dialog(),
-    Setwd = setwd_dialog(),
-    loadDataSet = load_dataset_dialog(),
-    loadLog = load_script_dialog()
+base_dialog_catalog <- function() {
+  c(
+    list(
+      loadPlugins = load_plugins_dialog(),
+      readDataSet = import_text_dialog(),
+      numericalSummaries = numerical_summaries_dialog(),
+      linearModel = linear_model_dialog(),
+      Options = options_dialog(),
+      Setwd = setwd_dialog(),
+      loadDataSet = load_dataset_dialog(),
+      loadLog = load_script_dialog()
+    ),
+    phase2_dialogs(), phase3_dialogs(), phase4_dialogs(), phase5_dialogs()
   )
-  c(base, phase2_dialogs(), phase3_dialogs(), phase4_dialogs(), phase5_dialogs(), plugin_dialogs())
+}
+
+#' @keywords internal
+dialog_catalog <- function() {
+  c(base_dialog_catalog(), plugin_dialogs())
 }
 
 #' @keywords internal
@@ -66,8 +73,8 @@ is_implemented_command <- function(command) {
 
 # Commands that do not need a dialog.  They are the first entries of the
 # "porting registry": each one is a function of the application state.
-direct_commands <- function() {
-  base <- list(
+base_direct_commands <- function() {
+  list(
     summarizeDataSet = function(state) {
       ds <- active_dataset(state)
       if (is.null(ds)) return(NULL)
@@ -230,7 +237,11 @@ direct_commands <- function() {
       show_help_modal(ds, package = NULL)
     }
   )
-  utils::modifyList(base, plugin_commands())
+}
+
+#' @keywords internal
+direct_commands <- function() {
+  utils::modifyList(base_direct_commands(), plugin_commands())
 }
 
 #' @keywords internal

@@ -11,6 +11,7 @@
 ^PHASE5-CHECKLIST\.md$
 ^PHASE6-CHECKLIST\.md$
 ^PHASE7-CHECKLIST\.md$
+^PLUGIN-WAVE0-CHECKLIST\.md$
 ^RELEASE-CHECKLIST\.md$
 ^cran-comments\.md$
 ^_pkgdown\.yml$
@@ -20,4 +21,5 @@
 ^\.Rbuildignore$
 ^\.gitignore$
 ^tools$
+^plugins$
 ^vignettes/\.gitkeep$

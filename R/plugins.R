@@ -4,9 +4,29 @@
 # Shiny dialog specifications.  Legacy Tk dialogs are deliberately not
 # executed: plugins that depend on them are registered with a warning and
 # their menu entries remain disabled.
+#
+# Two plugin shapes are supported:
+#
+#   * a script that calls RcmdrShiny.plugin();
+#   * an installed package that exports rcmdrshiny_plugin().  Packages named
+#     RcmdrShinyPlugin.* use this protocol; legacy RcmdrPlugin.* packages fall
+#     back to the menus-only compatibility loader.
 
 .plugin_registry <- new.env(parent = emptyenv())
 .plugin_registry$plugins <- list()
+.plugin_registry$version <- 0L
+
+# Predicates provided by the core activation environment.  Plugin predicates
+# may not shadow these unless the plugin is registered with `replace = TRUE`.
+.base_predicate_names <- c(
+  "activeDataSetP", "activeModelP", "dataSetsP", "numericP",
+  "numericPositiveP", "factorsP", "characterP", "twoLevelFactorsP",
+  "discreteNumericP", "modelsP", "hclustSolutionsP", "modelCapability",
+  "CoefficientsP", "PredictorsP", "packageAvailable", "getRcmdr",
+  "listPlugins", "rglLoaded", "rgl.cur", "dev.cur", "MarkdownP", "knitrP",
+  "manualTranslationP"
+)
+
 
 #' Create a plugin dialog specification
 #'
@@ -42,13 +62,18 @@ plugin_dialog <- function(id, title, ui, on_ok, on_open = NULL,
 #'   called with the application state.
 #' @param description Optional description.
 #' @param version Optional version string.
-#' @param tcltk Set to `TRUE` for a legacy Tk plugin; a warning is emitted and
-#'   menu entries without a Shiny implementation stay disabled.
+#' @param predicates Named list of activation predicates.  Each predicate is a
+#'   function of zero arguments, or of the application state, that returns a
+#'   logical value and can be used in the `activation` column of plugin menu
+#'   entries.
+#' @param replace Replace an existing plugin with the same name and allow
+#'   command, dialog or predicate names to override earlier definitions.
 #' @return The registered plugin, invisibly.
 #' @export
 RcmdrShiny.plugin <- function(name, menus = NULL, dialogs = list(),
                               commands = list(), description = NULL,
-                              version = NULL, tcltk = FALSE) {
+                              version = NULL, tcltk = FALSE,
+                              predicates = list(), replace = FALSE) {
   if (!is.character(name) || length(name) != 1L || !nzchar(name)) {
     stop("Plugin `name` must be a single non-empty string.", call. = FALSE)
   }
@@ -92,6 +117,44 @@ RcmdrShiny.plugin <- function(name, menus = NULL, dialogs = list(),
                  paste(names(commands)[bad], collapse = ", ")), call. = FALSE)
   }
 
+  if (!is.list(predicates)) {
+    stop("Plugin `predicates` must be a named list.", call. = FALSE)
+  }
+  if (length(predicates) > 0L &&
+      (is.null(names(predicates)) || any(!nzchar(names(predicates))))) {
+    stop("Plugin predicates must be named.", call. = FALSE)
+  }
+  bad <- !vapply(predicates, is.function, logical(1))
+  if (any(bad)) {
+    stop(sprintf("Plugin predicates must be functions: %s",
+                 paste(names(predicates)[bad], collapse = ", ")), call. = FALSE)
+  }
+
+  check_conflicts <- function(names, kind, base_names) {
+    if (length(names) == 0L) return(invisible(NULL))
+    others <- unlist(lapply(.plugin_registry$plugins, function(plugin) {
+      if (identical(plugin$name, name)) character() else names(plugin[[kind]])
+    }), use.names = FALSE)
+    clashes <- intersect(names, c(base_names, others))
+    if (length(clashes) > 0L && !isTRUE(replace)) {
+      stop(sprintf(
+        "Plugin '%s' %s already defined: %s. Use replace = TRUE to override.",
+        name, kind, paste(clashes, collapse = ", ")
+      ), call. = FALSE)
+    }
+    invisible(NULL)
+  }
+
+  check_conflicts(names(commands), "commands", names(base_direct_commands()))
+  check_conflicts(names(dialogs), "dialogs", names(base_dialog_catalog()))
+  check_conflicts(
+    names(predicates), "predicates",
+    c(.base_predicate_names,
+      unlist(lapply(.plugin_registry$plugins, function(plugin) {
+        if (identical(plugin$name, name)) character() else names(plugin$predicates)
+      }), use.names = FALSE))
+  )
+
   plugin <- list(
     name = name,
     menus = menus,
@@ -99,7 +162,8 @@ RcmdrShiny.plugin <- function(name, menus = NULL, dialogs = list(),
     commands = commands,
     description = description,
     version = version,
-    tcltk = isTRUE(tcltk)
+    tcltk = isTRUE(tcltk),
+    predicates = predicates
   )
 
   if (isTRUE(tcltk)) {
@@ -111,6 +175,7 @@ RcmdrShiny.plugin <- function(name, menus = NULL, dialogs = list(),
   }
 
   .plugin_registry$plugins[[name]] <- plugin
+  .plugin_registry$version <- .plugin_registry$version + 1L
   .implemented_commands_cache$names <- NULL
   invisible(plugin)
 }
@@ -129,6 +194,7 @@ list_plugins <- function() {
 #' @export
 unload_plugins <- function() {
   .plugin_registry$plugins <- list()
+  .plugin_registry$version <- .plugin_registry$version + 1L
   .implemented_commands_cache$names <- NULL
   invisible(NULL)
 }
@@ -151,29 +217,97 @@ load_plugin <- function(file) {
   invisible(list_plugins())
 }
 
-#' Load a legacy Rcmdr plugin package
+#' Load an Rcmdr plugin package
 #'
-#' Reads `etc/menus.txt` from an installed package and registers its menu.
-#' Because legacy menus call Tk dialog functions, their commands are not
-#' executed; the entries are shown as disabled with a warning.
+#' Supports two package protocols:
+#'
+#' * `RcmdrShinyPlugin.*` (and any package that exports `rcmdrshiny_plugin()`):
+#'   the namespace is loaded and `rcmdrshiny_plugin()` registers the plugin.
+#'   The function may either register the plugin itself and return it, or
+#'   return a plugin specification (or a list of specifications) to register.
+#' * legacy `RcmdrPlugin.*`: `etc/menus.txt` is read and registered with a
+#'   warning.  Because legacy menus call Tk dialog functions, their entries
+#'   are not executed.
 #'
 #' @param package Installed package name.
-#' @return Invisibly, the plugin object.
+#' @param lib.loc Optional library location.
+#' @return Invisibly, the plugin object (or the value returned by
+#'   `rcmdrshiny_plugin()`).
 #' @export
-load_plugin_package <- function(package) {
-  if (!requireNamespace(package, quietly = TRUE)) {
+load_plugin_package <- function(package, lib.loc = NULL) {
+  if (!requireNamespace(package, quietly = TRUE, lib.loc = lib.loc)) {
     stop(sprintf("Package '%s' is not installed.", package), call. = FALSE)
   }
-  path <- system.file("etc", "menus.txt", package = package)
-  if (!nzchar(path) || !file.exists(path)) {
-    stop(sprintf("Package '%s' does not provide etc/menus.txt.", package),
-         call. = FALSE)
+
+  namespace <- asNamespace(package)
+  if (exists("rcmdrshiny_plugin", envir = namespace, inherits = FALSE)) {
+    return(invisible(load_plugin_namespace(namespace, package)))
+  }
+
+  menus_path <- system.file("etc", "rcmdrshiny-menus.txt",
+                            package = package, lib.loc = lib.loc)
+  if (nzchar(menus_path) && file.exists(menus_path)) {
+    plugin <- RcmdrShiny.plugin(
+      name = package,
+      menus = read_rcmdr_menus(menus_path),
+      description = utils::packageDescription(package, lib.loc = lib.loc)$Title,
+      version = as.character(utils::packageVersion(package, lib.loc = lib.loc))
+    )
+    return(invisible(plugin))
+  }
+
+  legacy_path <- system.file("etc", "menus.txt", package = package,
+                             lib.loc = lib.loc)
+  if (!nzchar(legacy_path) || !file.exists(legacy_path)) {
+    stop(sprintf(
+      "Package '%s' is neither an RcmdrShiny plugin nor a legacy Rcmdr plugin.",
+      package
+    ), call. = FALSE)
   }
   RcmdrShiny.plugin(
     name = package,
-    menus = read_rcmdr_menus(path),
+    menus = read_rcmdr_menus(legacy_path),
+    description = utils::packageDescription(package, lib.loc = lib.loc)$Title,
+    version = as.character(utils::packageVersion(package, lib.loc = lib.loc)),
     tcltk = TRUE
   )
+}
+
+# Register the plugin exposed by a package namespace.  Kept separate so that
+# the protocol can be tested without installing a package.
+#' @keywords internal
+load_plugin_namespace <- function(namespace, package) {
+  loader <- get("rcmdrshiny_plugin", envir = namespace, inherits = FALSE)
+  before <- names(.plugin_registry$plugins)
+  result <- loader()
+  after <- names(.plugin_registry$plugins)
+
+  if (length(setdiff(after, before)) > 0L) {
+    return(invisible(result))
+  }
+
+  register_spec <- function(spec) {
+    if (is.list(spec) && !is.null(spec$name)) {
+      do.call(RcmdrShiny.plugin, spec)
+      return(invisible(TRUE))
+    }
+    FALSE
+  }
+
+  if (register_spec(result)) return(invisible(result))
+
+  if (is.list(result) && length(result) > 0L &&
+      all(vapply(result, function(spec) {
+        is.list(spec) && !is.null(spec$name)
+      }, logical(1)))) {
+    for (spec in result) do.call(RcmdrShiny.plugin, spec)
+    return(invisible(result))
+  }
+
+  stop(sprintf(
+    "Package '%s' exports rcmdrshiny_plugin() but it did not register a plugin.",
+    package
+  ), call. = FALSE)
 }
 
 #' Load plugins from files or packages
@@ -201,10 +335,31 @@ plugin_menu_definitions <- function() {
   definitions <- read_rcmdr_menus()
   for (plugin in .plugin_registry$plugins) {
     if (!is.null(plugin$menus)) {
-      definitions <- rbind(definitions, plugin$menus)
+      definitions <- merge_menu_definitions(
+        definitions, plugin$menus, source = plugin$name
+      )
     }
   }
+
+  menu_ids <- definitions$menu[definitions$type == "menu"]
+  duplicates <- unique(menu_ids[duplicated(menu_ids)])
+  if (length(duplicates) > 0L) {
+    stop(sprintf("Duplicate menu names after loading plugins: %s",
+                 paste(duplicates, collapse = ", ")), call. = FALSE)
+  }
   definitions
+}
+
+#' Predicates supplied by registered plugins
+#' @keywords internal
+plugin_predicates <- function() {
+  predicates <- list()
+  for (plugin in .plugin_registry$plugins) {
+    for (name in names(plugin$predicates)) {
+      predicates[[name]] <- plugin$predicates[[name]]
+    }
+  }
+  predicates
 }
 
 #' @keywords internal

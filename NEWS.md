@@ -1,3 +1,27 @@
+# RcmdrShiny 1.1.0
+
+## Plugin infrastructure (Wave 0)
+
+- New `RcmdrShinyPlugin.*` package protocol: `load_plugin_package()` loads the
+  namespace and calls the exported `rcmdrshiny_plugin()`.
+- Plugin packages can also return a plugin specification, or a list of
+  specifications, instead of registering a plugin directly.
+- Legacy `RcmdrPlugin.*` packages keep the menus-only compatibility path.
+- `RcmdrShiny.plugin()` accepts `predicates` for plugin-specific activation
+  expressions and `replace` for explicit overrides.
+- Command, dialog and predicate name conflicts are detected when a plugin is
+  registered.
+- Plugin menus are merged with Rcmdr's insertion rules, including top-level
+  placement before Tools/Help, insertion into existing menus and `remove` rows.
+- Duplicate menu names after merging are rejected with a clear error.
+- Exported plugin helpers: `variables()`, `numeric_variables()`,
+  `factor_variables()`, `dataset()`, `plugin_formula()`, widget functions and
+  translation helpers.
+- Tooling: `tools/new_plugin.R` scaffolds a plugin package;
+  `tools/inventory_plugin.R` reports menus, commands and Tk dialogs in an
+  upstream plugin source tree.
+- CI: the plugins workflow discovers every plugin package and checks each one.
+
 # RcmdrShiny 1.0.0
 
 ## Phase 7 — Hardening, documentation and release

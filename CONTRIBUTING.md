@@ -34,6 +34,19 @@
 - [ ] Unit, integration and (where relevant) browser tests pass.
 - [ ] The inventory is updated.
 
+## Porting a plugin
+
+1. Inventory the upstream plugin:
+   `Rscript tools/inventory_plugin.R /path/to/RcmdrPlugin.X`.
+2. Create the package skeleton:
+   `Rscript tools/new_plugin.R X --upstream RcmdrPlugin.X`.
+3. Port menu entries into `inst/etc/rcmdrshiny-menus.txt`.
+4. Replace Tk dialogs with `RcmdrShiny::plugin_dialog()` and the exported
+   widgets.
+5. Keep the generated R commands identical to the upstream plugin.
+6. Add golden command tests and a registration test.
+7. Run `R CMD check` on the plugin and add it to `plugins/README.md`.
+
 ## Style
 
 - Base R and Shiny, no tidyverse in the package code.

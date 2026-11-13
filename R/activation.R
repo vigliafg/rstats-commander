@@ -137,7 +137,10 @@ model_predictors <- function(state, type = NULL) {
 #' Environment in which menu activation expressions are evaluated
 #' @keywords internal
 activation_environment <- function(state) {
-  if (!is.null(state$activation_env)) return(state$activation_env)
+  if (!is.null(state$activation_env) &&
+      identical(state$activation_version, .plugin_registry$version)) {
+    return(state$activation_env)
+  }
 
   env <- new.env(parent = baseenv())
 
@@ -195,7 +198,22 @@ activation_environment <- function(state) {
   env$knitrP <- function() isTRUE(state$options$use_knitr)
   env$manualTranslationP <- function() FALSE
 
+  predicates <- plugin_predicates()
+  for (name in names(predicates)) {
+    predicate <- predicates[[name]]
+    env[[name]] <- if (length(formals(predicate)) == 0L) {
+      predicate
+    } else {
+      local({
+        fn <- predicate
+        st <- state
+        function() fn(st)
+      })
+    }
+  }
+
   state$activation_env <- env
+  state$activation_version <- .plugin_registry$version
   env
 }
 

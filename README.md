@@ -10,11 +10,12 @@ RcmdrShiny is a fork of the Rcmdr 2.15.0 engine: it keeps the R command
 generation semantics of Rcmdr, so every action in the graphical interface
 produces a reproducible command in the script log and in the output pane.
 
-> **Status: 1.0 feature-complete.** All user-facing Rcmdr dialogs are ported
+> **Status: 1.1 plugin-ready.** All user-facing Rcmdr dialogs are ported
 > (138 of 142 inventory entries; the remaining four are internal Tk
 > utilities). The package includes the Shiny shell, File/Data, Statistics,
-> Graphs/Distributions, Models and Tools/Help menus, a minimal plugin API,
-> accessibility landmarks, vignettes and release engineering.
+> Graphs/Distributions, Models and Tools/Help menus, the plugin-package
+> protocol and helpers, accessibility landmarks, vignettes and release
+> engineering. The 15 general-purpose plugins are being ported in waves.
 
 ## Requirements
 
@@ -83,11 +84,12 @@ RcmdrShiny::run(env = env)
 | Models: diagnostics, influence, hypotheses, model selection, effect plots | done |
 | Tools and Help menus | done |
 | Plugin API: menus, direct commands, Shiny dialogs | done |
+| Plugin packages (`RcmdrShinyPlugin.*`), predicates, menu merge and tooling | done |
 | Legacy Tk plugin detection and warning | done |
 | Accessibility landmarks and keyboard pass | done |
 | Vignettes, pkgdown and release checklist | done |
 | Remaining 4 internal utilities (no user-facing dialog) | backlog |
-| Plugin API, full i18n coverage, CRAN hardening | later phases |
+| 15 general-purpose plugins (GitHub-only, waves 1-4) | in progress |
 
 The inventory is regenerated from an Rcmdr source tree with:
 
@@ -161,8 +163,22 @@ Load a plugin before starting the app:
 RcmdrShiny::run(plugins = "path/to/plugin.R")
 ```
 
-See `inst/examples/demo-plugin.R` and `inst/examples/demo-menus.txt`.
-Legacy Tk plugins are detected and disabled with a warning.
+Package plugins follow the `RcmdrShinyPlugin.*` protocol and export
+`rcmdrshiny_plugin()`:
+
+```r
+RcmdrShiny::run(plugins = c(
+  "RcmdrShinyPlugin.Export",
+  "RcmdrShinyPlugin.sos"
+))
+```
+
+They live under `plugins/` in this repository and are distributed on GitHub;
+see `plugins/README.md`.  `tools/new_plugin.R` creates a new package skeleton
+and `tools/inventory_plugin.R` inventories an upstream plugin.
+
+See `inst/examples/demo-plugin.R` and `inst/examples/demo-menus.txt` for a
+script plugin.  Legacy Tk plugins are detected and disabled with a warning.
 
 ## License and attribution
 

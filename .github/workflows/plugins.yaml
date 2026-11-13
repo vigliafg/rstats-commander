@@ -1,0 +1,74 @@
+name: plugins
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "R/**"
+      - "NAMESPACE"
+      - "DESCRIPTION"
+      - "plugins/**"
+      - ".github/workflows/plugins.yaml"
+  pull_request:
+    paths:
+      - "R/**"
+      - "NAMESPACE"
+      - "DESCRIPTION"
+      - "plugins/**"
+      - ".github/workflows/plugins.yaml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.list.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: list
+        name: Discover plugin packages
+        run: |
+          dirs=$(find plugins -mindepth 1 -maxdepth 1 -type d \
+            -name 'RcmdrShinyPlugin.*' -printf '%f\n' 2>/dev/null | sort)
+          if [ -z "$dirs" ]; then
+            echo 'matrix=[]' >> "$GITHUB_OUTPUT"
+          else
+            echo "matrix=$(printf '%s\n' "$dirs" | jq -R -s -c \
+              'split("\n") | map(select(length > 0))')" >> "$GITHUB_OUTPUT"
+          fi
+
+  check:
+    needs: discover
+    if: needs.discover.outputs.matrix != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJson(needs.discover.outputs.matrix) }}
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      _R_CHECK_FORCE_SUGGESTS_: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
+      - name: Install core package
+        run: R CMD INSTALL .
+      - name: Build plugin
+        run: R CMD build --no-build-vignettes "plugins/${PACKAGE}"
+        env:
+          PACKAGE: ${{ matrix.package }}
+      - name: Check plugin
+        run: |
+          tarball=$(ls "${PACKAGE}_"*.tar.gz | head -1)
+          R CMD check --no-manual --no-build-vignettes "$tarball"
+        env:
+          PACKAGE: ${{ matrix.package }}
