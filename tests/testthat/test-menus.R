@@ -53,11 +53,14 @@ test_that("unimplemented commands stay disabled", {
 
 test_that("menu rendering marks unavailable entries as disabled", {
   state <- AppState(env = new.env())
-  html <- as.character(menu_ui(menu_tree(), function(cmd) command_enabled(state, cmd)))
+  html <- as.character(menu_ui(menu_tree(), function(node) {
+    command_status(state, node$command, node$activation, node$install)
+  }))
 
   expect_true(grepl("rcmdr-menu-item", html, fixed = TRUE))
   expect_true(grepl("disabled", html, fixed = TRUE))
   expect_true(grepl("menu_item_", html, fixed = TRUE))
+  expect_true(grepl("In porting", html, fixed = TRUE))
 })
 
 test_that("the parser keeps labels containing spaces", {

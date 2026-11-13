@@ -23,6 +23,8 @@ test_that("the Phase 0 vertical slice works end to end", {
   env <- new.env()
   leaves <- menu_leaves(menu_tree())
   key <- function(command) leaves$key[leaves$command == command][[1L]]
+  old_digits <- getOption("digits")
+  on.exit(options(digits = old_digits), add = TRUE)
 
   shiny::testServer(app_server(env), {
     # -- import -----------------------------------------------------------
@@ -90,6 +92,23 @@ test_that("the Phase 0 vertical slice works end to end", {
     expect_s3_class(env$LinearModel.1, "lm")
     expect_match(output$output_text, "Coefficients")
     expect_match(output$output_text, "lm\\(formula = y ~ x")
+
+    # -- options dialog ---------------------------------------------------
+    click(session, key("Options"))
+    session$setInputs(
+      Options_digits = 4,
+      Options_width = 110,
+      Options_edit_threshold = 10000,
+      Options_stringsAsFactors = TRUE
+    )
+    click(session, "dialog_ok")
+    expect_equal(getOption("digits"), 4)
+    expect_equal(getOption("width"), 110)
+
+    # -- data editor ------------------------------------------------------
+    session$setInputs(data_mode = "edit")
+    data_ui <- htmltools::renderTags(output$data_pane)$html
+    expect_match(data_ui, "data_editor")
   })
 })
 

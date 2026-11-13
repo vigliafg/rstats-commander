@@ -50,7 +50,7 @@
 "appNap","file-menu.R","appNap","Tools > Manage Mac OS X app nap for R.app...","todo"
 "installSoftware","file-menu.R","installSoftware","Tools > Install auxiliary software...","todo"
 "loadPackages","file-menu.R","loadPackages","Tools > Load package(s)...","todo"
-"Options","file-menu.R","Options","Tools > Options...","todo"
+"Options","file-menu.R","Options","Tools > Options...","ported"
 "saveOptions","file-menu.R","saveOptions","Tools > Save Rcmdr options...","todo"
 "barGraph","graphs-menu.R","barGraph","Graphs > Bar graph...","todo"
 "boxPlot","graphs-menu.R","boxPlot","Graphs > Boxplot...","todo"

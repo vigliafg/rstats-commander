@@ -1,7 +1,7 @@
 Package: RcmdrShiny
 Type: Package
 Title: A Shiny Version of the R Commander
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
     person("RcmdrShiny", "Contributors", role = c("aut", "cre"),
            email = "maintainer@example.com"),
@@ -25,7 +25,9 @@ Imports:
     DT,
     shinyAce,
     shinyFiles,
+    rhandsontable,
     RcmdrMisc,
+    tools,
     utils,
     stats,
     grDevices

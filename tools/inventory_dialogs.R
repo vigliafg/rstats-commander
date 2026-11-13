@@ -64,7 +64,9 @@ for (file in files) {
 }
 
 inventory <- do.call(rbind, rows)
-ported <- c("readDataSet", "numericalSummaries", "linearModel")
+ported <- c(
+  "readDataSet", "numericalSummaries", "linearModel", "Options"
+)
 inventory$status <- ifelse(
   inventory$function_name %in% ported, "ported", "todo"
 )

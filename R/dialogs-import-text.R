@@ -20,6 +20,7 @@ import_text_dialog <- function() {
   dialog_spec(
     id = id,
     title = tr("Read Text Data From File, Clipboard, or URL"),
+    help = "read.table",
     ui = function(state, memory) {
       m <- utils::modifyList(defaults, memory %||% list())
 
@@ -36,12 +37,9 @@ import_text_dialog <- function() {
         ),
         conditionalPanel(
           sprintf("input['%s'] == 'local'", ns("location")),
-          entry_input(
+          file_input(
             ns("path"), tr("File path:"), m$path,
             placeholder = tr("/path/to/data.csv")
-          ),
-          shinyFiles::shinyFilesButton(
-            ns("browse"), tr("Browse..."), tr("Select a file"), multiple = FALSE
           )
         ),
         conditionalPanel(
@@ -139,20 +137,11 @@ import_text_dialog <- function() {
     },
     observers = function(input, output, session, state, refresh) {
       roots <- c(home = "~", wd = getwd(), root = "/")
-      shinyFiles::shinyFileChoose(
-        input, ns("browse"),
-        roots = roots,
+      file_input_observers(
+        input, session, ns("path"), roots,
+        guard = function() identical(state$current_dialog, id),
         filetypes = c("txt", "csv", "dat", "tsv", "TXT", "CSV", "DAT", "TSV")
       )
-      observeEvent(input[[ns("browse")]], {
-        req(identical(state$current_dialog, id))
-        selected <- shinyFiles::parseFilePaths(roots, input[[ns("browse")]])
-        if (nrow(selected) > 0L) {
-          updateTextInput(session, ns("path"),
-                          value = as.character(selected$datapath[[1L]]))
-        }
-      }, ignoreInit = TRUE)
-      invisible(NULL)
     }
   )
 }

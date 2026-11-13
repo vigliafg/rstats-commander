@@ -27,15 +27,28 @@ AppState <- function(env = globalenv()) {
 
   state$dialog_memory <- list()
   state$plots <- list()
+  state$rgl_scene <- NULL
+  state$rgl_widget <- NULL
   state$current_dialog <- NULL
+  state$last_failed_dialog <- NULL
 
   state$model_number <- 0L
   state$revision <- 0L
   state$busy <- FALSE
+  state$session <- NULL
+  state$set_script <- NULL
+  state$plot_dir <- NULL
+  state$plot_prefix <- NULL
   state$options <- list(
     digits = 7L,
     width = 80L,
-    stringsAsFactors = TRUE
+    stringsAsFactors = TRUE,
+    edit_threshold = 10000L,
+    use_markdown = FALSE,
+    use_knitr = FALSE,
+    language = current_language(),
+    theme = "light",
+    capabilities = rcmdr_capabilities()
   )
 
   # Called after every mutation that the UI should react to.  The Shiny server
@@ -100,6 +113,31 @@ dataset <- function(state) {
   }
   object <- get(name, envir = state$env, inherits = FALSE)
   if (!is.data.frame(object)) NULL else object
+}
+
+#' Number of cells in the active data set
+#' @keywords internal
+dataset_cells <- function(state) {
+  df <- dataset(state)
+  if (is.null(df)) 0L else as.integer(nrow(df)) * as.integer(ncol(df))
+}
+
+#' Whether the active data set can be edited in the browser
+#' @keywords internal
+editable_dataset <- function(state) {
+  !is.null(dataset(state)) &&
+    dataset_cells(state) <= (state$options$edit_threshold %||% 0L)
+}
+
+#' Replace the active data set with an edited version
+#' @keywords internal
+update_dataset <- function(state, df) {
+  name <- active_dataset(state)
+  if (is.null(name)) stop("There is no active data set.", call. = FALSE)
+  if (!is.data.frame(df)) stop("The edited object is not a data frame.", call. = FALSE)
+  assign(name, df, envir = state$env)
+  state_touch(state)
+  invisible(df)
 }
 
 #' @keywords internal

@@ -31,6 +31,10 @@ run_command <- function(state, code, log = TRUE, echo = TRUE, plot = "auto") {
 
   if (isTRUE(log)) state$log <- c(state$log, code)
 
+  if (is_rgl_command(code)) {
+    return(invisible(run_rgl_command(state, code, echo = echo)))
+  }
+
   if (identical(plot, "auto")) plot <- is_plot_command(code)
   if (isTRUE(plot)) {
     return(invisible(run_plot_command(state, code, echo = echo)))
@@ -192,8 +196,19 @@ run_plot_command <- function(state, code, echo = TRUE) {
   recorded <- tryCatch(grDevices::recordPlot(), error = function(e) NULL)
   if (device %in% grDevices::dev.list()) grDevices::dev.off(device)
 
+  index <- length(state$plots) + 1L
+  url <- NULL
+  if (!is.null(state$plot_dir)) {
+    name <- sprintf("plot-%04d.png", index)
+    destination <- file.path(state$plot_dir, name)
+    if (isTRUE(file.copy(file, destination, overwrite = TRUE))) {
+      url <- paste0(state$plot_prefix, "/", name)
+    }
+  }
+
   state$plots <- c(state$plots, list(list(
     file = file,
+    url = url,
     code = code,
     recorded = recorded,
     time = Sys.time()
@@ -201,5 +216,33 @@ run_plot_command <- function(state, code, echo = TRUE) {
   state_touch(state)
 
   result$plot <- file
+  result
+}
+
+# 3D graphics through rgl ---------------------------------------------------
+
+is_rgl_command <- function(code) {
+  grepl(
+    "\\b(plot3d|scatter3d|persp3d|points3d|lines3d|segments3d|spheres3d|surface3d|triangles3d|bg3d|aspect3d|axes3d|title3d|play3d|movie3d|rgl\\.)",
+    code, perl = TRUE
+  )
+}
+
+run_rgl_command <- function(state, code, echo = TRUE) {
+  if (!requireNamespace("rgl", quietly = TRUE)) {
+    result <- eval_code(state, code, echo = echo)
+    state_touch(state)
+    return(result)
+  }
+
+  rgl::rgl.useNULL()
+  result <- eval_code(state, code, echo = echo)
+
+  if (isTRUE(rgl::rgl.cur() != 0L)) {
+    state$rgl_scene <- tryCatch(rgl::scene3d(), error = function(e) NULL)
+    state$rgl_widget <- tryCatch(rgl::rglwidget(), error = function(e) NULL)
+  }
+
+  state_touch(state)
   result
 }

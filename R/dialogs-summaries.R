@@ -34,6 +34,7 @@ numerical_summaries_dialog <- function() {
   dialog_spec(
     id = id,
     title = tr("Numerical Summaries"),
+    help = "numSummary", help_package = "RcmdrMisc",
     # Rcmdr calls Library("RcmdrMisc") when this dialog opens; its commands
     # (numSummary, binnedCounts, discreteCounts) rely on the package being
     # attached.

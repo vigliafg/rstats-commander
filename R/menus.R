@@ -148,37 +148,46 @@ menu_leaves <- function(tree) {
 # Rendering -----------------------------------------------------------------
 
 #' Render the menu tree as HTML
+#'
+#' @param tree Menu tree returned by [menu_tree()].
+#' @param status Function taking a menu item node and returning one of
+#'   `"enabled"`, `"porting"`, `"inactive"` or `"hidden"`.
 #' @keywords internal
-menu_ui <- function(tree, enabled = function(command) TRUE) {
+menu_ui <- function(tree, status = function(node) "enabled") {
   htmltools::tags$div(
     class = "rcmdr-menu",
-    lapply(tree, menu_node_ui, enabled = enabled)
+    lapply(tree, menu_node_ui, status = status)
   )
 }
 
-menu_node_ui <- function(node, enabled = function(command) TRUE) {
+menu_node_ui <- function(node, status = function(node) "enabled") {
   if (identical(node$type, "separator")) {
     return(htmltools::tags$hr(class = "my-1"))
   }
 
   if (identical(node$type, "menu")) {
+    children <- lapply(node$children, menu_node_ui, status = status)
     return(htmltools::tags$details(
       class = "rcmdr-menu-group",
       htmltools::tags$summary(menu_label(node$label)),
-      htmltools::tags$div(
-        class = "rcmdr-menu-children",
-        lapply(node$children, menu_node_ui, enabled = enabled)
-      )
+      htmltools::tags$div(class = "rcmdr-menu-children", children)
     ))
   }
 
-  available <- isTRUE(enabled(node$command))
-  if (available) {
+  state <- status(node)
+  if (identical(state, "hidden")) return(NULL)
+
+  if (identical(state, "enabled")) {
     actionLink(node$key, menu_label(node$label), class = "rcmdr-menu-item")
   } else {
+    tooltip <- if (identical(state, "porting")) {
+      tr("In porting")
+    } else {
+      tr("Not available for the current data set")
+    }
     htmltools::tags$span(
       class = "rcmdr-menu-item disabled",
-      title = tr("In porting"),
+      title = tooltip,
       menu_label(node$label)
     )
   }

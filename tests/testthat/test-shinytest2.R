@@ -124,4 +124,49 @@ test_that("the full Phase 0 flow works in a real browser", {
   )
   expect_match(script, "numSummary\\(")
   expect_match(script, "LinearModel.1 <- lm\\(")
+
+  # -- plot capture and history -----------------------------------------
+  app$run_js("ace.edit(document.querySelector('.ace_editor')).setValue('plot(y ~ x)')")
+  Sys.sleep(1.5)
+  app$click("run_all")
+  app$wait_for_idle()
+
+  switch_tab <- function(label) {
+    app$run_js(sprintf(
+      "Array.from(document.querySelectorAll('.nav-link')).find(function(a){return a.textContent.trim() === '%s';}).click();",
+      label
+    ))
+    app$wait_for_idle()
+  }
+  switch_tab("Plots")
+  app$wait_for_js(
+    "document.querySelectorAll('.rcmdr-gallery img.rcmdr-thumb').length > 0",
+    timeout = 30000
+  )
+  expect_equal(
+    app$get_js("document.querySelectorAll('.rcmdr-gallery img.rcmdr-thumb').length"),
+    1L
+  )
+
+  # -- data editor -------------------------------------------------------
+  switch_tab("Data")
+  app$set_inputs(data_mode = "edit")
+  app$wait_for_js(
+    "document.querySelector('#data_editor') !== null",
+    timeout = 30000
+  )
+  expect_match(app$get_html(".rcmdr-sidebar"), "Statistics")
+
+  # -- options dialog ----------------------------------------------------
+  click_menu("Options")
+  app$set_inputs(Options_digits = 4)
+  app$click("dialog_ok")
+  app$wait_for_idle()
+  app$wait_for_js("document.querySelector('.modal') === null", timeout = 30000)
+
+  # -- about dialog ------------------------------------------------------
+  click_menu("helpAboutCommander")
+  expect_match(app$get_js("document.querySelector('.modal').innerText"), "RcmdrShiny")
+  app$run_js("document.querySelector('.modal .btn').click()")
+  app$wait_for_idle()
 })

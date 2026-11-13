@@ -6,6 +6,7 @@ app_css <- function() {
     body { background: #f6f7f9; }
     .rcmdr-topbar { background: #1f3a5f; color: #fff; }
     .rcmdr-topbar .badge-box { color: #dfe8f3; font-size: .9rem; }
+    .rcmdr-topbar .form-select { max-width: 8rem; }
     .rcmdr-sidebar {
       background: #fff; border-right: 1px solid #dde2e8;
       min-height: calc(100vh - 90px); padding: .75rem .65rem;
@@ -28,8 +29,48 @@ app_css <- function() {
       padding: .25rem .75rem; font-size: .85rem; color: #52606d; }
     pre.shiny-text-output { white-space: pre-wrap; background: #fff;
       border: 1px solid #e2e6ea; border-radius: .35rem; padding: .75rem;
-      min-height: 120px; }
-    .rcmdr-plot img { max-width: 100%; border: 1px solid #e2e6ea; }
+      min-height: 120px; max-height: 60vh; overflow-y: auto; }
+    .rcmdr-plot img.rcmdr-main-plot { max-width: 100%; border: 1px solid #e2e6ea; }
+    .rcmdr-gallery { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .75rem; }
+    .rcmdr-gallery img.rcmdr-thumb { width: 110px; height: 82px; object-fit: cover;
+      border: 2px solid #dde2e8; border-radius: .3rem; cursor: pointer;
+      background: #fff; }
+    .rcmdr-gallery img.rcmdr-thumb.active { border-color: #0d6efd; }
+    .rcmdr-help-text { white-space: pre-wrap; max-height: 60vh; overflow-y: auto;
+      background: #fbfbfc; border: 1px solid #e2e6ea; padding: .75rem; }
+    .rcmdr-busy { color: #d97706; font-weight: 600; }
+    body.rcmdr-dark { background: #151a21; color: #d7dde5; }
+    body.rcmdr-dark .rcmdr-sidebar,
+    body.rcmdr-dark pre.shiny-text-output,
+    body.rcmdr-dark .rcmdr-help-text,
+    body.rcmdr-dark .rcmdr-gallery img.rcmdr-thumb,
+    body.rcmdr-dark .nav-tabs .nav-link.active { background: #1d242d; color: #d7dde5; }
+    body.rcmdr-dark .rcmdr-menu-group > summary,
+    body.rcmdr-dark .rcmdr-menu-item { color: #bfcbd9; }
+    body.rcmdr-dark .rcmdr-menu-item.disabled { color: #5d6874; }
+    body.rcmdr-dark .rcmdr-statusbar { background: #1d242d; color: #9fb0c2;
+      border-color: #2b3540; }
+    body.rcmdr-dark .table { color: #d7dde5; }
+    body.rcmdr-dark .modal-content { background: #1d242d; color: #d7dde5; }
+    "
+  )
+}
+
+app_js <- function() {
+  htmltools::HTML(
+    "
+    Shiny.addCustomMessageHandler('rcmdr-click', function(id) {
+      var el = document.getElementById(id);
+      if (el) el.click();
+    });
+    (function() {
+      var stored = window.localStorage.getItem('rcmdr-theme');
+      if (stored === 'dark') document.body.classList.add('rcmdr-dark');
+    })();
+    function rcmdrToggleTheme() {
+      var dark = document.body.classList.toggle('rcmdr-dark');
+      window.localStorage.setItem('rcmdr-theme', dark ? 'dark' : 'light');
+    }
     "
   )
 }
@@ -41,6 +82,8 @@ script_pane_ui <- function() {
       actionButton("run_selection", tr("Run selection"), class = "btn-sm btn-primary"),
       actionButton("run_all", tr("Run all"), class = "btn-sm btn-outline-primary"),
       actionButton("clear_script", tr("Clear"), class = "btn-sm btn-outline-secondary"),
+      downloadButton("download_script", tr("Download .R"),
+                     class = "btn-sm btn-outline-secondary"),
       checkboxInput("auto_append", tr("Append generated commands"), value = TRUE)
     ),
     shinyAce::aceEditor(
@@ -51,18 +94,77 @@ script_pane_ui <- function() {
   )
 }
 
-plot_pane_ui <- function() {
-  htmltools::div(
-    class = "rcmdr-plot",
+output_pane_ui <- function() {
+  htmltools::tagList(
+    htmltools::div(
+      class = "d-flex gap-2 mb-2",
+      downloadButton("download_output", tr("Download output"),
+                     class = "btn-sm btn-outline-secondary"),
+      actionButton("clear_output", tr("Clear"), class = "btn-sm btn-outline-secondary")
+    ),
+    verbatimTextOutput("output_text")
+  )
+}
+
+messages_pane_ui <- function() {
+  htmltools::tagList(
+    htmltools::div(
+      class = "d-flex gap-2 mb-2",
+      actionButton("clear_messages", tr("Clear"), class = "btn-sm btn-outline-secondary")
+    ),
+    verbatimTextOutput("messages_text")
+  )
+}
+
+data_pane_ui <- function() {
+  htmltools::tagList(
+    htmltools::div(
+      class = "d-flex gap-2 align-items-center mb-2 flex-wrap",
+      radioButtons(
+        "data_mode", NULL,
+        choices = stats::setNames(c("view", "edit"), c(tr("View"), tr("Edit"))),
+        inline = TRUE
+      ),
+      actionButton("data_refresh", tr("Refresh"), class = "btn-sm btn-outline-secondary"),
+      actionButton("data_apply", tr("Apply changes"), class = "btn-sm btn-primary"),
+      downloadButton("download_dataset", tr("Download CSV"),
+                     class = "btn-sm btn-outline-secondary"),
+      uiOutput("data_info", inline = TRUE)
+    ),
+    uiOutput("data_pane")
+  )
+}
+
+plots_pane_ui <- function() {
+  htmltools::tagList(
+    htmltools::div(
+      class = "d-flex gap-2 mb-2 flex-wrap",
+      downloadButton("download_plot_png", tr("Save PNG"),
+                     class = "btn-sm btn-outline-secondary"),
+      downloadButton("download_plot_pdf", tr("Save PDF"),
+                     class = "btn-sm btn-outline-secondary")
+    ),
+    uiOutput("plot_gallery"),
     uiOutput("plot_header"),
-    imageOutput("plot_image", height = "auto")
+    htmltools::div(
+      class = "rcmdr-plot",
+      imageOutput("plot_image", height = "auto")
+    ),
+    uiOutput("rgl_pane")
   )
 }
 
 app_ui <- function() {
+  languages <- available_languages()
+  current <- current_language()
+  if (!current %in% languages) languages <- c(current, languages)
+
   bslib::page_fluid(
     theme = bslib::bs_theme(version = 5, primary = "#1f3a5f"),
-    htmltools::tags$head(htmltools::tags$style(app_css())),
+    htmltools::tags$head(
+      htmltools::tags$style(app_css()),
+      htmltools::tags$script(app_js())
+    ),
     htmltools::div(
       class = "rcmdr-topbar d-flex justify-content-between align-items-center px-3 py-2",
       htmltools::div(
@@ -71,10 +173,19 @@ app_ui <- function() {
         htmltools::tags$small(tr("R Commander for Shiny"), class = "text-white-50")
       ),
       htmltools::div(
-        class = "d-flex gap-3 badge-box",
+        class = "d-flex gap-3 badge-box align-items-center",
         uiOutput("dataset_badge", inline = TRUE),
         uiOutput("model_badge", inline = TRUE),
-        uiOutput("language_badge", inline = TRUE)
+        selectInput(
+          "language", NULL,
+          choices = stats::setNames(languages, toupper(languages)),
+          selected = current, width = "100px"
+        ),
+        htmltools::tags$button(
+          type = "button", class = "btn btn-sm btn-outline-light",
+          title = tr("Toggle dark mode"),
+          onclick = "rcmdrToggleTheme()", "\u25D0"
+        )
       )
     ),
     htmltools::div(
@@ -87,10 +198,10 @@ app_ui <- function() {
           tabsetPanel(
             id = "main_tabs",
             tabPanel(tr("Script"), script_pane_ui()),
-            tabPanel(tr("Output"), verbatimTextOutput("output_text")),
-            tabPanel(tr("Messages"), verbatimTextOutput("messages_text")),
-            tabPanel(tr("Plots"), plot_pane_ui()),
-            tabPanel(tr("Data"), uiOutput("data_pane")),
+            tabPanel(tr("Output"), output_pane_ui()),
+            tabPanel(tr("Messages"), messages_pane_ui()),
+            tabPanel(tr("Plots"), plots_pane_ui()),
+            tabPanel(tr("Data"), data_pane_ui()),
             tabPanel(tr("Environment"), uiOutput("environment_pane"))
           )
         )
@@ -110,11 +221,26 @@ app_server <- function(env = globalenv()) {
 
   function(input, output, session) {
     state <- AppState(env)
+    state$session <- session
     tick <- reactiveVal(0L)
+    menu_revision <- reactiveVal(0L)
     dialog_revision <- reactiveVal(0L)
     script_value <- reactiveVal("")
+    plot_selected <- reactiveVal(NULL)
+    last_plot_count <- reactiveVal(0L)
     state$notify <- function() tick(tick() + 1L)
     state$script_consumed <- 0L
+    state$set_script <- function(value) {
+      script_value(value)
+      shinyAce::updateAceEditor(session, "script", value = value)
+    }
+
+    # Per-session directory for plot thumbnails and downloads.
+    plot_dir <- file.path(tempdir(), paste0("rcmdrshiny-", session$token))
+    dir.create(plot_dir, showWarnings = FALSE, recursive = TRUE)
+    state$plot_dir <- plot_dir
+    state$plot_prefix <- paste0("rcmdr-plots-", session$token)
+    try(addResourcePath(state$plot_prefix, plot_dir), silent = TRUE)
 
     tree <- menu_tree()
     leaves <- menu_leaves(tree)
@@ -122,8 +248,10 @@ app_server <- function(env = globalenv()) {
     # -- menus --------------------------------------------------------------
 
     output$menus <- renderUI({
-      tick()
-      menu_ui(tree, function(command) command_enabled(state, command))
+      menu_revision()
+      menu_ui(tree, function(node) {
+        command_status(state, node$command, node$activation, node$install)
+      })
     })
 
     open_dialog <- function(spec) {
@@ -152,6 +280,7 @@ app_server <- function(env = globalenv()) {
       if (!is.null(action)) {
         action(state)
         tick(tick() + 1L)
+        menu_revision(menu_revision() + 1L)
         return(invisible(TRUE))
       }
 
@@ -177,7 +306,7 @@ app_server <- function(env = globalenv()) {
       spec$ui(state, get_dialog_memory(state, spec$id))
     })
 
-    observeEvent(input$dialog_ok, {
+    submit_dialog <- function(close = TRUE) {
       id <- state$current_dialog
       req(id)
       spec <- get_dialog_spec(id)
@@ -190,24 +319,52 @@ app_server <- function(env = globalenv()) {
 
       if (!is.null(result$error)) {
         showNotification(result$error, type = "error", duration = 10)
-        return()
+        return(invisible(FALSE))
       }
 
       if (!is.null(result$memory)) set_dialog_memory(state, id, result$memory)
-      ok <- apply_dialog_result(state, result)
 
-      removeModal()
-      state$current_dialog <- NULL
-      dialog_revision(dialog_revision() + 1L)
+      state$busy <- TRUE
+      ok <- tryCatch(
+        apply_dialog_result(state, result),
+        error = function(e) {
+          state$last_error <- conditionMessage(e)
+          state$messages <- c(state$messages, paste0("Error: ", state$last_error))
+          FALSE
+        }
+      )
+      state$busy <- FALSE
+
+      if (close) {
+        removeModal()
+        state$current_dialog <- NULL
+        dialog_revision(dialog_revision() + 1L)
+      }
       tick(tick() + 1L)
+      menu_revision(menu_revision() + 1L)
 
       if (!ok) {
-        showNotification(
-          state$last_error %||% tr("The command produced an error."),
-          type = "error", duration = 10
+        state$last_failed_dialog <- list(
+          id = id,
+          memory = get_dialog_memory(state, id)
         )
+        showModal(modalDialog(
+          title = tr("Command error"),
+          htmltools::tags$pre(state$last_error %||% tr("The command produced an error.")),
+          easyClose = TRUE,
+          footer = htmltools::tagList(
+            modalButton(tr("Close")),
+            actionButton("dialog_retry", tr("Retry"), class = "btn-primary")
+          )
+        ))
+      } else if (!close) {
+        showNotification(tr("Applied."), type = "message", duration = 2)
       }
-    })
+      invisible(ok)
+    }
+
+    observeEvent(input$dialog_ok, submit_dialog(close = TRUE))
+    observeEvent(input$dialog_apply, submit_dialog(close = FALSE))
 
     observeEvent(input$dialog_cancel, {
       removeModal()
@@ -221,6 +378,27 @@ app_server <- function(env = globalenv()) {
       spec <- get_dialog_spec(id)
       req(spec)
       clear_dialog_memory(state, id)
+      if (!is.null(spec$on_open)) spec$on_open(state)
+      dialog_revision(dialog_revision() + 1L)
+      showModal(dialog_modal(spec))
+    })
+
+    observeEvent(input$dialog_help, {
+      spec <- get_dialog_spec(state$current_dialog %||% "")
+      req(spec, spec$help)
+      show_help_modal(spec$help, spec$help_package)
+    })
+
+    observeEvent(input$dialog_retry, {
+      failed <- state$last_failed_dialog
+      req(failed)
+      removeModal()
+      spec <- get_dialog_spec(failed$id)
+      req(spec)
+      state$current_dialog <- failed$id
+      if (!is.null(failed$memory)) {
+        set_dialog_memory(state, failed$id, failed$memory)
+      }
       if (!is.null(spec$on_open)) spec$on_open(state)
       dialog_revision(dialog_revision() + 1L)
       showModal(dialog_modal(spec))
@@ -244,10 +422,39 @@ app_server <- function(env = globalenv()) {
       paste(state$messages, collapse = "\n")
     })
 
-    # Keep the log panes current even while their tab is hidden, so that
-    # switching tabs never shows stale content.
     outputOptions(output, "output_text", suspendWhenHidden = FALSE)
     outputOptions(output, "messages_text", suspendWhenHidden = FALSE)
+
+    observeEvent(input$clear_output, {
+      state$output <- character()
+      tick(tick() + 1L)
+    }, ignoreInit = TRUE)
+
+    observeEvent(input$clear_messages, {
+      state$messages <- character()
+      state$warnings <- character()
+      state$last_error <- NULL
+      tick(tick() + 1L)
+    }, ignoreInit = TRUE)
+
+    # -- data pane ----------------------------------------------------------
+
+    output$data_info <- renderUI({
+      tick()
+      df <- dataset(state)
+      if (is.null(df)) return(NULL)
+      htmltools::tags$span(
+        class = "text-muted",
+        sprintf(tr("%d rows x %d columns, %d cells"),
+                nrow(df), ncol(df), nrow(df) * ncol(df)),
+        if (!editable_dataset(state)) {
+          htmltools::tags$span(
+            class = "text-warning",
+            tr(" (editing disabled: threshold exceeded)")
+          )
+        }
+      )
+    })
 
     output$data_pane <- renderUI({
       tick()
@@ -256,12 +463,58 @@ app_server <- function(env = globalenv()) {
         return(htmltools::tags$p(class = "text-muted",
                                  tr("No active data set.")))
       }
+      if (identical(input$data_mode %||% "view", "edit")) {
+        if (!editable_dataset(state)) {
+          return(htmltools::tags$div(
+            class = "alert alert-warning",
+            tr("This data set exceeds the interactive editing threshold.")
+          ))
+        }
+        return(rhandsontable::rHandsontableOutput("data_editor"))
+      }
+      DT::dataTableOutput("data_table")
+    })
+
+    output$data_table <- DT::renderDataTable({
+      tick()
+      df <- dataset(state)
+      req(df)
       DT::datatable(
         df,
         options = list(pageLength = 10, scrollX = TRUE, dom = "ftip"),
         rownames = FALSE
       )
     })
+
+    output$data_editor <- rhandsontable::renderRHandsontable({
+      tick()
+      df <- dataset(state)
+      req(df, editable_dataset(state))
+      rhandsontable::rhandsontable(
+        df, height = 480, stretchH = "all", useTypes = TRUE
+      )
+    })
+
+    observeEvent(input$data_apply, {
+      req(input$data_editor)
+      df <- tryCatch(
+        rhandsontable::hot_to_r(input$data_editor),
+        error = function(e) NULL
+      )
+      if (is.null(df) || !is.data.frame(df)) {
+        showNotification(tr("The edited data are not valid."),
+                         type = "error", duration = 6)
+        return()
+      }
+      update_dataset(state, df)
+      showNotification(tr("Data set updated."), type = "message", duration = 3)
+      tick(tick() + 1L)
+      menu_revision(menu_revision() + 1L)
+    }, ignoreInit = TRUE)
+
+    observeEvent(input$data_refresh, {
+      tick(tick() + 1L)
+    }, ignoreInit = TRUE)
 
     output$environment_pane <- renderUI({
       tick()
@@ -288,10 +541,55 @@ app_server <- function(env = globalenv()) {
       DT::datatable(info, rownames = FALSE, options = list(dom = "t"))
     })
 
-    output$plot_image <- renderImage({
+    # -- plots --------------------------------------------------------------
+
+    current_plot <- reactive({
       tick()
-      req(length(state$plots) > 0L)
-      plot <- state$plots[[length(state$plots)]]
+      n <- length(state$plots)
+      if (n == 0L) return(NULL)
+      index <- plot_selected()
+      if (is.null(index) || index < 1L || index > n) index <- n
+      state$plots[[index]]
+    })
+
+    observeEvent(input$plot_selected, {
+      plot_selected(input$plot_selected)
+    }, ignoreInit = TRUE)
+
+    observeEvent(tick(), {
+      n <- length(state$plots)
+      if (n > last_plot_count()) {
+        plot_selected(NULL)
+        last_plot_count(n)
+      }
+    }, ignoreInit = TRUE)
+
+    output$plot_gallery <- renderUI({
+      tick()
+      n <- length(state$plots)
+      if (n == 0L) return(NULL)
+      active <- plot_selected()
+      if (is.null(active) || active < 1L || active > n) active <- n
+      htmltools::div(
+        class = "rcmdr-gallery",
+        lapply(seq_len(n), function(index) {
+          plot <- state$plots[[index]]
+          htmltools::tags$img(
+            src = plot$url %||% "",
+            class = paste("rcmdr-thumb", if (index == active) "active"),
+            title = plot$code,
+            onclick = sprintf(
+              "Shiny.setInputValue('plot_selected', %d, {priority: 'event'})",
+              index
+            )
+          )
+        })
+      )
+    })
+
+    output$plot_image <- renderImage({
+      plot <- current_plot()
+      req(plot)
       list(src = plot$file, contentType = "image/png", alt = plot$code)
     }, deleteFile = FALSE)
 
@@ -300,15 +598,106 @@ app_server <- function(env = globalenv()) {
       if (length(state$plots) == 0L) {
         return(htmltools::tags$p(class = "text-muted", tr("No plot yet.")))
       }
-      plot <- state$plots[[length(state$plots)]]
+      plot <- current_plot()
+      req(plot)
       htmltools::tags$div(
         class = "mb-2",
         htmltools::tags$strong(sprintf(
-          tr("Plot %d of %d"), length(state$plots), length(state$plots)
+          tr("Plot %d of %d"),
+          plot_selected() %||% length(state$plots), length(state$plots)
         )),
         htmltools::tags$pre(class = "small text-muted mb-1", plot$code)
       )
     })
+
+    output$rgl_pane <- renderUI({
+      tick()
+      if (is.null(state$rgl_widget)) return(NULL)
+      htmltools::tagList(
+        htmltools::tags$h6(tr("3D plot")),
+        if (requireNamespace("rgl", quietly = TRUE)) {
+          rgl::rglwidgetOutput("rgl_plot", height = "420px")
+        }
+      )
+    })
+
+    if (requireNamespace("rgl", quietly = TRUE)) {
+      output$rgl_plot <- rgl::renderRglwidget({
+        tick()
+        req(state$rgl_widget)
+        state$rgl_widget
+      })
+    }
+
+    # -- downloads ----------------------------------------------------------
+
+    output$download_script <- downloadHandler(
+      filename = function() "RcmdrShiny-script.R",
+      content = function(file) {
+        writeLines(isolate(script_value()), file)
+      }
+    )
+
+    output$download_output <- downloadHandler(
+      filename = function() "RcmdrShiny-output.txt",
+      content = function(file) {
+        writeLines(isolate(paste(state$output, collapse = "\n")), file)
+      }
+    )
+
+    output$download_dataset <- downloadHandler(
+      filename = function() {
+        name <- active_dataset(state) %||% "dataset"
+        paste0(name, ".csv")
+      },
+      content = function(file) {
+        df <- isolate(dataset(state))
+        req(df)
+        utils::write.csv(df, file, row.names = FALSE)
+      }
+    )
+
+    output$download_workspace <- downloadHandler(
+      filename = function() "RcmdrShiny-workspace.RData",
+      content = function(file) {
+        objects <- isolate(ls(envir = state$env))
+        req(length(objects) > 0L)
+        save(list = objects, file = file, envir = state$env)
+      }
+    )
+
+    output$download_plot_png <- downloadHandler(
+      filename = function() "RcmdrShiny-plot.png",
+      content = function(file) {
+        plot <- isolate(current_plot())
+        req(plot)
+        file.copy(plot$file, file, overwrite = TRUE)
+      }
+    )
+
+    output$download_plot_pdf <- downloadHandler(
+      filename = function() "RcmdrShiny-plot.pdf",
+      content = function(file) {
+        plot <- isolate(current_plot())
+        req(plot, plot$recorded)
+        grDevices::pdf(file)
+        on.exit(grDevices::dev.off(), add = TRUE)
+        grDevices::replayPlot(plot$recorded)
+      }
+    )
+
+    # -- language -----------------------------------------------------------
+
+    observeEvent(input$language, {
+      language <- input$language %||% "en"
+      state$options$language <- language
+      Sys.setenv(LANGUAGE = language)
+      showNotification(
+        tr("The language change takes effect after restarting RcmdrShiny."),
+        type = "message", duration = 8
+      )
+      tick(tick() + 1L)
+    }, ignoreInit = TRUE)
 
     # -- status bar and badges ---------------------------------------------
 
@@ -330,24 +719,35 @@ app_server <- function(env = globalenv()) {
       )
     })
 
-    output$language_badge <- renderUI({
-      htmltools::tags$span(toupper(current_language()))
-    })
-
     output$statusbar <- renderUI({
       tick()
       version <- tryCatch(
         as.character(utils::packageVersion("RcmdrShiny")),
         error = function(e) "0.1.0"
       )
+      df <- dataset(state)
+      dimensions <- if (is.null(df)) {
+        tr("no data")
+      } else {
+        sprintf("%d x %d", nrow(df), ncol(df))
+      }
       htmltools::tagList(
         htmltools::tags$span(sprintf(tr("RcmdrShiny %s"), version)),
         htmltools::tags$span(" | "),
-        htmltools::tags$span(sprintf(tr("%d command(s) in the log"), length(state$log))),
+        htmltools::tags$span(dimensions),
         htmltools::tags$span(" | "),
-        htmltools::tags$span(sprintf(
-          tr("output lines: %d"), length(state$output)
-        ))
+        htmltools::tags$span(sprintf(tr("%d command(s)"), length(state$log))),
+        htmltools::tags$span(" | "),
+        htmltools::tags$span(sprintf(tr("%d plot(s)"), length(state$plots))),
+        if (isTRUE(state$busy)) {
+          htmltools::tags$span(class = "rcmdr-busy", tr(" | busy"))
+        },
+        if (!is.null(state$last_error)) {
+          htmltools::tags$span(
+            class = "text-danger",
+            sprintf(tr(" | last error: %s"), state$last_error)
+          )
+        }
       )
     })
 
@@ -374,8 +774,20 @@ app_server <- function(env = globalenv()) {
 
     run_script <- function(code) {
       if (is.null(code) || !nzchar(trimws(code))) return(invisible(NULL))
-      run_command(state, code, log = FALSE)
+      state$busy <- TRUE
+      result <- tryCatch(
+        run_command(state, code, log = FALSE),
+        error = function(e) list(status = "error", error = conditionMessage(e))
+      )
+      state$busy <- FALSE
       tick(tick() + 1L)
+      menu_revision(menu_revision() + 1L)
+      if (identical(result$status, "error")) {
+        showNotification(
+          result$error %||% tr("The script produced an error."),
+          type = "error", duration = 8
+        )
+      }
       invisible(NULL)
     }
 
@@ -408,6 +820,8 @@ app <- function(env = globalenv()) {
 #' Starts the local Shiny application in the browser.
 #'
 #' @param env Evaluation environment for user commands.
+#' @param language Language code for the session (for example `"en"` or
+#'   `"it"`).  Defaults to the current language.
 #' @param ... Further arguments passed to [shiny::runApp()].
 #' @return The value returned by [shiny::runApp()], invisibly.
 #' @examples
@@ -415,7 +829,8 @@ app <- function(env = globalenv()) {
 #' RcmdrShiny::run()
 #' }
 #' @export
-run_app <- function(env = globalenv(), ...) {
+run_app <- function(env = globalenv(), language = NULL, ...) {
+  if (!is.null(language)) Sys.setenv(LANGUAGE = language)
   shiny::runApp(app(env = env), ...)
 }
 

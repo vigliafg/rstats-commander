@@ -7,10 +7,13 @@ RcmdrShiny is a fork of the Rcmdr 2.15.0 engine: it keeps the R command
 generation semantics of Rcmdr, so every action in the graphical interface
 produces a reproducible command in the script log and in the output pane.
 
-> **Status: Phase 0 (vertical slice).** The application runs, the menu is
-> generated from Rcmdr's own `Rcmdr-menus.txt`, and three dialogs are ported
-> end to end: *Read Text Data*, *Numerical Summaries* and *Linear Model*.
-> The remaining dialogs are listed in
+> **Status: Phase 1 (shell and infrastructure).** The application runs with a
+> complete shell: reactive menu activation, dialog runtime (OK/Apply/Reset/
+> Help/Retry), data editor, plot history and export, rgl 3D view, options,
+> help and file utilities. Four Rcmdr dialogs are ported end to end:
+> *Read Text Data*, *Numerical Summaries*, *Linear Model* and *Options*, plus
+> the `Setwd`, `Load Data Set` and `Open Script File` utilities. The remaining
+> dialogs are listed in
 > [`inst/etc/dialogs-inventory.csv`](inst/etc/dialogs-inventory.csv) and are
 > disabled in the sidebar with an "In porting" tooltip.
 
@@ -18,8 +21,9 @@ produces a reproducible command in the script log and in the output pane.
 
 - R >= 4.1
 - A modern browser
-- Packages: `shiny`, `bslib`, `DT`, `shinyAce`, `shinyFiles`, `RcmdrMisc`
-  (plus their dependencies)
+- Packages: `shiny`, `bslib`, `DT`, `shinyAce`, `shinyFiles`,
+  `rhandsontable`, `RcmdrMisc` (plus their dependencies)
+- Optional: `rgl` for the 3D plot pane
 
 ## Install
 
@@ -46,21 +50,25 @@ env <- new.env()
 RcmdrShiny::run(env = env)
 ```
 
-## What works in Phase 0
+## What works
 
 | Area | Status |
 |---|---|
 | Menu sidebar generated from `Rcmdr-menus.txt` | done |
+| Reactive activation from Rcmdr predicates (`numericP()`, `modelCapability()`, ...) | done |
 | Command runner (`run_command`) with output, messages, warnings and errors | done |
-| Script pane (Ace), run selection / run all | done |
-| Output and Messages panes | done |
-| Data view (`DT`) and environment view | done |
-| Plot capture, history and preview | done (single last plot) |
-| Dialog runtime (modal, reset, memory, validation) | done |
+| Script pane (Ace), run selection / run all, open and download `.R` | done |
+| Output and Messages panes (clear, download) | done |
+| Data view (`DT`) and interactive editor (`rhandsontable`, 10,000-cell threshold) | done |
+| Plot capture, history gallery, PNG/PDF export | done |
+| rgl 3D scene rendered with `rglwidget()` | done |
+| Dialog runtime (tabs, OK/Apply/Reset/Cancel/Help, memory, validation, retry) | done |
 | Read Text Data (file, clipboard, URL) | done |
 | Numerical Summaries (statistics, groups, counts) | done |
-| Linear Model (formula, subset, weights, row removal) | done |
-| Remaining 139 dialog functions | backlog |
+| Linear Model (formula builder, subset, weights, row removal) | done |
+| Options, Setwd, Load Data Set, Open Script File | done |
+| Environment view, workspace download, dark mode, language selector | done |
+| Remaining 138 dialog functions | backlog |
 | Plugin API, full i18n coverage, CRAN hardening | later phases |
 
 The inventory is regenerated from an Rcmdr source tree with:

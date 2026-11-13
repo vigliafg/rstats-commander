@@ -13,13 +13,10 @@ linear_model_dialog <- function() {
     remove = ""
   )
 
-  operator_button <- function(op, label) {
-    actionButton(ns(paste0("op_", op)), label, class = "btn-sm btn-outline-secondary")
-  }
-
   dialog_spec(
     id = id,
     title = tr("Linear Model"),
+    help = "lm",
     on_open = function(state) {
       update_model_number(state)
     },
@@ -36,37 +33,8 @@ linear_model_dialog <- function() {
       htmltools::tagList(
         entry_input(ns("model"), tr("Enter name for model:"), m$model_name),
         htmltools::tags$hr(),
-        var_input(
-          ns("lhs"), tr("Response variable:"),
-          variables(state), selected = m$lhs, multiple = FALSE
-        ),
-        entry_input(ns("rhs"), tr("Model formula (right-hand side):"), m$rhs),
-        htmltools::div(
-          class = "row g-2 align-items-end mb-3",
-          htmltools::div(
-            class = "col-md-6",
-            selectInput(
-              ns("insert_var"), tr("Add variable"),
-              choices = stats::setNames(variables(state), variables(state)),
-              width = "100%"
-            )
-          ),
-          htmltools::div(
-            class = "col-md-3",
-            actionButton(ns("insert"), tr("Insert"),
-                         class = "btn-sm btn-outline-primary")
-          ),
-          htmltools::div(
-            class = "col-md-3",
-            button_row(
-              operator_button("plus", "+"),
-              operator_button("star", "*"),
-              operator_button("colon", ":"),
-              operator_button("caret", "^"),
-              operator_button("lparen", "("),
-              operator_button("rparen", ")")
-            )
-          )
+        model_formula_input(
+          id, variables(state), lhs = m$lhs, rhs = m$rhs
         ),
         htmltools::tags$hr(),
         entry_input(ns("subset"), tr("Subset (optional R expression):"), m$subset),
@@ -82,42 +50,10 @@ linear_model_dialog <- function() {
       )
     },
     observers = function(input, output, session, state, refresh) {
-      guard <- function() identical(state$current_dialog, id)
-
-      append <- function(text) {
-        current <- input[[ns("rhs")]] %||% ""
-        updateTextInput(
-          session, ns("rhs"),
-          value = paste0(current, if (nzchar(current)) " " else "", text)
-        )
-      }
-
-      observeEvent(input[[ns("insert")]], {
-        req(guard())
-        variable <- input[[ns("insert_var")]]
-        if (!is.null(variable) && nzchar(variable)) {
-          current <- trim_blanks(input[[ns("rhs")]] %||% "")
-          updateTextInput(
-            session, ns("rhs"),
-            value = paste0(current, if (nzchar(current)) " + " else "", variable)
-          )
-        }
-      }, ignoreInit = TRUE)
-
-      operators <- c(
-        plus = "+", star = "*", colon = ":",
-        caret = "^", lparen = "(", rparen = ")"
+      model_formula_observers(
+        input, session, id,
+        guard = function() identical(state$current_dialog, id)
       )
-      for (key in names(operators)) {
-        local({
-          op <- operators[[key]]
-          observeEvent(input[[ns(paste0("op_", key))]], {
-            req(guard())
-            append(op)
-          }, ignoreInit = TRUE)
-        })
-      }
-      invisible(NULL)
     },
     on_ok = function(input, state) {
       model_name <- trim_blanks(input[[ns("model")]])

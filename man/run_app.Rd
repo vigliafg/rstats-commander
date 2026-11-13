@@ -3,12 +3,15 @@
 \alias{run}
 \title{Run RcmdrShiny}
 \usage{
-run_app(env = globalenv(), ...)
+run_app(env = globalenv(), language = NULL, ...)
 
-run(env = globalenv(), ...)
+run(env = globalenv(), language = NULL, ...)
 }
 \arguments{
 \item{env}{Evaluation environment for user commands.}
+
+\item{language}{Language code for the session (for example \code{"en"} or
+\code{"it"}).  Defaults to the current language.}
 
 \item{...}{Further arguments passed to \code{\link[shiny:runApp]{shiny::runApp}}.}
 }

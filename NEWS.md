@@ -1,3 +1,29 @@
+# RcmdrShiny 0.2.0
+
+## Phase 1 — shell and infrastructure
+
+- Reactive menu activation and installation expressions evaluated from
+  `Rcmdr-menus.txt` (Rcmdr predicates and model-capability table).
+- Dialog runtime: OK, Apply, Reset, Cancel, Help, per-dialog memory,
+  command-error notification with Retry, busy state.
+- Full widget library: variable selector, checkbox groups, radio buttons,
+  text/numeric/slider/combo inputs, file and directory choosers, subset entry,
+  model-formula builder.
+- Data pane: `DT` view plus `rhandsontable` editing with a configurable cell
+  threshold and Apply-changes workflow.
+- Plot pipeline: history gallery, thumbnail selection, PNG and PDF export.
+- rgl integration: 3D scenes captured with `rgl.useNULL()` and rendered with
+  `rglwidget()`.
+- File utilities: `Setwd`, `Load Data Set` (RData/RDS), `Open Script File`,
+  script/output/dataset/workspace downloads.
+- Options dialog (digits, width, editing threshold, stringsAsFactors).
+- Help menu: about, quick help, R help system and dataset help.
+- Top bar: dataset/model badges, language selector, dark-mode toggle.
+- Tests for activation predicates, widgets, options, data editing, plot
+  history/export, rgl and workspace loading; browser test extended with plot,
+  data editor, options and about flows.
+- Version bumped to 0.2.0 (milestone "Shell").
+
 # RcmdrShiny 0.1.0
 
 ## Phase 0 — vertical slice
