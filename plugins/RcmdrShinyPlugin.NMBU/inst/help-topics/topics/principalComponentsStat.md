@@ -11,7 +11,7 @@ commands: [princomp]
 packages: [RcmdrShinyPlugin.NMBU]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

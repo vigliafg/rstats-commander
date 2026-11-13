@@ -39,7 +39,8 @@ base_dialog_catalog <- function() {
       Options = options_dialog(),
       Setwd = setwd_dialog(),
       loadDataSet = load_dataset_dialog(),
-      loadLog = load_script_dialog()
+      loadLog = load_script_dialog(),
+      exportReport = export_report_dialog()
     ),
     phase2_dialogs(), phase3_dialogs(), phase4_dialogs(), phase5_dialogs()
   )
@@ -56,13 +57,23 @@ get_dialog_spec <- function(id) get_dialog(id)
 #' Retrieve a dialog specification
 #'
 #' Exposes the dialog registry to plugin packages so their tests can call
-#' `on_ok()` with a synthetic input.
+#' `on_ok()` with a synthetic input.  Plugin aliases resolve to the core
+#' dialog, with the alias command id preserved.
 #'
 #' @param id Command name used in the menu file.
 #' @return A dialog specification, or `NULL`.
 #' @export
 get_dialog <- function(id) {
-  dialog_catalog()[[id]]
+  catalog <- dialog_catalog()
+  spec <- catalog[[id]]
+  if (!is.null(spec)) return(spec)
+
+  target <- plugin_aliases()[id]
+  if (is.na(target) || !nzchar(target)) return(NULL)
+  spec <- catalog[[target]]
+  if (is.null(spec)) return(NULL)
+  spec$id <- id
+  spec
 }
 
 .implemented_commands_cache <- new.env(parent = emptyenv())
@@ -70,10 +81,11 @@ get_dialog <- function(id) {
 #' @keywords internal
 implemented_commands <- function() {
   if (is.null(.implemented_commands_cache$names)) {
-    .implemented_commands_cache$names <- c(
+    .implemented_commands_cache$names <- unique(c(
       names(dialog_catalog()),
-      names(direct_commands())
-    )
+      names(direct_commands()),
+      names(plugin_aliases())
+    ))
   }
   .implemented_commands_cache$names
 }
@@ -118,6 +130,25 @@ base_direct_commands <- function() {
       ds <- active_dataset(state)
       if (is.null(ds)) return(NULL)
       run_command(state, cmd_count_missing(ds))
+    },
+    convertStrings2Factors = function(state) {
+      df <- dataset(state)
+      if (is.null(df)) return(NULL)
+      variables <- names(df)[vapply(df, is.character, logical(1))]
+      if (length(variables) == 0L) {
+        if (!is.null(state$session)) {
+          showNotification(
+            tr("The active data set has no character variables."),
+            type = "message", duration = 5
+          )
+        }
+        return(invisible(NULL))
+      }
+      for (command in cmd_convert_strings_to_factors(active_dataset(state),
+                                                     variables)) {
+        run_command(state, command, plot = FALSE)
+      }
+      invisible(NULL)
     },
     saveDataSet = function(state) request_download(state, "download_dataset_rdata"),
     saveLog = function(state) request_download(state, "download_script"),
@@ -285,7 +316,15 @@ base_direct_commands <- function() {
 
 #' @keywords internal
 direct_commands <- function() {
-  utils::modifyList(base_direct_commands(), plugin_commands())
+  commands <- utils::modifyList(base_direct_commands(), plugin_commands())
+  aliases <- plugin_aliases()
+  if (length(aliases) > 0L) {
+    for (alias in names(aliases)) {
+      target <- commands[[aliases[[alias]]]]
+      if (!is.null(target)) commands[[alias]] <- target
+    }
+  }
+  commands
 }
 
 #' @keywords internal
@@ -404,12 +443,25 @@ dialog_modal <- function(spec) {
 #' @keywords internal
 apply_dialog_result <- function(state, result) {
   ok <- TRUE
+  # A new dialog result replaces any previous interactive plot.  The base
+  # command below still produces the PNG shown in the gallery.
+  state$plotly_widget <- NULL
+  state$plotly_title <- NULL
+
   for (command in result$commands %||% character()) {
     outcome <- run_command(
       state, command,
       plot = if (isTRUE(result$plot)) TRUE else "auto"
     )
     if (!identical(outcome$status, "ok")) ok <- FALSE
+  }
+
+  if (!is.null(result$interactive) && plotly_available()) {
+    widget <- plotly_build(state, result$interactive)
+    if (!is.null(widget)) {
+      state$plotly_widget <- widget
+      state$plotly_title <- result$interactive_title %||% ""
+    }
   }
 
   if (!is.null(result$activate_dataset)) {
@@ -421,6 +473,17 @@ apply_dialog_result <- function(state, result) {
     if (exists(result$activate_model, envir = state$env, inherits = FALSE)) {
       active_model(state, result$activate_model)
     }
+  }
+  if (!is.null(result$report)) {
+    state$report_title <- result$report$title %||% "RcmdrShiny report"
+    request_download(
+      state,
+      if (identical(result$report$format, "html")) {
+        "download_report_html"
+      } else {
+        "download_report_rmd"
+      }
+    )
   }
   if (!is.null(result$script) && is.function(state$set_script)) {
     state$set_script(result$script)

@@ -11,7 +11,7 @@ commands: [format.df]
 packages: [Hmisc]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

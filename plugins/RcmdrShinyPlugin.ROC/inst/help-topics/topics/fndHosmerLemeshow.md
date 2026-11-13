@@ -11,7 +11,7 @@ commands: [hoslem.test]
 packages: [ResourceSelection]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

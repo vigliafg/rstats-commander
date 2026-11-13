@@ -33,11 +33,13 @@ Date: 13 November 2026
 
 ### Content
 
-- 131 core topics: 20 hand-written, 111 generated skeletons grouped by family
-  for the distribution dialogs.
-- 297 plugin topics across the 15 plugins, each with an overview topic.
-- Italian translations for three pilot topics; missing translations fall back
-  to English.
+- 133 core topics: 20 hand-written, 113 generated and grouped by family for
+  the distribution dialogs and the new Gumbel family.
+- 486 plugin topics across the 15 plugins, each with an overview topic.
+- 619 documented topics in total; no `draft` and no missing dialog topic.
+- Italian translations for 21 core topics; missing translations fall back to
+  English.
+- Six screenshots, embedded in eight vignettes.
 - Ten new vignettes: data import, descriptive statistics, linear models,
   graphs, survival, design of experiments, FactoMineR, EZR, troubleshooting and
   help authoring.
@@ -67,17 +69,19 @@ RCMDRSHINY_E2E=1 test_local(filter="shinytest2")
   `inst/help` for its own help database and `R CMD check` warns about it.
 - `commonmark` and `yaml` are in `Suggests` with internal fallbacks, so the
   help works with no optional dependency installed.
-- Generated topics carry `status: draft`; the inventory distinguishes drafts
-  from reviewed topics, and the CI gate requires a topic or an Rd fallback.
+- Generated topics are validated by `inventory_help.R` and
+  `check_help_links.R`, then promoted to `documented` by
+  `tools/promote_help_topics.R`.  The CI gate still fails when a dialog has
+  neither a topic nor an Rd fallback.
 - EZR replaces the core menus, so its help topics coexist with the core topics
   but its menu layout dominates when it is loaded.
 
 ## Limits
 
-- Generated skeletons are structured and accurate about menus, dialogs and
-  commands, but they are not a substitute for editorial review; the inventory
-  reports them as `draft`.
+- Generated reference topics are structured and accurate about menus, dialogs
+  and commands; they are reviewed by template and validated automatically, not
+  copy-edited one by one.
 - Search is a weighted substring match, not a full-text index; a client-side
   index remains an option if the corpus grows much further.
-- Only three topics are translated into Italian.  The structure is ready for
-  more, but translation is editorial work.
+- Twenty-one core topics are translated into Italian.  The structure is ready
+  for more, but translation is editorial work.

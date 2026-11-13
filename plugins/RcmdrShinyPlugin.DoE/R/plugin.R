@@ -15,7 +15,30 @@ rcmdrshiny_plugin <- function() {
     menus = system.file("etc", "rcmdrshiny-menus.txt",
                         package = "RcmdrShinyPlugin.DoE"),
     dialogs = doe_dialogs(),
-    commands = list(dc = function(state) invisible(NULL)),
+    commands = local({
+      info <- function(topic) function(state) {
+        RcmdrShiny::open_help_topic(state, topic)
+      }
+      list(
+        dc = function(state) invisible(NULL),
+        helpImport = info("doe-import-export"),
+        helpExport = info("doe-import-export"),
+        helpExpImp = info("doe-import-export"),
+        help2level = info("doe-designs"),
+        helpgeneral = info("doe-designs"),
+        helpquant = info("doe-designs"),
+        helpDopt = info("doe-designs"),
+        displayGlossary = info("doe-designs"),
+        displayblock = info("doe-designs"),
+        displaysplitplot = info("doe-designs"),
+        displayCentralCompositeDesigns = info("doe-designs"),
+        helpInspect = info("doe-analyse"),
+        helpModify = info("doe-analyse"),
+        helpAnalyze = info("doe-analyse"),
+        helpMenus = info("doe-analyse"),
+        helpabout = info("doe-about")
+      )
+    }),
     predicates = list(
       existDesigns = function(state) {
         objects <- ls(envir = state$env)

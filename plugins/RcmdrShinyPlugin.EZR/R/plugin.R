@@ -24,6 +24,38 @@ rcmdrshiny_plugin <- function() {
         }
       }
     ),
+    aliases = c(
+      StatMedLoadDataSet = "loadDataSet",
+      StatMedSaveDataSet = "saveDataSet",
+      StatMedLoadLogCP932 = "loadLog",
+      StatMedImportSPSS = "importSPSS",
+      StatMedImportMinitab = "importMinitab",
+      StatMedImportSTATA = "importSTATA",
+      StatMedBinVariable = "binVariable",
+      StatMedChrToFactor = "characterToFactor",
+      StatMedDropUnusedFactorLevels = "dropUnusedFactorLevels",
+      StatMedSetContrasts = "setContrasts",
+      StatMedRenameVariables = "renameVariables",
+      StatMedStack = "Stack",
+      StatMedCountMissing = "countMissing",
+      StatMedFilterNA = "filterNA",
+      StatMedExportDataSet = "exportDataSet",
+      StatMedEnterTable = "enterTable",
+      StatMedRepANOVA = "oneWayRepeatedMeasures",
+      StatMedPieChart = "pieChart",
+      StatMedStemAndLeaf = "stemAndLeaf",
+      StatMedQQPlot = "QQPlot",
+      StatMedPlotMeans = "PlotMeans",
+      StatMedLinePlot = "linePlot",
+      StatMedStripChart = "stripChart",
+      StatMedScatterPlotMatrix = "scatterPlotMatrix",
+      StatMedChangePalette = "setPalette",
+      StatMedSetPalette = "setPalette",
+      StatMedScatterPlotMatrix = "scatterPlotMatrix",
+      StatMedQQPlot = "QQPlot",
+      StatMedBarMeans = "PlotMeans",
+      StatMedPlotMeans = "PlotMeans"
+    ),
     version = "0.1.0",
     description = "Core EZR statistical workflow."
   )

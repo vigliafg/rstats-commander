@@ -1,3 +1,88 @@
+# RcmdrShiny 1.12.0
+
+## Residual features (plan F1-F12)
+
+### Core
+
+- **Gumbel distribution** family: quantiles, probabilities, plot and samples
+  through `VGAM`; the menu entries are hidden when VGAM is missing.
+- **Convert all character variables to factors** as a direct command.
+- **Plugin command aliases**: `RcmdrShiny.plugin(aliases = c(new = "core"))`
+  lets plugin menus reuse core dialogs and direct commands without duplicating
+  them.  `get_dialog()` and `direct_commands()` resolve aliases, and the alias
+  keeps its own id for dialog memory and help.
+- **Interactive plots**: when `plotly` is installed, the histogram, boxplot,
+  scatterplot and line graph dialogs also produce an interactive widget with
+  hover, zoom and selection.  The PNG gallery and export are unchanged.
+- **Session report**: `report_rmd()`, `write_report_rmd()` and
+  `write_report_html()` back **File > Export report...**, which collects the
+  command log, output and plots without re-running the analysis.
+- Core menu coverage: 205 dialogs; with all plugins, 850 of 900 menu entries
+  are implemented.  The remaining 50 are out of scope by design (R Markdown
+  editor, close/restart, cut/copy/undo, `identify()`, `Identify3D`).
+
+### EZR 0.2.0
+
+- **Sample size and power**: 17 entries covering proportions, means, paired
+  means, hazard ratios, non-inferiority, phase II and selection designs via
+  `pwr` and `clinfun`.
+- **Data and variables**: CP932 import, copy/rename/merge data sets, workspace
+  load, renewal, Stata export, threshold binning, log transform, numeric
+  conversion.
+- **Graphs and tables**: violin, ordered chart, swimmer, Sankey, CONSORT,
+  adjusted survival, adjusted and stacked cumulative incidence, graph settings
+  and summary table.
+- **Tests and accuracy**: proportion differences and ratios, Cochran Q,
+  Cochran-Armitage trend, modified Poisson regression, Grubbs, Kolmogorov-
+  Smirnov, variance F, ANCOVA, Jonckheere-Terpstra, predictive values, ROC
+  comparison, time-dependent ROC and Cronbach's alpha.
+- **Survival, matching and meta-analysis**: logrank trend, current survival,
+  time-dependent Cox, competing risks (Gray test, Fine-Gray), `MatchIt`
+  matching, Mantel-Haenszel, conditional logistic, stratified Cox, and
+  proportion/mean/hazard/network meta-analysis.
+- Every remaining EZR-specific menu entry is now implemented; the only
+  disabled entries are the shared out-of-scope core commands.
+
+### NMBU 0.2.0
+
+- Clipboard import/export, data sequences, deletion and mean centering.
+- Covariance/correlation matrix and summarized one- and two-sample z-tests.
+- Relevant component analysis, variable clustering, simplex models, LDA/QDA,
+  grand-mean CI, discriminant scores, hierarchical merging, contrasts,
+  post-hoc tests, PRESS/R2pred/RMSEP, deviance tests, (X'X)^-1, PCA/PCR/PLS
+  plots, discriminant and mixture plots, stepwise selection and fitted line
+  plots.
+- All NMBU-specific menu entries are implemented.
+
+### DoE 0.2.0
+
+- Import/export: workspace load, CSV re-import, design export, catalogue load.
+- Candidate and Taguchi parameter designs, Latin hypercube augmentation.
+- Tabulation, response selection, contrasts, long-to-wide reshape,
+  aggregation, centre points, cube extraction, effect plots and steepest
+  ascent.
+- Sixteen **Info** entries now open the in-app DoE guide instead of being
+  dead menu items.
+- All DoE-specific menu entries are implemented.
+
+### Help and documentation
+
+- 619 documented topics across the core and the 15 plugins; no `draft` and no
+  missing dialog topic remain.  `tools/promote_help_topics.R` upgrades the
+  template-generated topics after validation.
+- Italian translations for 21 core topics (up from 3), with English fallback.
+- `tools/help_screenshots.R` captures the main window, import and histogram
+  dialogs, the Data/Plots/Help tabs; eight vignettes embed a screenshot.
+- New `PLUGIN-ALIAS-MAP.md` documents every alias.
+
+### Tests and CI
+
+- Five browser flows for the plugin families (graphics, models,
+  multivariate, clinical, teaching) in `test-plugins-e2e.R`.
+- New unit tests for Gumbel, aliases, string conversion, plotly, report
+  generation and every plugin extras module.
+- `R CMD check` clean for the core and all 15 plugins.
+
 # RcmdrShiny 1.6.0
 
 ## Help and documentation infrastructure

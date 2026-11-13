@@ -10,6 +10,57 @@ rcmdrshiny_plugin <- function() {
     menus = system.file("etc", "rcmdrshiny-menus.txt",
                         package = "RcmdrShinyPlugin.NMBU"),
     dialogs = numbu_dialogs(),
+    commands = list(
+      auto.import.GUI = function(state) {
+        if (!is.null(state$session)) {
+          shiny::showNotification(
+            "Reading tab-separated data from the clipboard.",
+            type = "message", duration = 4
+          )
+        }
+        RcmdrShiny::run_command(state, paste0(
+          "Dataset <- read.table(text = utils::readClipboard(), ",
+          "header = TRUE, sep = \"\\t\")"
+        ), plot = FALSE)
+      },
+      onExport = function(state) {
+        value <- RcmdrShiny::popOutput(keep = TRUE)
+        text <- utils::capture.output(print(value))
+        utils::writeClipboard(text)
+        if (!is.null(state$session)) {
+          shiny::showNotification(
+            "The last result was copied to the clipboard.",
+            type = "message", duration = 4
+          )
+        }
+        invisible(text)
+      },
+      deleteActiveDataSet = function(state) {
+        name <- RcmdrShiny::active_dataset(state)
+        if (is.null(name)) return(invisible(NULL))
+        RcmdrShiny::run_command(state, sprintf("rm(%s)", name), plot = FALSE)
+        RcmdrShiny::active_dataset(state, NULL)
+        invisible(NULL)
+      }
+    ),
+    aliases = c(
+      numericalSummariesNMBU = "numericalSummaries",
+      twoSamplesZTest = "independentSamplesZTestNMBU",
+      tally.GUI = "frequencyDistribution",
+      twoWayTableNMBU = "twoWayTableFromCounts",
+      enterTableNMBU = "enterTable",
+      histogram_discrete = "DiscretePlot",
+      linePlotNMBU = "linePlot",
+      dotplotGUI = "DotPlot",
+      sortData = "sortDataSet",
+      anova_reg_GUI = "anovaTable",
+      bestSubsets = "subsetRegression",
+      binomialDistributionPlotNMBU = "binomialDistributionPlot",
+      PoissonDistributionPlotNMBU = "PoissonDistributionPlot",
+      geomDistributionPlotNMBU = "geomDistributionPlot",
+      hyperDistributionPlotNMBU = "hyperDistributionPlot",
+      negbinomialDistributionPlotNMBU = "negbinomialDistributionPlot"
+    ),
     predicates = list(
       variablesP = function(state, n = 1) length(RcmdrShiny::variables(state)) >= n,
       lmmP = function(state) {

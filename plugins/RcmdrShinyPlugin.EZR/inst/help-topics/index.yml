@@ -7,6 +7,26 @@ categories:
     order: 70
 
 topics:
+  - id: ezr-sample-size
+    file: topics/ezr-sample-size.md
+    category: plugins
+    order: 5
+  - id: ezr-data-tools
+    file: topics/ezr-data-tools.md
+    category: plugins
+    order: 6
+  - id: ezr-graphs-tables
+    file: topics/ezr-graphs-tables.md
+    category: plugins
+    order: 7
+  - id: ezr-tests
+    file: topics/ezr-tests.md
+    category: plugins
+    order: 8
+  - id: ezr-survival-meta
+    file: topics/ezr-survival-meta.md
+    category: plugins
+    order: 9
   - id: ezr-overview
     file: topics/ezr-overview.md
     category: plugins

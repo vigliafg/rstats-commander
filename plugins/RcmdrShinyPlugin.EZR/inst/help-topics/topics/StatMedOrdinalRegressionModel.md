@@ -11,7 +11,7 @@ commands: [polr]
 packages: [RcmdrShinyPlugin.EZR]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

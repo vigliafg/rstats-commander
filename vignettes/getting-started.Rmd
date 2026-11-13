@@ -11,6 +11,12 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
 ```
 
+The RcmdrShiny window: menus on the left, script and output tabs on the right.
+
+```{r screenshot, echo = FALSE, eval = TRUE, out.width = "100%"}
+knitr::include_graphics("figures/app-main.png")
+```
+
 # Installation
 
 RcmdrShiny is a source package.  Install it from a local clone:

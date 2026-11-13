@@ -216,6 +216,7 @@ plots_pane_ui <- function() {
                        class = "btn-sm btn-outline-secondary")
       }
     ),
+    uiOutput("plotly_pane"),
     uiOutput("plot_gallery"),
     uiOutput("plot_header"),
     htmltools::div(
@@ -294,6 +295,13 @@ app_ui <- function() {
     htmltools::div(
       class = "rcmdr-statusbar", role = "status", `aria-live` = "polite",
       uiOutput("statusbar", inline = TRUE)
+    ),
+    # Report downloads are triggered from the Export report dialog; the
+    # buttons are invisible but must exist for Shiny to bind the outputs.
+    htmltools::div(
+      class = "visually-hidden",
+      downloadButton("download_report_rmd", tr("Download report (.Rmd)")),
+      downloadButton("download_report_html", tr("Download report (.html)"))
     )
   )
 }
@@ -678,6 +686,23 @@ app_server <- function(env = globalenv()) {
       )
     })
 
+    output$plotly_pane <- renderUI({
+      tick()
+      if (!plotly_available() || is.null(state$plotly_widget)) return(NULL)
+      htmltools::tagList(
+        htmltools::tags$h6(state$plotly_title %||% tr("Interactive plot")),
+        plotly::plotlyOutput("plotly_plot", height = "480px")
+      )
+    })
+
+    if (plotly_available()) {
+      output$plotly_plot <- plotly::renderPlotly({
+        tick()
+        req(state$plotly_widget)
+        state$plotly_widget
+      })
+    }
+
     output$plot_image <- renderImage({
       plot <- current_plot()
       req(plot)
@@ -721,6 +746,26 @@ app_server <- function(env = globalenv()) {
     }
 
     # -- downloads ----------------------------------------------------------
+
+    output$download_report_rmd <- downloadHandler(
+      filename = function() {
+        paste0("rcmdrshiny-report-", Sys.Date(), ".Rmd")
+      },
+      content = function(file) {
+        write_report_rmd(state, file,
+                         title = state$report_title %||% "RcmdrShiny report")
+      }
+    )
+
+    output$download_report_html <- downloadHandler(
+      filename = function() {
+        paste0("rcmdrshiny-report-", Sys.Date(), ".html")
+      },
+      content = function(file) {
+        write_report_html(state, file,
+                          title = state$report_title %||% "RcmdrShiny report")
+      }
+    )
 
     output$download_script <- downloadHandler(
       filename = function() "RcmdrShiny-script.R",

@@ -11,7 +11,7 @@ commands: [sigma.test]
 packages: [TeachingDemos]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

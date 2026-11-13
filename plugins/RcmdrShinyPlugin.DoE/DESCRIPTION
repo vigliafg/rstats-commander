@@ -1,7 +1,7 @@
 Package: RcmdrShinyPlugin.DoE
 Type: Package
 Title: Design of Experiments for RcmdrShiny
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
     person("RcmdrShiny", "Contributors", role = c("aut", "cre"),
            email = "vigliafg@gmail.com"),

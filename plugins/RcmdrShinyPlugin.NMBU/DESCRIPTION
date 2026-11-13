@@ -1,7 +1,7 @@
 Package: RcmdrShinyPlugin.NMBU
 Type: Package
 Title: NMBU Statistics Extensions for RcmdrShiny
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
     person("RcmdrShiny", "Contributors", role = c("aut", "cre"),
            email = "vigliafg@gmail.com"),
@@ -16,7 +16,8 @@ Encoding: UTF-8
 Depends: R (>= 4.1.0)
 Imports:
     RcmdrShiny (>= 1.1.0),
-    htmltools
+    htmltools,
+    shiny
 Suggests:
     testthat (>= 3.0.0),
     pls,
@@ -24,7 +25,9 @@ Suggests:
     leaps,
     car,
     effects,
-    multcomp
+    multcomp,
+    psych,
+    Hmisc
 Config/testthat/edition: 3
 URL: https://github.com/vigliafg/rstats-commander
 BugReports: https://github.com/vigliafg/rstats-commander/issues

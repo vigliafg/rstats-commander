@@ -47,8 +47,8 @@ test_that("the three Phase 0 commands are enabled only when appropriate", {
 
 test_that("unimplemented commands stay disabled", {
   state <- AppState(env = new.env())
-  expect_false(command_enabled(state, "GumbelQuantiles"))
-  expect_false(is_implemented_command("GumbelQuantiles"))
+  expect_false(command_enabled(state, "CloseCommander"))
+  expect_false(is_implemented_command("CloseCommander"))
 })
 
 test_that("menu rendering marks unavailable entries as disabled", {

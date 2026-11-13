@@ -11,7 +11,7 @@ commands: [PcaHubert]
 packages: [rrcov]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

@@ -28,3 +28,5 @@
 ^plugins$
 ^vignettes/\.gitkeep$
 ^HELP-CHECKLIST\.md$
+^FEATURE-CHECKLIST\.md$
+^PLUGIN-ALIAS-MAP\.md$

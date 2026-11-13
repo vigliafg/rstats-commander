@@ -11,7 +11,7 @@ commands: [paretochart]
 packages: [qicharts2]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

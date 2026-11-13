@@ -11,7 +11,7 @@ commands: [runs.test]
 packages: [tseries]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

@@ -7,6 +7,22 @@ categories:
     order: 70
 
 topics:
+  - id: doe-import-export
+    file: topics/doe-import-export.md
+    category: plugins
+    order: 5
+  - id: doe-designs
+    file: topics/doe-designs.md
+    category: plugins
+    order: 6
+  - id: doe-analyse
+    file: topics/doe-analyse.md
+    category: plugins
+    order: 7
+  - id: doe-about
+    file: topics/doe-about.md
+    category: plugins
+    order: 8
   - id: doe-overview
     file: topics/doe-overview.md
     category: plugins

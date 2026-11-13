@@ -11,7 +11,7 @@ commands: [numSummary]
 packages: [RcmdrMisc]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

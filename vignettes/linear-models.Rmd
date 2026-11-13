@@ -11,6 +11,12 @@ vignette: >
 knitr::opts_chunk$set(eval = FALSE, comment = "#>")
 ```
 
+Model plots are captured in the Plots tab.
+
+```{r screenshot, echo = FALSE, eval = TRUE, out.width = "100%"}
+knitr::include_graphics("figures/app-plots.png")
+```
+
 ## Fitting a model
 
 **Models > Linear model...** fits `lm()` and stores the result as the active

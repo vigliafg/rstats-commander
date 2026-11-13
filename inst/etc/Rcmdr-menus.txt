@@ -19,6 +19,8 @@
     item    fileMenu        command         "Save output..."                                saveOutput                  ""          ""
     item    fileMenu        command         "Save output as..."                             saveOutputAs                ""          ""
     item    fileMenu        separator       ""                                              ""                          ""          ""
+    item    fileMenu        command         "Export report..."                              exportReport                ""          ""
+    item    fileMenu        separator       ""                                              ""                          ""          ""
     item    fileMenu        command         "Save R workspace..."                           saveWorkspace               ""          ""
     item    fileMenu        command         "Save R workspace as..."                        saveWorkspaceAs             ""          ""
     item    fileMenu        separator       ""                                              ""                          ""          ""
@@ -354,10 +356,10 @@
     # Gumbel distribution
     menu    GumbelMenu      continuousMenu     ""                                            ""                         ""          ""
     item    continuousMenu  cascade            "Gumbel distribution"                         GumbelMenu                 ""          ""
-    item    GumbelMenu      command            "Gumbel quantiles..."                         GumbelQuantiles            ""          ""
-    item    GumbelMenu      command            "Gumbel probabilities..."                     GumbelProbabilities        ""          ""
-    item    GumbelMenu      command            "Plot Gumbel distribution..."                 GumbelDistributionPlot     ""          "packageAvailable('RcmdrMisc')"
-    item    GumbelMenu      command            "Sample from Gumbel distribution..."          GumbelDistributionSamples  ""          ""
+    item    GumbelMenu      command            "Gumbel quantiles..."                         GumbelQuantiles            ""          "packageAvailable('VGAM')"
+    item    GumbelMenu      command            "Gumbel probabilities..."                     GumbelProbabilities        ""          "packageAvailable('VGAM')"
+    item    GumbelMenu      command            "Plot Gumbel distribution..."                 GumbelDistributionPlot     ""          "packageAvailable('VGAM')"
+    item    GumbelMenu      command            "Sample from Gumbel distribution..."          GumbelDistributionSamples  ""          "packageAvailable('VGAM')"
         
     # Binomial distribution
     menu    binomialMenu    discreteMenu    ""                                              ""                          ""          ""

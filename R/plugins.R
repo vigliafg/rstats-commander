@@ -73,13 +73,16 @@ plugin_dialog <- function(id, title, ui, on_ok, on_open = NULL,
 #' @param replace Replace an existing plugin with the same name and allow
 #'   command, dialog or predicate names to override earlier definitions.
 #' @param help Path to a directory containing `index.yml` and Markdown topics.
+#' @param aliases Named character vector mapping a plugin command id to a core
+#'   command id.  The plugin menu entry keeps its label but opens the core
+#'   dialog or runs the core direct command.
 #' @return The registered plugin, invisibly.
 #' @export
 RcmdrShiny.plugin <- function(name, menus = NULL, dialogs = list(),
                               commands = list(), description = NULL,
                               version = NULL, tcltk = FALSE,
                               predicates = list(), replace = FALSE,
-                              help = NULL) {
+                              help = NULL, aliases = NULL) {
   if (!is.character(name) || length(name) != 1L || !nzchar(name)) {
     stop("Plugin `name` must be a single non-empty string.", call. = FALSE)
   }
@@ -136,6 +139,14 @@ RcmdrShiny.plugin <- function(name, menus = NULL, dialogs = list(),
                  paste(names(predicates)[bad], collapse = ", ")), call. = FALSE)
   }
 
+  if (!is.null(aliases)) {
+    if (!is.character(aliases) || is.null(names(aliases)) ||
+        any(!nzchar(names(aliases))) || any(!nzchar(aliases))) {
+      stop("Plugin `aliases` must be a named character vector.", call. = FALSE)
+    }
+    aliases <- stats::setNames(unname(aliases), names(aliases))
+  }
+
   check_conflicts <- function(names, kind, base_names) {
     if (length(names) == 0L) return(invisible(NULL))
     others <- unlist(lapply(.plugin_registry$plugins, function(plugin) {
@@ -177,7 +188,8 @@ RcmdrShiny.plugin <- function(name, menus = NULL, dialogs = list(),
     version = version,
     tcltk = isTRUE(tcltk),
     predicates = predicates,
-    help = help
+    help = help,
+    aliases = aliases
   )
   if (isTRUE(tcltk)) {
     warning(
@@ -418,6 +430,26 @@ plugin_dialogs <- function() {
     }
   }
   dialogs
+}
+
+#' Command aliases supplied by registered plugins
+#'
+#' Returns a named character vector mapping plugin command ids to the core
+#' command that implements them.  Earlier plugins win when two plugins map the
+#' same alias.
+#'
+#' @return A named character vector.
+#' @keywords internal
+plugin_aliases <- function() {
+  aliases <- character()
+  for (plugin in .plugin_registry$plugins) {
+    for (alias in names(plugin$aliases %||% character())) {
+      if (!alias %in% names(aliases)) {
+        aliases[[alias]] <- plugin$aliases[[alias]]
+      }
+    }
+  }
+  aliases
 }
 
 

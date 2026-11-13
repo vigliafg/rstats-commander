@@ -11,7 +11,7 @@ commands: []
 packages: [RcmdrShinyPlugin.PcaRobust]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

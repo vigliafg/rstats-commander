@@ -11,6 +11,12 @@ vignette: >
 knitr::opts_chunk$set(eval = FALSE, comment = "#>")
 ```
 
+The Help tab showing a search result.
+
+```{r screenshot, echo = FALSE, eval = TRUE, out.width = "100%"}
+knitr::include_graphics("figures/app-help.png")
+```
+
 ## How help is organised
 
 Help lives in `inst/help-topics/`:

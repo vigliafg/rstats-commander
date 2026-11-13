@@ -230,6 +230,10 @@ distribution_info <- function(name) {
                    params = list(list("shape", "Shape", ""),
                                  list("scale", "Scale", "1")),
                    discrete = FALSE),
+    Gumbel = list(title = "Gumbel", fun = "gumbel", prefix = "VGAM::",
+                  params = list(list("location", "Location", "0"),
+                                list("scale", "Scale", "1")),
+                  discrete = FALSE, requires = "VGAM"),
     binomial = list(title = "Binomial", fun = "binom",
                     params = list(list("size", "Size", ""),
                                   list("prob", "Probability of success", "0.5")),
@@ -256,9 +260,13 @@ distribution_info <- function(name) {
 
 distribution_menu_names <- function() {
   c("normal", "t", "chisq", "F", "exponential", "uniform", "beta", "Cauchy",
-    "logistic", "lognormal", "gamma", "Weibull", "binomial", "Poisson",
-    "geom", "hyper", "negbinomial")
+    "logistic", "lognormal", "gamma", "Weibull", "Gumbel", "binomial",
+    "Poisson", "geom", "hyper", "negbinomial")
 }
+
+# Gumbel lives in VGAM; the other families come from stats.  The prefix keeps
+# the generated command runnable without attaching the package.
+distribution_prefix <- function(info) info$prefix %||% ""
 
 #' @keywords internal
 cmd_distribution_quantiles <- function(name, probabilities, params,
@@ -267,7 +275,8 @@ cmd_distribution_quantiles <- function(name, probabilities, params,
   param_code <- paste0(
     paste0(names(params), "=", unlist(params), collapse = ", ")
   )
-  paste0("q", info$fun, "(c(", paste(probabilities, collapse = ","), "), ",
+  paste0(distribution_prefix(info), "q", info$fun, "(c(",
+         paste(probabilities, collapse = ","), "), ",
          param_code, ", lower.tail=", isTRUE(lower_tail), ")")
 }
 
@@ -278,7 +287,8 @@ cmd_distribution_probabilities <- function(name, values, params,
   param_code <- paste0(
     paste0(names(params), "=", unlist(params), collapse = ", ")
   )
-  paste0("p", info$fun, "(c(", paste(values, collapse = ","), "), ",
+  paste0(distribution_prefix(info), "p", info$fun, "(c(",
+         paste(values, collapse = ","), "), ",
          param_code, ", lower.tail=", isTRUE(lower_tail), ")")
 }
 
@@ -288,8 +298,8 @@ cmd_distribution_mass <- function(name, x, params) {
   param_code <- paste0(
     paste0(names(params), "=", unlist(params), collapse = ", ")
   )
-  paste0("d", info$fun, "(c(", paste(x, collapse = ","), "), ",
-         param_code, ")")
+  paste0(distribution_prefix(info), "d", info$fun, "(c(",
+         paste(x, collapse = ","), "), ", param_code, ")")
 }
 
 #' @keywords internal
@@ -304,15 +314,16 @@ cmd_distribution_plot <- function(name, params, type = "density",
     x <- if (is.null(from) || !nzchar(from)) "0:20" else
       paste0(as.integer(from), ":", as.integer(to_value))
     if (identical(type, "density")) {
-      paste0("plot(", x, ", d", info$fun, "(", x, ", ", param_code,
-             '), type="h", xlab="x", ylab="Density")')
+      paste0("plot(", x, ", ", distribution_prefix(info), "d", info$fun, "(",
+             x, ", ", param_code, '), type="h", xlab="x", ylab="Density")')
     } else {
-      paste0("plot(", x, ", p", info$fun, "(", x, ", ", param_code,
+      paste0("plot(", x, ", ", distribution_prefix(info), "p", info$fun, "(",
+             x, ", ", param_code,
              '), type="s", xlab="x", ylab="Cumulative Probability")')
     }
   } else {
-    fn <- if (identical(type, "density")) paste0("d", info$fun) else
-      paste0("p", info$fun)
+    fn <- paste0(distribution_prefix(info),
+                 if (identical(type, "density")) "d" else "p", info$fun)
     from_code <- if (is.null(from) || !nzchar(from)) "" else
       paste0(", from=", from, ", to=", to)
     paste0('curve(', fn, '(x, ', param_code, ')', from_code,
@@ -332,8 +343,9 @@ cmd_distribution_samples <- function(name, params, dataset,
   n <- as.integer(n)
   samples <- as.integer(samples)
   commands <- c(
-    paste0(dataset, " <- as.data.frame(matrix(r", info$fun, "(",
-           samples * n, ", ", param_code, "), ncol=", n, "))"),
+    paste0(dataset, " <- as.data.frame(matrix(", distribution_prefix(info),
+           "r", info$fun, "(", samples * n, ", ", param_code, "), ncol=", n,
+           "))"),
     if (samples == 1L) {
       paste0('rownames(', dataset, ') <- "sample"')
     } else {

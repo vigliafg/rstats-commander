@@ -11,7 +11,7 @@ commands: []
 packages: [ggplot2]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

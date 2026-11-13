@@ -63,6 +63,14 @@ cmd_character_to_factor <- function(dataset, variables, name = NULL) {
   cmd_numeric_to_factor(dataset, variables, name = name, labels = NULL)
 }
 
+# Rcmdr's convertStrings2Factors() converts every character column in place.
+#' @keywords internal
+cmd_convert_strings_to_factors <- function(dataset, variables) {
+  variables <- variables[nzchar(variables)]
+  if (length(variables) == 0L) return(character())
+  cmd_numeric_to_factor(dataset, variables, name = NULL, labels = NULL)
+}
+
 #' @keywords internal
 cmd_bin_variable <- function(dataset, variable, new_variable, bins = 3L,
                              method = "intervals", labels = NULL) {

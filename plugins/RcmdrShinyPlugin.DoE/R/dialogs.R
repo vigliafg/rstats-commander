@@ -1,9 +1,10 @@
 # Shiny dialogs for DoE -------------------------------------------------
 
-doe_dialog <- function(id, title, fields, build, help = NULL) {
+doe_dialog <- function(id, title, fields, build, help = NULL, plot = TRUE,
+                       help_topic = NULL) {
   ns <- function(x) paste0(id, "_", x)
   RcmdrShiny::plugin_dialog(
-    id = id, title = title, help = help,
+    id = id, title = title, help = help, help_topic = help_topic,
     ui = function(state, memory) {
       htmltools::tagList(lapply(fields, function(field) {
         value <- if (is.null(memory)) NULL else memory[[field$name]]
@@ -26,7 +27,7 @@ doe_dialog <- function(id, title, fields, build, help = NULL) {
       for (field in fields) values[[field$name]] <- input[[ns(field$name)]]
       command <- tryCatch(build(values, state), error = function(e) e)
       if (inherits(command, "error")) return(list(error = conditionMessage(command)))
-      list(commands = command, memory = values,
+      list(commands = command, memory = values, plot = plot,
            activate_dataset = values$name %||% NULL)
     }
   )
@@ -43,7 +44,7 @@ dv <- function(name, label, default = "") {
 }
 
 doe_dialogs <- function() {
-  list(
+  dialogs <- list(
     Menu.pb2level = doe_dialog(
       "Menu.pb2level", "Screening design",
       list(de("name", "Design name", "design"), ds("factors", "Factors", 7),
@@ -202,6 +203,13 @@ doe_dialogs <- function() {
         if (is.null(model)) stop("No active model.")
         sprintf("rsm::contour.lm(%s, ~ x1 + x2)", model)
       }
+    ),
+    loadworkspace = doe_dialog(
+      "loadworkspace", "Load R workspace",
+      list(de("file", "Workspace file", "workspace.RData")),
+      function(values, state) sprintf("load(%s)", doe_quote(values$file)),
+      help_topic = "doe-import-export", plot = FALSE
     )
   )
+  c(dialogs, doe_extra_dialogs())
 }

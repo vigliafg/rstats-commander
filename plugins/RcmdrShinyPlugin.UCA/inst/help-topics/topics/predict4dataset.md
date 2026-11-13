@@ -11,7 +11,7 @@ commands: [predict]
 packages: [RcmdrShinyPlugin.UCA]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

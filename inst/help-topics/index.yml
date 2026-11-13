@@ -38,6 +38,10 @@ topics:
     file: topics/getting-started.md
     category: getting-started
     order: 100
+  - id: converting-character-variables
+    file: topics/converting-character-variables.md
+    category: data
+    order: 45
   - id: data-editing
     file: topics/data-editing.md
     category: data
@@ -442,6 +446,10 @@ topics:
     file: topics/logistic-distribution.md
     category: distributions
     order: 180
+  - id: gumbel-distribution
+    file: topics/gumbel-distribution.md
+    category: distributions
+    order: 190
   - id: lognormal-distribution
     file: topics/lognormal-distribution.md
     category: distributions

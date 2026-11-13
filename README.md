@@ -10,13 +10,17 @@ RcmdrShiny is a fork of the Rcmdr 2.15.0 engine: it keeps the R command
 generation semantics of Rcmdr, so every action in the graphical interface
 produces a reproducible command in the script log and in the output pane.
 
-> **Status: 1.6 help infrastructure.** All user-facing Rcmdr dialogs are ported
-> (138 of 142 inventory entries; the remaining four are internal Tk
-> utilities). The package includes the Shiny shell, File/Data, Statistics,
-> Graphs/Distributions, Models and Tools/Help menus, a searchable in-app help
-> centre with Markdown topics and plugin help, the plugin-package
-> protocol and helpers, accessibility landmarks, vignettes and release
-> engineering. All 15 general-purpose plugins are ported and tested.
+> **Status: 1.12 residual features complete.** The core exposes 205 dialogs
+> and, with all 15 plugins loaded, 850 of 900 menu entries are implemented.
+> The 50 disabled entries correspond to 38 distinct commands: 23 core entries
+> out of scope by design (R Markdown editor, close/restart, cut/copy/undo,
+> `identify()`, `Identify3D`), 2 EZR exit duplicates and 13 TeachStat generic
+> distribution helpers.  EZR, NMBU and DoE implement every plugin-specific
+> entry.  The package includes the
+> Shiny shell, a searchable offline help centre with 619 documented topics,
+> interactive plotly versions of the main charts, R Markdown report export,
+> plugin command aliases, accessibility landmarks, vignettes and release
+> engineering.
 
 ## Requirements
 
@@ -85,7 +89,11 @@ RcmdrShiny::run(env = env)
 | Models: diagnostics, influence, hypotheses, model selection, effect plots | done |
 | Tools and Help menus | done |
 | Help tab: search, categories, topic pane, recent and contextual help | done |
-| Markdown help topics for the core and every plugin | done |
+| Markdown help topics for the core and every plugin (619 documented) | done |
+| Italian translations for 21 core topics, with English fallback | done |
+| Interactive plots (plotly) for histogram, boxplot, scatterplot and line graph | done |
+| Session report export (R Markdown, HTML when rmarkdown is installed) | done |
+| Plugin command aliases (`aliases = c(new = "core")`) | done |
 | Help API: `help_search()`, `help_topic()`, `help_index()` and plugin registration | done |
 | Help inventory and link checker in CI | done |
 | Plugin API: menus, direct commands, Shiny dialogs | done |

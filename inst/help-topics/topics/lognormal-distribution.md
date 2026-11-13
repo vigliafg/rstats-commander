@@ -11,7 +11,7 @@ commands: [qlnorm, plnorm, dlnorm, rlnorm]
 packages: [stats]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

@@ -11,7 +11,7 @@ commands: [qweibull, pweibull, dweibull, rweibull]
 packages: [stats]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

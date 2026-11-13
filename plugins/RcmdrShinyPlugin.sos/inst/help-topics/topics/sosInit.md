@@ -11,7 +11,7 @@ commands: [findFn]
 packages: [sos]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

@@ -1,9 +1,10 @@
 # Shiny dialogs for NMBU ------------------------------------------------
 
-numbu_dialog <- function(id, title, fields, build, help = NULL) {
+numbu_dialog <- function(id, title, fields, build, help = NULL, plot = TRUE,
+                         help_topic = NULL, activate = NULL) {
   ns <- function(x) paste0(id, "_", x)
   RcmdrShiny::plugin_dialog(
-    id = id, title = title, help = help,
+    id = id, title = title, help = help, help_topic = help_topic,
     ui = function(state, memory) {
       htmltools::tagList(lapply(fields, function(field) {
         value <- if (is.null(memory)) NULL else memory[[field$name]]
@@ -34,7 +35,12 @@ numbu_dialog <- function(id, title, fields, build, help = NULL) {
       for (field in fields) values[[field$name]] <- input[[ns(field$name)]]
       command <- tryCatch(build(values, state), error = function(e) e)
       if (inherits(command, "error")) return(list(error = conditionMessage(command)))
-      list(commands = command, memory = values, plot = TRUE)
+      result <- list(commands = command, memory = values, plot = plot)
+      if (!is.null(activate)) {
+        dataset <- tryCatch(activate(values, state), error = function(e) NULL)
+        if (!is.null(dataset) && nzchar(dataset)) result$activate_dataset <- dataset
+      }
+      result
     }
   )
 }
@@ -280,6 +286,10 @@ numbu_dialogs <- function() {
   for (new_name in names(aliases)) {
     spec <- RcmdrShiny::get_dialog(aliases[[new_name]])
     if (!is.null(spec)) dialogs[[new_name]] <- spec
+  }
+  extras <- nb_extra_dialogs()
+  for (name in names(extras)) {
+    dialogs[[name]] <- extras[[name]]
   }
   dialogs
 }

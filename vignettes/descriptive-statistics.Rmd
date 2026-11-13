@@ -11,6 +11,12 @@ vignette: >
 knitr::opts_chunk$set(eval = FALSE, comment = "#>")
 ```
 
+The Data tab with the active data set.
+
+```{r screenshot, echo = FALSE, eval = TRUE, out.width = "100%"}
+knitr::include_graphics("figures/app-data.png")
+```
+
 ## A first look at the data
 
 Descriptive statistics answer three questions: what is in the data, how are the

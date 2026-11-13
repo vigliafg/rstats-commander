@@ -11,7 +11,7 @@ commands: [qexp, pexp, dexp, rexp]
 packages: [stats]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

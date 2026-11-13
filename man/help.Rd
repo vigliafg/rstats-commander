@@ -1,4 +1,5 @@
 \name{help}
+\alias{open_help_topic}
 \alias{help_topic}\alias{help_topics}
 \alias{help_index}
 \alias{help_catalog}
@@ -45,11 +46,14 @@ help_register(manifest, base_dir = NULL, package = NULL)
 
 help_unregister(package = NULL)
 
+open_help_topic(state, id)
+
 help_registry()
 
 register_plugin_help(package, name = package, lib.loc = NULL)
 }
 \arguments{
+  \item{state}{Application state.}
   \item{language}{Language code such as \code{"en"} or \code{"it"}.  Missing
   translations fall back to English.}
   \item{id}{Topic identifier.  Canonical ids are used for plugin topics

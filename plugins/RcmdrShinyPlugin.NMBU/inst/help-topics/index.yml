@@ -7,6 +7,18 @@ categories:
     order: 70
 
 topics:
+  - id: nmbu-data
+    file: topics/nmbu-data.md
+    category: plugins
+    order: 5
+  - id: nmbu-tests
+    file: topics/nmbu-tests.md
+    category: plugins
+    order: 6
+  - id: nmbu-models
+    file: topics/nmbu-models.md
+    category: plugins
+    order: 7
   - id: nmbu-overview
     file: topics/nmbu-overview.md
     category: plugins

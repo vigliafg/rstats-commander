@@ -72,6 +72,9 @@ histogram_dialog <- function() {
                                  if (nzchar(group)) group else NULL,
                                  input[[ns("scale")]] %||% "frequency",
                                  input[[ns("breaks")]] %||% "Sturges"),
+        interactive = plotly_code_histogram(active_dataset(state), variable,
+                                            if (nzchar(group)) group else NULL),
+        interactive_title = tr("Histogram"),
         memory = list(variable = variable, group = group,
                       scale = input[[ns("scale")]] %||% "frequency",
                       breaks = input[[ns("breaks")]] %||% "Sturges")
@@ -134,6 +137,12 @@ boxplot_dialog <- function() {
         commands = cmd_boxplot(active_dataset(state), variables,
                                if (nzchar(response)) response else NULL,
                                if (nzchar(group)) group else NULL),
+        interactive = plotly_code_boxplot(
+          active_dataset(state), variables,
+          if (nzchar(response)) response else NULL,
+          if (nzchar(group)) group else NULL
+        ),
+        interactive_title = tr("Boxplot"),
         memory = list(variables = variables, response = response, group = group)
       )
     }
@@ -203,6 +212,13 @@ scatterplot_dialog <- function() {
           isTRUE(input[[ns("smooth")]]), isTRUE(input[[ns("boxplots")]]),
           input[[ns("log")]] %||% ""
         ),
+        interactive = plotly_code_scatter(
+          active_dataset(state), x, y,
+          if (nzchar(group)) group else NULL,
+          isTRUE(input[[ns("smooth")]]),
+          input[[ns("log")]] %||% ""
+        ),
+        interactive_title = tr("Scatterplot"),
         memory = list(x = x, y = y, group = group,
                       smooth = isTRUE(input[[ns("smooth")]]),
                       boxplots = isTRUE(input[[ns("boxplots")]]),
@@ -316,6 +332,8 @@ line_plot_dialog <- function() {
         return(list(error = tr("You must select x and y variables.")))
       }
       list(commands = cmd_lineplot(active_dataset(state), x, y),
+           interactive = plotly_code_line(active_dataset(state), x, y),
+           interactive_title = tr("Line Graph"),
            memory = list(x = x, y = y))
     }
   )
@@ -646,6 +664,7 @@ distribution_dialog <- function(distribution, kind) {
                   mass = paste0("d", info$fun),
                   plot = paste0("d", info$fun),
                   samples = paste0("r", info$fun)),
+    help_package = info$requires,
     ui = function(state, memory) {
       m <- utils::modifyList(defaults, memory %||% list())
       values <- lapply(param_names, function(name) m[[name]])

@@ -11,6 +11,12 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
 ```
 
+The application with the core menus; plugins add their own.
+
+```{r screenshot, echo = FALSE, eval = TRUE, out.width = "100%"}
+knitr::include_graphics("figures/app-main.png")
+```
+
 An RcmdrShiny plugin adds menus, direct commands and Shiny dialogs.  Plugins can
 be delivered as a single R script or, preferably, as an R package named
 `RcmdrShinyPlugin.<Name>`.

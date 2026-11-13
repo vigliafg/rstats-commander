@@ -11,7 +11,7 @@ commands: [roc.test]
 packages: [pROC]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

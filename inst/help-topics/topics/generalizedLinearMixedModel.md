@@ -11,7 +11,7 @@ commands: [glmer]
 packages: [RcmdrShiny]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

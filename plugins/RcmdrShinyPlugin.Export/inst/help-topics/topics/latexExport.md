@@ -11,7 +11,7 @@ commands: [latex]
 packages: [Hmisc]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

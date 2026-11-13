@@ -11,7 +11,7 @@ commands: [data.frame]
 packages: [RcmdrShinyPlugin.TeachStat]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

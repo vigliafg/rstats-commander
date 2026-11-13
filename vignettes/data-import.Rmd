@@ -11,6 +11,12 @@ vignette: >
 knitr::opts_chunk$set(eval = FALSE, comment = "#>")
 ```
 
+The text import dialog.
+
+```{r screenshot, echo = FALSE, eval = TRUE, out.width = "100%"}
+knitr::include_graphics("figures/dialog-import.png")
+```
+
 ## Why start here
 
 Every RcmdrShiny analysis begins with a data set.  The import dialogs read a

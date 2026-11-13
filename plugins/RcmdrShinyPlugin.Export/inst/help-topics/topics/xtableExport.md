@@ -11,7 +11,7 @@ commands: [xtable]
 packages: [xtable]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

@@ -11,7 +11,7 @@ commands: []
 packages: [survival]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does

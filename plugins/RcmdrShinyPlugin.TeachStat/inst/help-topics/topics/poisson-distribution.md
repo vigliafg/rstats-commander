@@ -11,7 +11,7 @@ commands: [qpois, ppois, dpois, rpois]
 packages: [stats]
 related: []
 language: en
-status: draft
+status: documented
 ---
 
 ## What it does
