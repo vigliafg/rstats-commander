@@ -100,7 +100,7 @@ Date: 13 November 2026
 | Draft dialog topics | 443 | 0 |
 | Italian topics | 3 | 21 |
 
-The 50 disabled entries correspond to 38 distinct commands: 23 core entries
+The 50 disabled entries correspond to 38 distinct commands: 24 core entries
 out of scope by design (R Markdown/knitr editor, close/restart commander,
 cut/copy/paste/undo/find, `Identify3D`), 2 EZR close/exit duplicates and 13
 TeachStat generic-distribution helpers that the plan keeps outside the

@@ -12,7 +12,7 @@ produces a reproducible command in the script log and in the output pane.
 
 > **Status: 1.12 residual features complete.** The core exposes 205 dialogs
 > and, with all 15 plugins loaded, 850 of 900 menu entries are implemented.
-> The 50 disabled entries correspond to 38 distinct commands: 23 core entries
+> The 50 disabled entries correspond to 38 distinct commands: 24 core entries
 > out of scope by design (R Markdown editor, close/restart, cut/copy/undo,
 > `identify()`, `Identify3D`), 2 EZR exit duplicates and 13 TeachStat generic
 > distribution helpers.  EZR, NMBU and DoE implement every plugin-specific
