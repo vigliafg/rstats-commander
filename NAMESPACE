@@ -1,0 +1,15 @@
+# Generated manually for the Phase 0 skeleton; replace with roxygen2 output
+# once the public API stabilises.
+
+export(AppState)
+export(app)
+export(run)
+export(run_app)
+export(run_command)
+
+import(shiny)
+
+importFrom(grDevices, dev.off, png, recordPlot)
+importFrom(RcmdrMisc, binnedCounts, discreteCounts, numSummary)
+importFrom(stats, setNames)
+importFrom(utils, capture.output)

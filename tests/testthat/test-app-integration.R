@@ -1,0 +1,104 @@
+# Server-level integration test: drives the menu, import dialog, numerical
+# summaries dialog and linear model dialog exactly as a user would.
+
+set_input <- function(session, name, value) {
+  do.call(session$setInputs, stats::setNames(list(value), name))
+}
+
+click <- function(session, name) {
+  set_input(session, name, 0)
+  set_input(session, name, 1)
+}
+
+test_that("the Phase 0 vertical slice works end to end", {
+  skip_if_not_installed("shiny")
+
+  csv <- tempfile(fileext = ".csv")
+  writeLines(
+    c("y,x,g", "1,2,a", "2,4,b", "3,6,a", "4,8,b", "5,10,a", "6,12,b"),
+    csv
+  )
+  on.exit(unlink(csv), add = TRUE)
+
+  env <- new.env()
+  leaves <- menu_leaves(menu_tree())
+  key <- function(command) leaves$key[leaves$command == command][[1L]]
+
+  shiny::testServer(app_server(env), {
+    # -- import -----------------------------------------------------------
+    click(session, key("readDataSet"))
+    expect_match(class(output$dialog_body), "list")
+
+    session$setInputs(
+      readDataSet_dsname = "Dataset",
+      readDataSet_location = "local",
+      readDataSet_path = csv,
+      readDataSet_header = TRUE,
+      readDataSet_stringsAsFactors = TRUE,
+      readDataSet_delimiter = "commas",
+      readDataSet_other = "",
+      readDataSet_decimal = "period",
+      readDataSet_missing = "NA"
+    )
+    click(session, "dialog_ok")
+
+    expect_true(exists("Dataset", envir = env, inherits = FALSE))
+    expect_equal(nrow(env$Dataset), 6L)
+    expect_equal(as.character(env$Dataset$g),
+                 c("a", "b", "a", "b", "a", "b"))
+
+    # -- numerical summaries ---------------------------------------------
+    click(session, key("numericalSummaries"))
+    expect_match(class(output$dialog_body), "list")
+    session$setInputs(
+      numericalSummaries_x = c("y", "x"),
+      numericalSummaries_groups = "",
+      numericalSummaries_mean = TRUE,
+      numericalSummaries_sd = TRUE,
+      numericalSummaries_se.mean = FALSE,
+      numericalSummaries_var = FALSE,
+      numericalSummaries_IQR = FALSE,
+      numericalSummaries_cv = FALSE,
+      numericalSummaries_counts = FALSE,
+      numericalSummaries_skewness = FALSE,
+      numericalSummaries_kurtosis = FALSE,
+      numericalSummaries_quantiles = FALSE,
+      numericalSummaries_quantiles_values = "0, .25, .5, .75, 1",
+      numericalSummaries_type = "2"
+    )
+    click(session, "dialog_ok")
+
+    text <- output$output_text
+    expect_match(text, "mean")
+    expect_match(text, "sd")
+    expect_match(output$messages_text, "^$")
+
+    # -- linear model -----------------------------------------------------
+    click(session, key("linearModel"))
+    expect_match(class(output$dialog_body), "list")
+    session$setInputs(
+      linearModel_model = "LinearModel.1",
+      linearModel_lhs = "y",
+      linearModel_rhs = "x",
+      linearModel_subset = "",
+      linearModel_weights = "",
+      linearModel_remove = ""
+    )
+    click(session, "dialog_ok")
+
+    expect_true(exists("LinearModel.1", envir = env, inherits = FALSE))
+    expect_s3_class(env$LinearModel.1, "lm")
+    expect_match(output$output_text, "Coefficients")
+    expect_match(output$output_text, "lm\\(formula = y ~ x")
+  })
+})
+
+test_that("the menus disable commands that need a data set", {
+  skip_if_not_installed("shiny")
+  env <- new.env()
+
+  shiny::testServer(app_server(env), {
+    html <- htmltools::renderTags(output$menus)$html
+    expect_true(grepl("disabled", html, fixed = TRUE))
+  })
+})

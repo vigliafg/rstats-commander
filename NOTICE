@@ -1,0 +1,31 @@
+RcmdrShiny -- attribution notice
+================================
+
+This package is a derivative work of the R Commander (Rcmdr) version
+2.15.0:
+
+  Copyright (C) 2001-2026 John Fox, Milan Bouchet-Valat and contributors
+  License: GPL (>= 2)
+  Upstream: https://github.com/RCmdr-Project/rcmdr
+
+The following components are derived from, or reimplement the behaviour
+of, the corresponding Rcmdr files:
+
+  * R/menus.R                  -- parser for inst/etc/Rcmdr-menus.txt
+  * R/dialogs-import-text.R    -- command generation from R/data-menu.R
+                                  (readDataSet)
+  * R/dialogs-summaries.R      -- command generation from
+                                  R/statistics-summaries-menu.R
+                                  (numericalSummaries)
+  * R/dialogs-models.R         -- command generation from
+                                  R/statistics-models-menu.R
+                                  (linearModel)
+  * inst/etc/Rcmdr-menus.txt   -- copied verbatim from Rcmdr 2.15.0
+  * inst/po/*.po               -- translation catalogues copied from
+                                  Rcmdr 2.15.0
+
+The Shiny user interface, the application state, the command runner and
+the dialog runtime are new work.
+
+RcmdrShiny is distributed under the GNU General Public License,
+version 2 or later.  See LICENSE.

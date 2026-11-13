@@ -1,0 +1,205 @@
+# Command runner ------------------------------------------------------------
+#
+# This is the Shiny counterpart of Rcmdr's doItAndPrint()/justDoIt(): the
+# command is appended to the log, evaluated in the session environment, and
+# stdout, messages, warnings and errors are captured and stored in the state.
+
+#' Run an R command
+#'
+#' Evaluates `code` in `state$env`, appends it to the command log and captures
+#' its output, messages, warnings and errors.  This is the engine counterpart
+#' of Rcmdr's `doItAndPrint()`.
+#'
+#' @param state Application state created by [AppState()].
+#' @param code Character string (or vector of lines) of R code.
+#' @param log Append the command to the command log.
+#' @param echo Reserved: include the command in the output.
+#' @param plot If `TRUE`, capture the resulting plot as a PNG.  The default
+#'   `"auto"` captures only commands that look like plotting calls.
+#' @return Invisibly, a list with components `status`, `code`, `output`,
+#'   `warnings`, `messages`, `error` and `value`.
+#' @export
+run_command <- function(state, code, log = TRUE, echo = TRUE, plot = "auto") {
+  if (!is_app_state(state)) {
+    stop("`state` must be created with AppState().", call. = FALSE)
+  }
+
+  code <- paste(code, collapse = "\n")
+  if (!nzchar(trimws(code))) {
+    return(invisible(list(status = "empty", code = code)))
+  }
+
+  if (isTRUE(log)) state$log <- c(state$log, code)
+
+  if (identical(plot, "auto")) plot <- is_plot_command(code)
+  if (isTRUE(plot)) {
+    return(invisible(run_plot_command(state, code, echo = echo)))
+  }
+
+  result <- eval_code(state, code, echo = echo)
+  state_touch(state)
+  invisible(result)
+}
+
+# Evaluate code and capture everything that a console would show.
+eval_code <- function(state, code, echo = TRUE) {
+  exprs <- tryCatch(parse(text = code), error = identity)
+
+  if (inherits(exprs, "error")) {
+    message <- conditionMessage(exprs)
+    state$messages <- c(state$messages, paste0("Error: ", message))
+    state$last_error <- message
+    return(list(
+      status = "error", code = code, output = character(),
+      warnings = character(), messages = paste0("Error: ", message),
+      error = message, value = NULL
+    ))
+  }
+
+  output <- character()
+  warnings <- character()
+  messages <- character()
+  error <- NULL
+  value <- NULL
+  visible <- FALSE
+
+  for (expr in exprs) {
+    captured <- character()
+    local_value <- NULL
+    local_visible <- FALSE
+    local_error <- NULL
+
+    captured <- tryCatch(
+      withCallingHandlers(
+        utils::capture.output({
+          local_value <- withVisible(eval(expr, envir = state$env))
+          local_visible <- local_value$visible
+          if (local_visible) print(local_value$value)
+        }),
+        warning = function(w) {
+          warnings <<- c(warnings, conditionMessage(w))
+          invokeRestart("muffleWarning")
+        },
+        message = function(m) {
+          messages <<- c(messages, conditionMessage(m))
+          invokeRestart("muffleMessage")
+        }
+      ),
+      error = function(e) {
+        local_error <<- conditionMessage(e)
+        character()
+      }
+    )
+
+    output <- c(output, captured)
+    if (!is.null(local_error)) {
+      error <- local_error
+      break
+    }
+
+    if (!is.null(local_value)) {
+      value <- local_value$value
+      visible <- local_visible
+      remember_assignment(state, expr, value, visible)
+    }
+  }
+
+  if (length(warnings) > 0L) {
+    state$warnings <- c(state$warnings, warnings)
+    state$messages <- c(state$messages, paste0("Warning: ", warnings))
+  }
+  if (length(messages) > 0L) {
+    state$messages <- c(state$messages, messages)
+  }
+  if (!is.null(error)) {
+    state$messages <- c(state$messages, paste0("Error: ", error))
+    state$last_error <- error
+  }
+
+  state$output <- c(state$output, output)
+
+  list(
+    status = if (is.null(error)) "ok" else "error",
+    code = code,
+    output = output,
+    warnings = warnings,
+    messages = messages,
+    error = error,
+    value = value,
+    visible = visible
+  )
+}
+
+# When the user assigns a data frame or a model, make it the active object,
+# as Rcmdr does for models created from its dialogs.
+remember_assignment <- function(state, expr, value, visible) {
+  if (isTRUE(visible) || is.null(value)) return(invisible(NULL))
+  name <- assignment_name(expr)
+  if (is.null(name)) return(invisible(NULL))
+
+  if (is.data.frame(value)) {
+    state$active_dataset <- name
+    state$active_model <- NULL
+  } else if (inherits(value, "lm") || inherits(value, "glm")) {
+    state$active_model <- name
+  }
+  invisible(NULL)
+}
+
+assignment_name <- function(expr) {
+  if (!is.call(expr) || length(expr) < 3L) return(NULL)
+  if (!identical(expr[[1L]], as.name("<-")) && !identical(expr[[1L]], as.name("="))) {
+    return(NULL)
+  }
+  if (!is.name(expr[[2L]])) return(NULL)
+  as.character(expr[[2L]])
+}
+
+# Plot capture --------------------------------------------------------------
+
+plot_call_pattern <- paste0(
+  "\\b(",
+  "plot|plot\\.default|hist|boxplot|barplot|barplot2|pie|piechart|curve|",
+  "density|dotchart|matplot|pairs|image|contour|persp|qqnorm|qqline|",
+  "stripchart|stem|scatterplot|scatterplotMatrix|plotMeans|plotmeans|",
+  "xyplot|bwplot|densityplot|histogram|qqplot|qplot|ggplot|plot3d|",
+  "scatter3d|rgl\\.(points|lines|planes|spheres|surface3d)|monitor|",
+  "plotModel|crPlots|avPlots|influencePlot",
+  ")[[:space:]]*\\("
+)
+
+#' @keywords internal
+is_plot_command <- function(code) {
+  # Assigning a ggplot/lattice object does not draw anything yet.
+  if (grepl("^[[:space:]]*[A-Za-z.][A-Za-z0-9._]*[[:space:]]*<-", code) &&
+      !grepl("print[[:space:]]*\\(", code)) {
+    return(FALSE)
+  }
+  any(grepl(plot_call_pattern, code, perl = TRUE))
+}
+
+run_plot_command <- function(state, code, echo = TRUE) {
+  file <- tempfile("RcmdrShiny-plot-", fileext = ".png")
+  grDevices::png(filename = file, width = 800, height = 600, res = 96)
+  device <- grDevices::dev.cur()
+  on.exit({
+    if (device %in% grDevices::dev.list()) {
+      try(grDevices::dev.off(device), silent = TRUE)
+    }
+  }, add = TRUE)
+
+  result <- eval_code(state, code, echo = echo)
+  recorded <- tryCatch(grDevices::recordPlot(), error = function(e) NULL)
+  if (device %in% grDevices::dev.list()) grDevices::dev.off(device)
+
+  state$plots <- c(state$plots, list(list(
+    file = file,
+    code = code,
+    recorded = recorded,
+    time = Sys.time()
+  )))
+  state_touch(state)
+
+  result$plot <- file
+  result
+}

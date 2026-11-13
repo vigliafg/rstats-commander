@@ -1,0 +1,13 @@
+^\.git$
+^\.github$
+^LICENSE$
+^NOTICE$
+^UPSTREAM\.md$
+^PHASE0-CHECKLIST\.md$
+^CONTRIBUTING\.md$
+^CODE_OF_CONDUCT\.md$
+^AGENTS\.md$
+^\.Rbuildignore$
+^\.gitignore$
+^tools$
+^vignettes/\.gitkeep$

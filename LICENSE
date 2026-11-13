@@ -1,0 +1,16 @@
+RcmdrShiny is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 2 of the License, or (at your
+option) any later version.
+
+RcmdrShiny is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+The full text of the GNU General Public License version 2 is available
+at <https://www.gnu.org/licenses/old-licenses/gpl-2.0.html>.
+
+RcmdrShiny is derived from the R Commander (Rcmdr) version 2.15.0,
+Copyright (C) 2001-2026 John Fox, Milan Bouchet-Valat and contributors,
+distributed under the same license.  See NOTICE for details.

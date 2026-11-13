@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.Rcheck/
+*.tar.gz
+tests/testthat/_snaps/
+tests/testthat/*.new.png
+tests/testthat/*.diff.png
+inst/doc/
+pkgdown/

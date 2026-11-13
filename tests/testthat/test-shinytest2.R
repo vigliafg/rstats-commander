@@ -1,0 +1,127 @@
+# Browser-level end-to-end test (Phase 0, P0.7).
+#
+# It is opt-in because it needs a working headless browser:
+#   RCMDRSHINY_E2E=1 Rscript -e 'testthat::test_file("tests/testthat/test-shinytest2.R")'
+
+test_that("the full Phase 0 flow works in a real browser", {
+  skip_if_not_installed("shinytest2")
+  skip_if_not_installed("chromote")
+  skip_if(Sys.getenv("RCMDRSHINY_E2E") != "1",
+          "set RCMDRSHINY_E2E=1 to run the browser test")
+
+  csv <- tempfile(fileext = ".csv")
+  writeLines(
+    c("y,x,g", "1,2,a", "2,4,b", "3,6,a", "4,8,b", "5,10,a", "6,12,b"),
+    csv
+  )
+  on.exit(unlink(csv), add = TRUE)
+
+  env <- new.env()
+  app <- shinytest2::AppDriver$new(
+    RcmdrShiny::app(env = env),
+    name = "phase0-flow",
+    width = 1200,
+    height = 1000,
+    load_timeout = 60000
+  )
+  on.exit(app$stop(), add = TRUE)
+
+  leaves <- menu_leaves(menu_tree())
+  key <- function(command) leaves$key[leaves$command == command][[1L]]
+
+  app$wait_for_js(
+    "document.querySelectorAll('.rcmdr-menu-item').length > 0",
+    timeout = 60000
+  )
+
+  click_menu <- function(command) {
+    app$run_js(sprintf(
+      "document.getElementById('%s').click();", key(command)
+    ))
+    app$wait_for_idle()
+    app$wait_for_js(
+      "document.querySelector('.modal') !== null",
+      timeout = 60000
+    )
+  }
+
+  click_menu("readDataSet")
+  app$set_inputs(
+    readDataSet_dsname = "Dataset",
+    readDataSet_location = "local",
+    readDataSet_path = csv,
+    readDataSet_header = TRUE,
+    readDataSet_stringsAsFactors = TRUE,
+    readDataSet_delimiter = "commas",
+    readDataSet_other = "",
+    readDataSet_decimal = "period",
+    readDataSet_missing = "NA"
+  )
+  app$click("dialog_ok")
+  app$wait_for_idle()
+  app$wait_for_js("document.querySelector('.modal') === null", timeout = 30000)
+
+  expect_match(app$get_html("#dataset_badge"), "Dataset")
+
+  click_menu("numericalSummaries")
+  app$set_inputs(
+    numericalSummaries_x = c("y", "x"),
+    numericalSummaries_groups = "",
+    numericalSummaries_mean = TRUE,
+    numericalSummaries_sd = TRUE,
+    numericalSummaries_se.mean = FALSE,
+    numericalSummaries_var = FALSE,
+    numericalSummaries_IQR = FALSE,
+    numericalSummaries_cv = FALSE,
+    numericalSummaries_counts = FALSE,
+    numericalSummaries_skewness = FALSE,
+    numericalSummaries_kurtosis = FALSE,
+    numericalSummaries_quantiles = FALSE,
+    numericalSummaries_quantiles_values = "0, .25, .5, .75, 1",
+    numericalSummaries_type = "2"
+  )
+  app$click("dialog_ok")
+  app$wait_for_idle()
+  app$wait_for_js("document.querySelector('.modal') === null", timeout = 30000)
+
+  app$wait_for_js(
+    "document.querySelector('#output_text').innerText.includes('mean')",
+    timeout = 30000
+  )
+  output <- app$get_text("#output_text")
+  expect_match(output, "mean")
+  expect_match(output, "sd")
+
+  click_menu("linearModel")
+  app$set_inputs(
+    linearModel_model = "LinearModel.1",
+    linearModel_lhs = "y",
+    linearModel_rhs = "x",
+    linearModel_subset = "",
+    linearModel_weights = "",
+    linearModel_remove = ""
+  )
+  app$click("dialog_ok")
+  app$wait_for_idle()
+  app$wait_for_js("document.querySelector('.modal') === null", timeout = 30000)
+
+  expect_match(app$get_html("#model_badge"), "LinearModel.1")
+  app$wait_for_js(
+    "document.querySelector('#output_text').innerText.includes('Coefficients')",
+    timeout = 30000
+  )
+
+  output <- app$get_text("#output_text")
+  expect_match(output, "Coefficients")
+  expect_match(output, "lm\\(formula = y ~ x")
+
+  app$wait_for_js(
+    "ace.edit(document.querySelector('.ace_editor')).getValue().includes('LinearModel.1 <- lm(')",
+    timeout = 30000
+  )
+  script <- app$get_js(
+    "ace.edit(document.querySelector('.ace_editor')).getValue()"
+  )
+  expect_match(script, "numSummary\\(")
+  expect_match(script, "LinearModel.1 <- lm\\(")
+})
