@@ -1,0 +1,8 @@
+bibentry(
+  bibtype = "Manual",
+  title = "RcmdrShiny: A Shiny Version of the R Commander",
+  author = person("RcmdrShiny", "Contributors"),
+  year = "2026",
+  note = "R package version 1.0.0, derived from Rcmdr 2.15.0",
+  url = "https://github.com/vigliafg/rstats-commander"
+)

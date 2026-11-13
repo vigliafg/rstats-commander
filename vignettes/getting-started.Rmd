@@ -1,0 +1,73 @@
+---
+title: "Getting started with RcmdrShiny"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with RcmdrShiny}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+# Installation
+
+RcmdrShiny is a source package.  Install it from a local clone:
+
+```r
+install.packages(".", repos = NULL, type = "source")
+```
+
+The package needs `shiny`, `bslib`, `DT`, `shinyAce`, `shinyFiles`,
+`rhandsontable` and `RcmdrMisc`.  Optional packages (`rgl`, `car`, `lme4`,
+`MASS`, `nnet`, `sem`, `effects`, `leaps`, `lmtest`, `boot`) enable specific
+analyses and are attached lazily when a command needs them.
+
+# Starting the application
+
+```r
+RcmdrShiny::run()
+```
+
+The application opens in the default browser and evaluates commands in the
+global environment, matching Rcmdr's single-user desktop model.  Use
+`RcmdrShiny::run(env = new.env())` to keep a session isolated.
+
+Pass plugins at startup if needed:
+
+```r
+RcmdrShiny::run(plugins = "path/to/plugin.R")
+```
+
+# The interface
+
+- **Sidebar**: menus generated from Rcmdr's `Rcmdr-menus.txt`.  Entries that
+  are not available for the current data set are disabled with a tooltip.
+- **Script**: the generated R code.  Commands can be appended automatically,
+  edited, and run with *Run selection* or *Run all*.
+- **Output** and **Messages**: results, warnings and errors.
+- **Plots**: history gallery, PNG/PDF export, and the optional 3D pane.
+- **Data**: `DT` view and `rhandsontable` editing below the configured cell
+  threshold.
+- **Environment**: objects in the evaluation environment.
+
+# A first analysis
+
+1. *Data > Import data > from text file, clipboard, or URL...* and choose a
+   CSV file.
+2. *Statistics > Summaries > Numerical summaries...* and select variables.
+3. *Graphs > Histogram...* and select a numeric variable.
+4. *Statistics > Fit models > Linear model...* and fit a model.
+5. Inspect the script: every action adds a reproducible R command.
+
+# Options
+
+*Tools > Options...* controls digits, output width, the data-editing threshold
+and the default `stringsAsFactors` behaviour.  *Tools > Save Rcmdr options...*
+writes the options to `~/.RcmdrShiny-options.rds`.
+
+# Plugins
+
+See the *Writing RcmdrShiny plugins* vignette.  A plugin can add Rcmdr-style
+menus, direct commands and Shiny dialogs; legacy Tk dialogs are not executed.

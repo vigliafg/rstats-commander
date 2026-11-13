@@ -1,0 +1,83 @@
+---
+title: "Writing RcmdrShiny plugins"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Writing RcmdrShiny plugins}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+An RcmdrShiny plugin is an R script that calls `RcmdrShiny.plugin()`.  It can
+add menu entries, direct commands and Shiny dialogs.
+
+# Menu file
+
+Plugin menus use the same tabular format as `Rcmdr-menus.txt`:
+
+```text
+    menu    demoMenu        topMenu         ""                          ""          ""  ""
+    item    demoMenu        command         "Demo: Hello"               demoHello   ""  ""
+    item    demoMenu        command         "Demo: Shiny dialog"        demoDialog  ""  ""
+    item    topMenu         cascade         "Demo plugin"               demoMenu    ""  ""
+```
+
+The first column is `menu` or `item`; the remaining columns follow Rcmdr's
+conventions for parent, label, command, activation and installation
+expressions.
+
+# Registering the plugin
+
+```r
+RcmdrShiny.plugin(
+  name = "demo",
+  menus = "path/to/menus.txt",
+  commands = list(
+    demoHello = function(state) {
+      RcmdrShiny::run_command(state, 'cat("Hello from the plugin\\n")')
+    }
+  ),
+  dialogs = list(
+    demoDialog = RcmdrShiny::plugin_dialog(
+      id = "demoDialog",
+      title = "Demo dialog",
+      ui = function(state, memory) {
+        htmltools::tags$p("This dialog comes from the plugin.")
+      },
+      on_ok = function(input, state) {
+        list(commands = "1 + 1")
+      }
+    )
+  )
+)
+```
+
+`on_ok()` can return `commands`, `error`, `memory`, `activate_dataset`,
+`activate_model`, `script`, `tab` or `message`, exactly like the built-in
+dialog runtime.
+
+# Loading plugins
+
+Before starting the application:
+
+```r
+RcmdrShiny::run(plugins = "path/to/plugin.R")
+```
+
+Or from the Tools menu (*Load Rcmdr plug-in(s)...*).  Menus are read at
+startup, so a plugin loaded in a running session requires a restart.
+
+# Legacy Tk plugins
+
+`load_plugin_package()` detects installed packages that provide
+`etc/menus.txt`.  They are registered with a warning, but Tk dialog functions
+are not executed and their entries remain disabled.  The adapter supports
+plugins whose menu entries are plain direct commands.
+
+# Example
+
+`system.file("examples", "demo-plugin.R", package = "RcmdrShiny")` contains a
+small working plugin together with `demo-menus.txt`.

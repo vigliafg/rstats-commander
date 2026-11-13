@@ -10,6 +10,10 @@
 ^PHASE4-CHECKLIST\.md$
 ^PHASE5-CHECKLIST\.md$
 ^PHASE6-CHECKLIST\.md$
+^PHASE7-CHECKLIST\.md$
+^RELEASE-CHECKLIST\.md$
+^cran-comments\.md$
+^_pkgdown\.yml$
 ^CONTRIBUTING\.md$
 ^CODE_OF_CONDUCT\.md$
 ^AGENTS\.md$

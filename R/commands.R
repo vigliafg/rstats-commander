@@ -124,6 +124,7 @@ eval_code <- function(state, code, echo = TRUE) {
   }
 
   state$output <- c(state$output, output)
+  trim_state(state)
 
   list(
     status = if (is.null(error)) "ok" else "error",
@@ -160,6 +161,41 @@ assignment_name <- function(expr) {
   }
   if (!is.name(expr[[2L]])) return(NULL)
   as.character(expr[[2L]])
+}
+
+# Keep memory bounded for very long sessions.  The command log is intentionally
+# not trimmed because the script pane uses its indices.
+trim_state <- function(state) {
+  limit <- state$options$max_output_lines %||% 20000L
+  if (length(state$output) > limit) {
+    state$output <- utils::tail(state$output, limit)
+  }
+  if (length(state$messages) > limit) {
+    state$messages <- utils::tail(state$messages, limit)
+  }
+  invisible(NULL)
+}
+
+trim_plots <- function(state) {
+  limit <- state$options$max_plots %||% 50L
+  if (length(state$plots) <= limit) return(invisible(NULL))
+  drop <- seq_len(length(state$plots) - limit)
+  for (plot in state$plots[drop]) {
+    if (!is.null(plot$file) && file.exists(plot$file)) {
+      unlink(plot$file)
+    }
+    if (!is.null(plot$url)) {
+      # The served copy is also removed when possible.
+      prefix <- state$plot_prefix
+      if (!is.null(prefix)) {
+        name <- sub(paste0("^", prefix, "/"), "", plot$url)
+        path <- file.path(state$plot_dir, name)
+        if (file.exists(path)) unlink(path)
+      }
+    }
+  }
+  state$plots <- utils::tail(state$plots, limit)
+  invisible(NULL)
 }
 
 # Packages assumed attached by Rcmdr-generated commands.  They are attached
@@ -280,6 +316,7 @@ run_plot_command <- function(state, code, echo = TRUE) {
     recorded = recorded,
     time = Sys.time()
   )))
+  trim_plots(state)
   state_touch(state)
 
   result$plot <- file

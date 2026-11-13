@@ -35,7 +35,9 @@ available_languages <- function() {
 #' @keywords internal
 current_language <- function() {
   lang <- Sys.getenv("LANGUAGE", "")
-  if (!nzchar(lang)) "en" else sub("[_.].*$", "", strsplit(lang, ":")[[1L]][1L])
+  if (!nzchar(lang)) return("en")
+  code <- sub("[_.].*$", "", strsplit(lang, ":")[[1L]][1L])
+  if (identical(code, "C")) "en" else code
 }
 
 # Labels stored in the menus file are English msgids; translate them on the

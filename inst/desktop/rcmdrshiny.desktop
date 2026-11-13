@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=RcmdrShiny
+Comment=A Shiny version of the R Commander
+Exec=Rscript -e "RcmdrShiny::run()"
+Terminal=false
+Categories=Education;Science;Math;
+Keywords=R;statistics;GUI;

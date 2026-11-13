@@ -1,0 +1,35 @@
+url: https://vigliafg.github.io/rstats-commander/
+
+template:
+  bootstrap: 5
+  bslib:
+    primary: "#1f3a5f"
+
+reference:
+  - title: Application
+    desc: Start and embed the local application.
+    contents:
+      - run_app
+      - app
+      - AppState
+  - title: Commands
+    desc: Evaluate and capture R code.
+    contents:
+      - run_command
+  - title: Plugins
+    desc: Extend menus, commands and dialogs.
+    contents:
+      - RcmdrShiny.plugin
+      - plugin_dialog
+      - load_plugin
+      - load_plugin_package
+      - list_plugins
+      - unload_plugins
+
+articles:
+  - title: User guide
+    navbar: ~
+    contents:
+      - getting-started
+      - migrating
+      - plugins

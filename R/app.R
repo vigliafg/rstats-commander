@@ -39,6 +39,10 @@ app_css <- function() {
     .rcmdr-help-text { white-space: pre-wrap; max-height: 60vh; overflow-y: auto;
       background: #fbfbfc; border: 1px solid #e2e6ea; padding: .75rem; }
     .rcmdr-busy { color: #d97706; font-weight: 600; }
+    .rcmdr-skip-link { position: absolute; left: .5rem; top: .5rem;
+      background: #fff; color: #1f3a5f; padding: .4rem .7rem;
+      border-radius: .3rem; z-index: 2000; }
+    :focus-visible { outline: 3px solid #0d6efd; outline-offset: 2px; }
     body.rcmdr-dark { background: #151a21; color: #d7dde5; }
     body.rcmdr-dark .rcmdr-sidebar,
     body.rcmdr-dark pre.shiny-text-output,
@@ -56,10 +60,11 @@ app_css <- function() {
   )
 }
 
-app_js <- function() {
+app_js <- function(lang = current_language()) {
   htmltools::HTML(
-    "
-    Shiny.addCustomMessageHandler('rcmdr-click', function(id) {
+    paste0(
+    "document.documentElement.lang = '", lang, "';\n",
+    "Shiny.addCustomMessageHandler('rcmdr-click', function(id) {
       var el = document.getElementById(id);
       if (el) el.click();
     });
@@ -78,7 +83,7 @@ app_js <- function() {
       window.localStorage.setItem('rcmdr-theme', dark ? 'dark' : 'light');
     }
     "
-  )
+  ))
 }
 
 script_pane_ui <- function() {
@@ -177,8 +182,13 @@ app_ui <- function() {
       htmltools::tags$style(app_css()),
       htmltools::tags$script(app_js())
     ),
+    htmltools::tags$a(
+      class = "visually-hidden-focusable rcmdr-skip-link",
+      href = "#main-content", tr("Skip to main content")
+    ),
     htmltools::div(
       class = "rcmdr-topbar d-flex justify-content-between align-items-center px-3 py-2",
+      role = "banner",
       htmltools::div(
         class = "d-flex align-items-center gap-2",
         htmltools::tags$strong("RcmdrShiny", class = "fs-5"),
@@ -196,6 +206,7 @@ app_ui <- function() {
         htmltools::tags$button(
           type = "button", class = "btn btn-sm btn-outline-light",
           title = tr("Toggle dark mode"),
+          `aria-label` = tr("Toggle dark mode"),
           onclick = "rcmdrToggleTheme()", "\u25D0"
         )
       )
@@ -204,9 +215,14 @@ app_ui <- function() {
       class = "container-fluid",
       htmltools::div(
         class = "row",
-        htmltools::div(class = "col-lg-3 col-xl-2 rcmdr-sidebar", uiOutput("menus")),
+        htmltools::div(
+          class = "col-lg-3 col-xl-2 rcmdr-sidebar",
+          role = "navigation", `aria-label` = tr("Application menus"),
+          uiOutput("menus")
+        ),
         htmltools::div(
           class = "col-lg-9 col-xl-10 py-3",
+          id = "main-content", role = "main", tabindex = "-1",
           tabsetPanel(
             id = "main_tabs",
             tabPanel(tr("Script"), script_pane_ui()),
@@ -219,7 +235,10 @@ app_ui <- function() {
         )
       )
     ),
-    htmltools::div(class = "rcmdr-statusbar", uiOutput("statusbar", inline = TRUE))
+    htmltools::div(
+      class = "rcmdr-statusbar", role = "status", `aria-live` = "polite",
+      uiOutput("statusbar", inline = TRUE)
+    )
   )
 }
 
@@ -497,7 +516,8 @@ app_server <- function(env = globalenv()) {
       DT::datatable(
         df,
         options = list(pageLength = 10, scrollX = TRUE, dom = "ftip"),
-        rownames = FALSE
+        rownames = FALSE,
+        server = nrow(df) > (state$options$dt_server_threshold %||% 5000L)
       )
     })
 
@@ -592,7 +612,7 @@ app_server <- function(env = globalenv()) {
           htmltools::tags$img(
             src = plot$url %||% "",
             class = paste("rcmdr-thumb", if (index == active) "active"),
-            title = plot$code,
+            title = plot$code, alt = plot$code,
             onclick = sprintf(
               "Shiny.setInputValue('plot_selected', %d, {priority: 'event'})",
               index

@@ -1,10 +1,10 @@
 Package: RcmdrShiny
 Type: Package
 Title: A Shiny Version of the R Commander
-Version: 0.7.0
+Version: 1.0.0
 Authors@R: c(
     person("RcmdrShiny", "Contributors", role = c("aut", "cre"),
-           email = "maintainer@example.com"),
+           email = "vigliafg@gmail.com"),
     person("John", "Fox", role = "ctb",
            comment = "Author of Rcmdr, from which this package is derived"),
     person("Milan", "Bouchet-Valat", role = "ctb",
@@ -60,6 +60,7 @@ Suggests:
     withr,
     pkgdown
 Config/testthat/edition: 3
+VignetteBuilder: knitr
 URL: https://github.com/vigliafg/rstats-commander
 BugReports: https://github.com/vigliafg/rstats-commander/issues
 RoxygenNote: 7.3.3

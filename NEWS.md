@@ -1,3 +1,22 @@
+# RcmdrShiny 1.0.0
+
+## Phase 7 — Hardening, documentation and release
+
+- Hardened long-running sessions: bounded output/message buffers and capped
+  plot history with file cleanup.
+- Large data sets use server-side `DT` rendering above a configurable
+  threshold.
+- Accessibility pass: skip link, main/navigation/banner landmarks, ARIA live
+  status, focus-visible styles, icon labels, plot image alt text and document
+  language.
+- Documentation: Getting Started, Migrating from Rcmdr and Writing Plugins
+  vignettes; pkgdown configuration and reference sections.
+- Release engineering: CRAN comments, release checklist, citation file,
+  desktop entry, coverage workflow and browser E2E workflow.
+- Full suite of unit, golden, integration, plugin and opt-in browser tests.
+- Version 1.0.0; 138 user-facing dialogs ported, four internal Tk utilities
+  remain.
+
 # RcmdrShiny 0.7.0
 
 ## Phase 6 — Plugin API

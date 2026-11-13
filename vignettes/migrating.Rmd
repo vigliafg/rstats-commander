@@ -1,0 +1,58 @@
+---
+title: "Migrating from Rcmdr to RcmdrShiny"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Migrating from Rcmdr to RcmdrShiny}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = FALSE)
+```
+
+RcmdrShiny keeps Rcmdr's command-generation semantics but replaces the Tk
+interface with Shiny.  Most statistical work is unchanged; the differences are
+in the interface and in extension points.
+
+# What stays the same
+
+- Commands are evaluated in the global environment (or an explicit
+  environment when `run(env = ...)` is used).
+- `Rcmdr-menus.txt` remains the menu source of truth.
+- Commands such as `numSummary()`, `Tapply()`, `Anova()`, `scatterplot()` and
+  `Confint()` are generated with the same arguments.
+- Data sets, models and scripts are ordinary R objects.
+
+# What changes
+
+| Rcmdr | RcmdrShiny |
+|---|---|
+| Tk dialog windows | Bootstrap modals |
+| Script and output windows | Script/Output/Messages/Plots/Data/Environment tabs |
+| `showData()` window | Data tab with `DT` |
+| `editDataset()` | `rhandsontable` below the cell threshold |
+| `tcltk`/`tcltk2` | removed |
+| Tk plugins | minimal Shiny plugin API |
+| `identify()`/`locator()` | out of scope |
+
+# Menus and activation
+
+Menu entries are generated from `Rcmdr-menus.txt` and evaluated with Rcmdr's
+activation predicates (for example `numericP()`, `factorsP()`,
+`modelCapability()`).  Entries that are not available for the current data set
+are disabled; unimplemented upstream entries are marked *In porting*.
+
+# Plugins
+
+Legacy `RcmdrPlugin.*` packages are detected but their Tk dialogs are not
+executed.  New plugins use `RcmdrShiny.plugin()` with Rcmdr-style menu files,
+direct commands and `plugin_dialog()` dialogs.  See the plugin vignette.
+
+# Known limitations
+
+- Gumbel distribution dialogs are unavailable (no base `qgumbel`/`pgumbel`).
+- R Markdown/knitr document generation is not enabled.
+- Interactive point identification is not implemented.
+- The package targets a local single-user deployment; multi-user server
+  isolation is out of scope.

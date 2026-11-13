@@ -1,5 +1,8 @@
 # RcmdrShiny
 
+[![R-CMD-check](https://github.com/vigliafg/rstats-commander/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/vigliafg/rstats-commander/actions/workflows/R-CMD-check.yaml)
+[![Browser E2E](https://github.com/vigliafg/rstats-commander/actions/workflows/e2e.yaml/badge.svg)](https://github.com/vigliafg/rstats-commander/actions/workflows/e2e.yaml)
+
 A local, browser-based version of the [R Commander](https://www.r-commander.com/)
 (Rcmdr), rebuilt on [Shiny](https://shiny.posit.co/) and free of Tcl/Tk.
 
@@ -7,12 +10,11 @@ RcmdrShiny is a fork of the Rcmdr 2.15.0 engine: it keeps the R command
 generation semantics of Rcmdr, so every action in the graphical interface
 produces a reproducible command in the script log and in the output pane.
 
-> **Status: Phase 6 (Plugin API).** All user-facing Rcmdr dialogs are ported
-> (138 of 142 inventory entries; the four remaining entries are internal Tk
-> utilities). A minimal plugin API supports Rcmdr-style menu files, direct
-> commands and Shiny dialogs; legacy Tk plugins are detected and rejected with
-> a warning. The application shell, File/Data, Statistics, Graphs and Models
-> menus remain in place.
+> **Status: 1.0 feature-complete.** All user-facing Rcmdr dialogs are ported
+> (138 of 142 inventory entries; the remaining four are internal Tk
+> utilities). The package includes the Shiny shell, File/Data, Statistics,
+> Graphs/Distributions, Models and Tools/Help menus, a minimal plugin API,
+> accessibility landmarks, vignettes and release engineering.
 
 ## Requirements
 
@@ -82,6 +84,8 @@ RcmdrShiny::run(env = env)
 | Tools and Help menus | done |
 | Plugin API: menus, direct commands, Shiny dialogs | done |
 | Legacy Tk plugin detection and warning | done |
+| Accessibility landmarks and keyboard pass | done |
+| Vignettes, pkgdown and release checklist | done |
 | Remaining 4 internal utilities (no user-facing dialog) | backlog |
 | Plugin API, full i18n coverage, CRAN hardening | later phases |
 
