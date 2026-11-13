@@ -110,8 +110,9 @@ merge_menu_definitions <- function(definitions, additions, source = NULL) {
   find_menu <- function(menu) {
     rows <- which(definitions$type == "menu" & definitions$menu == menu)
     if (length(rows) == 0L) {
-      stop(sprintf("Plugin menu refers to unknown parent menu '%s'%s.",
-                   menu, where), call. = FALSE)
+      warning(sprintf("Plugin menu refers to unknown parent menu '%s'%s; entry skipped.",
+                      menu, where), call. = FALSE)
+      return(NA_integer_)
     }
     max(rows)
   }
@@ -131,7 +132,7 @@ merge_menu_definitions <- function(definitions, additions, source = NULL) {
       } else {
         find_menu(parent)
       }
-      definitions <- insert_menu_row(definitions, row, after)
+      if (!is.na(after)) definitions <- insert_menu_row(definitions, row, after)
       next
     }
 
@@ -154,12 +155,14 @@ merge_menu_definitions <- function(definitions, additions, source = NULL) {
       if (identical(row$kind, "separator") && nzchar(row$command)) {
         anchor <- which(definitions$command == row$command)
         if (length(anchor) == 0L) {
-          stop(sprintf("Plugin separator refers to unknown command '%s'%s.",
-                       row$command, where), call. = FALSE)
+          warning(sprintf("Plugin separator refers to unknown command '%s'%s; entry skipped.",
+                          row$command, where), call. = FALSE)
+          after <- NA_integer_
+        } else {
+          after <- max(anchor)
         }
-        after <- max(anchor)
       }
-      definitions <- insert_menu_row(definitions, row, after)
+      if (!is.na(after)) definitions <- insert_menu_row(definitions, row, after)
     } else if (identical(row$kind, "cascade")) {
       if (identical(row$menu, "topMenu")) {
         siblings <- which(
@@ -174,12 +177,14 @@ merge_menu_definitions <- function(definitions, additions, source = NULL) {
             definitions$command == row$menu
         )
         if (length(siblings) == 0L) {
-          stop(sprintf("Plugin cascade refers to unknown parent menu '%s'%s.",
-                       row$menu, where), call. = FALSE)
+          warning(sprintf("Plugin cascade refers to unknown parent menu '%s'%s; entry skipped.",
+                          row$menu, where), call. = FALSE)
+          after <- NA_integer_
+        } else {
+          after <- max(siblings)
         }
-        after <- max(siblings)
       }
-      definitions <- insert_menu_row(definitions, row, after)
+      if (!is.na(after)) definitions <- insert_menu_row(definitions, row, after)
     } else {
       stop(sprintf("Unrecognised plugin menu operation '%s'%s.",
                    row$kind, where), call. = FALSE)

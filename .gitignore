@@ -10,4 +10,4 @@ tests/testthat/*.diff.png
 inst/doc/
 pkgdown/
 
-Rplots.pdf
+Rplots*.pdf

@@ -1,0 +1,29 @@
+Package: RcmdrShinyPlugin.FactoMineR
+Type: Package
+Title: FactoMineR Multivariate Analysis for RcmdrShiny
+Version: 0.1.0
+Authors@R: c(
+    person("RcmdrShiny", "Contributors", role = c("aut", "cre"),
+           email = "vigliafg@gmail.com"),
+    person("François", "Husson", role = "ctb",
+           comment = "Author of FactoMineR"),
+    person("Julie", "Josse", role = "ctb",
+           comment = "Author of FactoMineR")
+  )
+Description: RcmdrShiny dialogs for principal component analysis,
+    correspondence analysis, multiple correspondence analysis, multiple factor
+    analysis, mixed-data factor analysis, hierarchical clustering on principal
+    components, Procrustes analysis and category description.  Derived from
+    RcmdrPlugin.FactoMineR 1.0-1.
+License: GPL (>= 2)
+Encoding: UTF-8
+Depends: R (>= 4.1.0)
+Imports:
+    RcmdrShiny (>= 1.1.0),
+    htmltools
+Suggests:
+    testthat (>= 3.0.0),
+    FactoMineR
+Config/testthat/edition: 3
+URL: https://github.com/vigliafg/rstats-commander
+BugReports: https://github.com/vigliafg/rstats-commander/issues

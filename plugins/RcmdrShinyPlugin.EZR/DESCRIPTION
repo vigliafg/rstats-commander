@@ -1,0 +1,34 @@
+Package: RcmdrShinyPlugin.EZR
+Type: Package
+Title: EZR Statistics for RcmdrShiny
+Version: 0.1.0
+Authors@R: c(
+    person("RcmdrShiny", "Contributors", role = c("aut", "cre"),
+           email = "vigliafg@gmail.com"),
+    person("Yoshinobu", "Kanda", role = "ctb",
+           comment = "Author of RcmdrPlugin.EZR")
+  )
+Description: RcmdrShiny implementation of the core EZR statistical workflow:
+    data preparation, descriptive statistics, t and proportion tests,
+    nonparametric tests, regression, survival analysis, diagnostic accuracy
+    and graphics.  Derived from RcmdrPlugin.EZR 1.70.
+License: GPL (>= 2)
+Encoding: UTF-8
+Depends: R (>= 4.1.0)
+Imports:
+    RcmdrShiny (>= 1.1.0),
+    htmltools,
+    shiny
+Suggests:
+    testthat (>= 3.0.0),
+    survival,
+    pROC,
+    car,
+    MASS,
+    nnet,
+    lme4,
+    tableone,
+    irr
+Config/testthat/edition: 3
+URL: https://github.com/vigliafg/rstats-commander
+BugReports: https://github.com/vigliafg/rstats-commander/issues

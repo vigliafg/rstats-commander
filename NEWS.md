@@ -1,3 +1,18 @@
+# RcmdrShiny 1.5.0
+
+## Plugin Wave 4 and completion
+
+- Added `RcmdrShinyPlugin.FactoMineR`: PCA, CA, MCA, MFA, DMFA, FAMD, HCPC,
+  GPA, category description and preference plots.
+- Added `RcmdrShinyPlugin.EZR`: core EZR data preparation, descriptive
+  statistics, t and proportion tests, ANOVA, correlation, regression,
+  nonparametric tests, survival analysis, diagnostic accuracy and graphics.
+- All 15 general-purpose plugins from the approved plan are now present in the
+  monorepo and distributed on GitHub.
+- Wave 5 hardening: all plugin packages are checked with `R CMD check`, the
+  combined plugin set is smoke-tested, and the documentation/status files are
+  synchronised.
+
 # RcmdrShiny 1.4.0
 
 ## Plugin Wave 3

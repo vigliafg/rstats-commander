@@ -10,12 +10,12 @@ RcmdrShiny is a fork of the Rcmdr 2.15.0 engine: it keeps the R command
 generation semantics of Rcmdr, so every action in the graphical interface
 produces a reproducible command in the script log and in the output pane.
 
-> **Status: 1.4 plugins Wave 3.** All user-facing Rcmdr dialogs are ported
+> **Status: 1.5 plugins complete.** All user-facing Rcmdr dialogs are ported
 > (138 of 142 inventory entries; the remaining four are internal Tk
 > utilities). The package includes the Shiny shell, File/Data, Statistics,
 > Graphs/Distributions, Models and Tools/Help menus, the plugin-package
 > protocol and helpers, accessibility landmarks, vignettes and release
-> engineering. Thirteen of the 15 general-purpose plugins are ported and tested;
+> engineering. All 15 general-purpose plugins are ported and tested;
 > the remaining plugins are being ported in waves.
 
 ## Requirements
@@ -93,7 +93,8 @@ RcmdrShiny::run(env = env)
 | Wave 1 plugins: Export, sos, PcaRobust, ROC, UCA | done |
 | Wave 2 plugins: TeachingDemos, HH, KMggplot2, TeachStat | done |
 | Wave 3 plugins: survival, aRnova, NMBU, DoE | done |
-| Remaining 2 general-purpose plugins (wave 4) | in progress |
+| Wave 4 plugins: FactoMineR, EZR | done |
+| Plugin hardening and release preparation | done |
 
 The inventory is regenerated from an Rcmdr source tree with:
 

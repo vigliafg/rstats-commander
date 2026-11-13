@@ -356,8 +356,8 @@ plugin_menu_definitions <- function() {
   menu_ids <- definitions$menu[definitions$type == "menu"]
   duplicates <- unique(menu_ids[duplicated(menu_ids)])
   if (length(duplicates) > 0L) {
-    stop(sprintf("Duplicate menu names after loading plugins: %s",
-                 paste(duplicates, collapse = ", ")), call. = FALSE)
+    warning(sprintf("Duplicate menu names after loading plugins: %s; their entries are merged.",
+                    paste(duplicates, collapse = ", ")), call. = FALSE)
   }
   definitions
 }

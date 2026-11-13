@@ -43,8 +43,8 @@ RcmdrShiny::run(plugins = c(
 | RcmdrShinyPlugin.aRnova | 3 | done |
 | RcmdrShinyPlugin.NMBU | 3 | done |
 | RcmdrShinyPlugin.DoE | 3 | done |
-| RcmdrShinyPlugin.FactoMineR | 4 | planned |
-| RcmdrShinyPlugin.EZR | 4 | planned |
+| RcmdrShinyPlugin.FactoMineR | 4 | done |
+| RcmdrShinyPlugin.EZR | 4 | done (core workflow) |
 
 ## Create a plugin skeleton
 
