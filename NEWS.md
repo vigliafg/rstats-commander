@@ -1,3 +1,24 @@
+# RcmdrShiny 0.7.0
+
+## Phase 6 — Plugin API
+
+- Public plugin API: `RcmdrShiny.plugin()`, `plugin_dialog()`,
+  `load_plugin()`, `load_plugin_package()`, `list_plugins()` and
+  `unload_plugins()`.
+- Plugins can add Rcmdr-style menus, direct commands (with or without a state
+  argument) and Shiny dialogs.
+- Menu definitions from plugin `menus.txt` files are merged with the standard
+  Rcmdr menus at application start.
+- Legacy Tk plugins are detected and registered with a warning; their Tk
+  dialogs are not executed.
+- `run()`/`app()` accept a `plugins` argument; the Tools menu can load a
+  plugin script (menus appear after restart).
+- Example plugin in `inst/examples/demo-plugin.R` and `demo-menus.txt`.
+- Plugin tests for menus, commands, dialogs, script loading and legacy
+  warnings.
+- Inventory unchanged: 138 ported dialogs / 4 internal utilities; version
+  0.7.0.
+
 # RcmdrShiny 0.6.0
 
 ## Phase 5 — Models, Tools and Help

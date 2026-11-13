@@ -846,7 +846,8 @@ app_server <- function(env = globalenv()) {
 #'   global environment.
 #' @return A `shiny.appobj`.
 #' @export
-app <- function(env = globalenv()) {
+app <- function(env = globalenv(), plugins = NULL) {
+  load_plugins(plugins)
   shinyApp(ui = app_ui(), server = app_server(env))
 }
 
@@ -864,9 +865,9 @@ app <- function(env = globalenv()) {
 #' RcmdrShiny::run()
 #' }
 #' @export
-run_app <- function(env = globalenv(), language = NULL, ...) {
+run_app <- function(env = globalenv(), language = NULL, plugins = NULL, ...) {
   if (!is.null(language)) Sys.setenv(LANGUAGE = language)
-  shiny::runApp(app(env = env), ...)
+  shiny::runApp(app(env = env, plugins = plugins), ...)
 }
 
 #' @rdname run_app

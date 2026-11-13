@@ -1,0 +1,5 @@
+    menu    demoMenu        topMenu         ""                                              ""                          ""          ""
+    item    demoMenu        command         "Demo: Hello from a plugin"                      demoHello                   ""          ""
+    item    demoMenu        command         "Demo: Add two numbers"                          demoAdd                     ""          ""
+    item    demoMenu        command         "Demo: Shiny dialog"                             demoDialog                  ""          ""
+    item    topMenu         cascade         "Demo plugin"                                    demoMenu                    ""          ""

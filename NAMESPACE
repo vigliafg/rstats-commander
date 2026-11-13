@@ -2,10 +2,16 @@
 # once the public API stabilises.
 
 export(AppState)
+export(RcmdrShiny.plugin)
 export(app)
 export(run)
 export(run_app)
+export(list_plugins)
+export(load_plugin)
+export(load_plugin_package)
+export(plugin_dialog)
 export(run_command)
+export(unload_plugins)
 
 import(shiny)
 

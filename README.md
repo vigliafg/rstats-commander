@@ -7,13 +7,12 @@ RcmdrShiny is a fork of the Rcmdr 2.15.0 engine: it keeps the R command
 generation semantics of Rcmdr, so every action in the graphical interface
 produces a reproducible command in the script log and in the output pane.
 
-> **Status: Phase 5 (Models, Tools and Help).** The application now covers the
-> Models menu (diagnostics, influence, hypotheses, confidence intervals,
-> bootstrap, stepwise/subset selection, effect plots), the Tools menu and the
-> Help menu. All 138 user-facing Rcmdr dialogs are ported; only four internal
-> utilities in the upstream inventory remain. The Phase 1 shell, Phase 2
-> File/Data, Phase 3 Statistics and Phase 4 Graphs/Distributions remain in
-> place.
+> **Status: Phase 6 (Plugin API).** All user-facing Rcmdr dialogs are ported
+> (138 of 142 inventory entries; the four remaining entries are internal Tk
+> utilities). A minimal plugin API supports Rcmdr-style menu files, direct
+> commands and Shiny dialogs; legacy Tk plugins are detected and rejected with
+> a warning. The application shell, File/Data, Statistics, Graphs and Models
+> menus remain in place.
 
 ## Requirements
 
@@ -81,6 +80,8 @@ RcmdrShiny::run(env = env)
 | 3D graphs with rgl and plot export/snapshot | done |
 | Models: diagnostics, influence, hypotheses, model selection, effect plots | done |
 | Tools and Help menus | done |
+| Plugin API: menus, direct commands, Shiny dialogs | done |
+| Legacy Tk plugin detection and warning | done |
 | Remaining 4 internal utilities (no user-facing dialog) | backlog |
 | Plugin API, full i18n coverage, CRAN hardening | later phases |
 
@@ -129,6 +130,35 @@ Adding a dialog means:
 4. add the dialog to the inventory status list in
    `tools/inventory_dialogs.R`;
 5. add unit and integration tests.
+
+## Plugins
+
+A minimal plugin API allows adding Rcmdr-style menus, direct commands and
+Shiny dialogs:
+
+```r
+RcmdrShiny::RcmdrShiny.plugin(
+  name = "demo",
+  menus = "etc/menus.txt",
+  commands = list(hello = function(state) {
+    RcmdrShiny::run_command(state, 'cat("Hello\n")')
+  }),
+  dialogs = list(demo = RcmdrShiny::plugin_dialog(
+    "demo", "Demo",
+    ui = function(state, memory) htmltools::tags$p("Hello"),
+    on_ok = function(input, state) list(commands = "1 + 1")
+  ))
+)
+```
+
+Load a plugin before starting the app:
+
+```r
+RcmdrShiny::run(plugins = "path/to/plugin.R")
+```
+
+See `inst/examples/demo-plugin.R` and `inst/examples/demo-menus.txt`.
+Legacy Tk plugins are detected and disabled with a warning.
 
 ## License and attribution
 

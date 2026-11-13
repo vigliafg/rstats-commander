@@ -246,6 +246,8 @@ evaluate_condition <- function(state, expression) {
 command_status <- function(state, command, activation = "", install = "") {
   if (!evaluate_condition(state, install)) return("hidden")
   if (!is_implemented_command(command)) return("porting")
+  # The plugin loader must remain reachable even when no plugin is installed.
+  if (identical(command, "loadPlugins")) return("enabled")
   if (!evaluate_condition(state, activation)) return("inactive")
   "enabled"
 }

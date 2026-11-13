@@ -9,16 +9,19 @@
 dialog_spec <- function(id, title, ui, on_ok, on_open = NULL,
                         observers = NULL, size = "l",
                         help = NULL, help_package = NULL) {
-  list(
-    id = id,
-    title = title,
-    ui = ui,
-    on_ok = on_ok,
-    on_open = on_open,
-    observers = observers,
-    size = size,
-    help = help,
-    help_package = help_package
+  structure(
+    list(
+      id = id,
+      title = title,
+      ui = ui,
+      on_ok = on_ok,
+      on_open = on_open,
+      observers = observers,
+      size = size,
+      help = help,
+      help_package = help_package
+    ),
+    class = "RcmdrShinyDialog"
   )
 }
 
@@ -26,6 +29,7 @@ dialog_spec <- function(id, title, ui, on_ok, on_open = NULL,
 #' @keywords internal
 dialog_catalog <- function() {
   base <- list(
+    loadPlugins = load_plugins_dialog(),
     readDataSet = import_text_dialog(),
     numericalSummaries = numerical_summaries_dialog(),
     linearModel = linear_model_dialog(),
@@ -34,7 +38,7 @@ dialog_catalog <- function() {
     loadDataSet = load_dataset_dialog(),
     loadLog = load_script_dialog()
   )
-  c(base, phase2_dialogs(), phase3_dialogs(), phase4_dialogs(), phase5_dialogs())
+  c(base, phase2_dialogs(), phase3_dialogs(), phase4_dialogs(), phase5_dialogs(), plugin_dialogs())
 }
 
 #' @keywords internal
@@ -63,7 +67,7 @@ is_implemented_command <- function(command) {
 # Commands that do not need a dialog.  They are the first entries of the
 # "porting registry": each one is a function of the application state.
 direct_commands <- function() {
-  list(
+  base <- list(
     summarizeDataSet = function(state) {
       ds <- active_dataset(state)
       if (is.null(ds)) return(NULL)
@@ -135,12 +139,6 @@ direct_commands <- function() {
       model <- active_model(state)
       if (is.null(model)) return(NULL)
       for (command in cmd_plot_model(model)) run_command(state, command)
-    },
-    loadPlugins = function(state) {
-      showNotification(
-        tr("The plugin API is minimal in this version; legacy Tk dialogs are not supported."),
-        type = "message", duration = 8
-      )
     },
     appNap = function(state) {
       showNotification(tr("App Nap management is only relevant on macOS."),
@@ -232,6 +230,7 @@ direct_commands <- function() {
       show_help_modal(ds, package = NULL)
     }
   )
+  utils::modifyList(base, plugin_commands())
 }
 
 #' @keywords internal
@@ -370,6 +369,11 @@ apply_dialog_result <- function(state, result) {
   }
   if (!is.null(result$tab) && is.function(state$show_tab)) {
     state$show_tab(result$tab)
+  }
+  if (!is.null(result$message)) {
+    showNotification(result$message,
+                     type = result$message_type %||% "message",
+                     duration = 8)
   }
   state_touch(state)
   ok

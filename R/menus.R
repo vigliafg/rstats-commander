@@ -61,7 +61,7 @@ parse_menu_line <- function(line) {
 #' @param definitions Data frame returned by [read_rcmdr_menus()].
 #' @return A list of top-level menu nodes.
 #' @export
-menu_tree <- function(definitions = read_rcmdr_menus()) {
+menu_tree <- function(definitions = plugin_menu_definitions()) {
   counter <- new.env(parent = emptyenv())
   counter$n <- 0L
   build_menu_children(definitions, "topMenu", path = character(), counter = counter)
