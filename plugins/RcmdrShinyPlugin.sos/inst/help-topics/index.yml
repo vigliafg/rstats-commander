@@ -1,0 +1,17 @@
+version: 1
+language: en
+
+categories:
+  - id: plugins
+    title: Plugins
+    order: 70
+
+topics:
+  - id: sos-overview
+    file: topics/sos-overview.md
+    category: plugins
+    order: 10
+  - id: sosInit
+    file: topics/sosInit.md
+    category: plugins
+    order: 100

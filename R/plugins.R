@@ -50,9 +50,10 @@
 #' @export
 plugin_dialog <- function(id, title, ui, on_ok, on_open = NULL,
                           observers = NULL, size = "l",
-                          help = NULL, help_package = NULL) {
+                          help = NULL, help_package = NULL,
+                          help_topic = NULL) {
   dialog_spec(id, title, ui, on_ok, on_open, observers, size,
-              help, help_package)
+              help, help_package, help_topic)
 }
 
 #' Register an RcmdrShiny plugin
@@ -71,12 +72,14 @@ plugin_dialog <- function(id, title, ui, on_ok, on_open = NULL,
 #'   entries.
 #' @param replace Replace an existing plugin with the same name and allow
 #'   command, dialog or predicate names to override earlier definitions.
+#' @param help Path to a directory containing `index.yml` and Markdown topics.
 #' @return The registered plugin, invisibly.
 #' @export
 RcmdrShiny.plugin <- function(name, menus = NULL, dialogs = list(),
                               commands = list(), description = NULL,
                               version = NULL, tcltk = FALSE,
-                              predicates = list(), replace = FALSE) {
+                              predicates = list(), replace = FALSE,
+                              help = NULL) {
   if (!is.character(name) || length(name) != 1L || !nzchar(name)) {
     stop("Plugin `name` must be a single non-empty string.", call. = FALSE)
   }
@@ -173,9 +176,9 @@ RcmdrShiny.plugin <- function(name, menus = NULL, dialogs = list(),
     description = description,
     version = version,
     tcltk = isTRUE(tcltk),
-    predicates = predicates
+    predicates = predicates,
+    help = help
   )
-
   if (isTRUE(tcltk)) {
     warning(
       sprintf("Plugin '%s' uses legacy Tk dialogs; only its direct commands are supported.",
@@ -188,6 +191,16 @@ RcmdrShiny.plugin <- function(name, menus = NULL, dialogs = list(),
   .plugin_registry$version <- .plugin_registry$version + 1L
   .implemented_commands_cache$names <- NULL
   .model_capabilities_cache$table <- NULL
+
+  if (!is.null(help)) {
+    if (is.character(help) && length(help) == 1L && dir.exists(help)) {
+      help_load_directory(help, package = name)
+    } else if (is.character(help) && length(help) == 1L) {
+      warning(sprintf("Plugin '%s' help directory not found: %s", name, help),
+              call. = FALSE)
+    }
+  }
+
   invisible(plugin)
 }
 
@@ -204,6 +217,9 @@ list_plugins <- function() {
 #' @return Invisibly, `NULL`.
 #' @export
 unload_plugins <- function() {
+  for (name in names(.plugin_registry$plugins)) {
+    try(help_unregister(name), silent = TRUE)
+  }
   .plugin_registry$plugins <- list()
   .plugin_registry$version <- .plugin_registry$version + 1L
   .implemented_commands_cache$names <- NULL
@@ -253,7 +269,9 @@ load_plugin_package <- function(package, lib.loc = NULL) {
 
   namespace <- asNamespace(package)
   if (exists("rcmdrshiny_plugin", envir = namespace, inherits = FALSE)) {
-    return(invisible(load_plugin_namespace(namespace, package)))
+    result <- load_plugin_namespace(namespace, package)
+    register_plugin_help(package, lib.loc = lib.loc)
+    return(invisible(result))
   }
 
   menus_path <- system.file("etc", "rcmdrshiny-menus.txt",
@@ -265,6 +283,7 @@ load_plugin_package <- function(package, lib.loc = NULL) {
       description = utils::packageDescription(package, lib.loc = lib.loc)$Title,
       version = as.character(utils::packageVersion(package, lib.loc = lib.loc))
     )
+    register_plugin_help(package, lib.loc = lib.loc)
     return(invisible(plugin))
   }
 

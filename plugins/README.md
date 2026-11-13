@@ -46,6 +46,20 @@ RcmdrShiny::run(plugins = c(
 | RcmdrShinyPlugin.FactoMineR | 4 | done |
 | RcmdrShinyPlugin.EZR | 4 | done (core workflow) |
 
+## Help topics
+
+Every plugin ships in-app help in `inst/help-topics/`: a manifest
+(`index.yml`), an overview topic and one topic per dialog.  Topics are
+discovered automatically when the plugin is loaded and appear in the **Help**
+tab under **Plugins**; each dialog's **Help** button opens its own topic.
+
+Validate the help of a plugin with:
+
+```sh
+Rscript tools/generate_help_topics.R --plugin RcmdrShinyPlugin.Export
+Rscript tools/check_help_links.R --strict
+```
+
 ## Create a plugin skeleton
 
 ```bash

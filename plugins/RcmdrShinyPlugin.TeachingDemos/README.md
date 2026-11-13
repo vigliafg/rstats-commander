@@ -23,6 +23,12 @@ RcmdrShiny::run(plugins = "RcmdrShinyPlugin.TeachingDemos")
 
 central limit theorem, confidence intervals, power, coin/die, regression, correlation, distribution plots.
 
+## Help
+
+The package ships in-app help topics in `inst/help-topics/`.  They appear
+in the **Help** tab once the plugin is loaded, and each dialog's **Help**
+button opens its own topic.
+
 ## Status
 
 - [x] menus ported

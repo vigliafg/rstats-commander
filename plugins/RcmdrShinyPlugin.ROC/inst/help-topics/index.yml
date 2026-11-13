@@ -1,0 +1,33 @@
+version: 1
+language: en
+
+categories:
+  - id: plugins
+    title: Plugins
+    order: 70
+
+topics:
+  - id: roc-overview
+    file: topics/roc-overview.md
+    category: plugins
+    order: 10
+  - id: fncvpROC
+    file: topics/fncvpROC.md
+    category: plugins
+    order: 100
+  - id: fncPairedpROC
+    file: topics/fncPairedpROC.md
+    category: plugins
+    order: 110
+  - id: fncUnpairedpROC
+    file: topics/fncUnpairedpROC.md
+    category: plugins
+    order: 120
+  - id: fndHosmerLemeshow
+    file: topics/fndHosmerLemeshow.md
+    category: plugins
+    order: 130
+  - id: fncLRpROC
+    file: topics/fncLRpROC.md
+    category: plugins
+    order: 140

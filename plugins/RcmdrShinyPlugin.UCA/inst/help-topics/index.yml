@@ -1,0 +1,121 @@
+version: 1
+language: en
+
+categories:
+  - id: plugins
+    title: Plugins
+    order: 70
+
+topics:
+  - id: uca-overview
+    file: topics/uca-overview.md
+    category: plugins
+    order: 10
+  - id: sigmaTest
+    file: topics/sigmaTest.md
+    category: plugins
+    order: 100
+  - id: randomnessFTest
+    file: topics/randomnessFTest.md
+    category: plugins
+    order: 110
+  - id: randomnessNTest
+    file: topics/randomnessNTest.md
+    category: plugins
+    order: 120
+  - id: paretochartMenu
+    file: topics/paretochartMenu.md
+    category: plugins
+    order: 130
+  - id: predict4dataset
+    file: topics/predict4dataset.md
+    category: plugins
+    order: 140
+  - id: input2predict
+    file: topics/input2predict.md
+    category: plugins
+    order: 150
+  - id: pchart1Menu
+    file: topics/pchart1Menu.md
+    category: plugins
+    order: 160
+  - id: pchart2Menu
+    file: topics/pchart2Menu.md
+    category: plugins
+    order: 170
+  - id: pchartpMenu
+    file: topics/pchartpMenu.md
+    category: plugins
+    order: 180
+  - id: npchart1Menu
+    file: topics/npchart1Menu.md
+    category: plugins
+    order: 190
+  - id: npchart2Menu
+    file: topics/npchart2Menu.md
+    category: plugins
+    order: 200
+  - id: npchartpMenu
+    file: topics/npchartpMenu.md
+    category: plugins
+    order: 210
+  - id: uchart1Menu
+    file: topics/uchart1Menu.md
+    category: plugins
+    order: 220
+  - id: uchart2Menu
+    file: topics/uchart2Menu.md
+    category: plugins
+    order: 230
+  - id: uchartpMenu
+    file: topics/uchartpMenu.md
+    category: plugins
+    order: 240
+  - id: cchart1Menu
+    file: topics/cchart1Menu.md
+    category: plugins
+    order: 250
+  - id: cchart2Menu
+    file: topics/cchart2Menu.md
+    category: plugins
+    order: 260
+  - id: cchartpMenu
+    file: topics/cchartpMenu.md
+    category: plugins
+    order: 270
+  - id: xbar1mcMenu
+    file: topics/xbar1mcMenu.md
+    category: plugins
+    order: 280
+  - id: xbar2mcMenu
+    file: topics/xbar2mcMenu.md
+    category: plugins
+    order: 290
+  - id: xbarpmcMenu
+    file: topics/xbarpmcMenu.md
+    category: plugins
+    order: 300
+  - id: R1mcMenu
+    file: topics/R1mcMenu.md
+    category: plugins
+    order: 310
+  - id: R2mcMenu
+    file: topics/R2mcMenu.md
+    category: plugins
+    order: 320
+  - id: RpmcMenu
+    file: topics/RpmcMenu.md
+    category: plugins
+    order: 330
+  - id: S1mcMenu
+    file: topics/S1mcMenu.md
+    category: plugins
+    order: 340
+  - id: S2mcMenu
+    file: topics/S2mcMenu.md
+    category: plugins
+    order: 350
+  - id: SpmcMenu
+    file: topics/SpmcMenu.md
+    category: plugins
+    order: 360

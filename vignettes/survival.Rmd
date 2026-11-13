@@ -1,0 +1,93 @@
+---
+title: "Survival analysis with RcmdrShinyPlugin.survival"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Survival analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(eval = FALSE, comment = "#>")
+```
+
+## Install and load
+
+```{r}
+remotes::install_github("vigliafg/rstats-commander",
+                        subdir = "plugins/RcmdrShinyPlugin.survival")
+RcmdrShiny::run(plugins = "RcmdrShinyPlugin.survival")
+```
+
+The plugin adds a **Survival** menu that wraps the `survival` package.
+
+## Data shape
+
+Survival data need one row per subject with at least:
+
+- a follow-up time;
+- an event indicator (1 = event, 0 = censored);
+- optionally, grouping and explanatory variables.
+
+```{r}
+head(lung)
+```
+
+## Kaplan-Meier estimate
+
+**Survival > Kaplan-Meier...** builds:
+
+```{r}
+.fit <- survival::survfit(survival::Surv(time, status) ~ sex, data = lung)
+plot(.fit, col = 1:2, lwd = 2, xlab = "Time", ylab = "Survival")
+summary(.fit)
+```
+
+The plot appears in the **Plots** tab.  The summary shows the estimated survival
+at each event time, with confidence limits.
+
+## Log-rank test
+
+**Survival > Log-rank test...** compares curves:
+
+```{r}
+survival::survdiff(survival::Surv(time, status) ~ sex, data = lung)
+```
+
+A small p-value says that at least two curves differ; it does not quantify the
+size of the difference.
+
+## Cox proportional hazards
+
+**Survival > Cox model...** fits:
+
+```{r}
+.cox <- survival::coxph(survival::Surv(time, status) ~ age + sex, data = lung)
+summary(.cox)
+```
+
+`exp(coef)` is the hazard ratio.  The proportional-hazards assumption is checked
+with:
+
+```{r}
+survival::cox.zph(.cox)
+```
+
+A significant test for a predictor, or a trend in the Schoenfeld residuals,
+suggests that its effect changes over time.
+
+## Parametric models
+
+**Survival > Parametric survival...** wraps `survreg()` with exponential,
+Weibull, log-normal and other distributions.
+
+## Reporting
+
+The plugin writes the same commands you would write by hand, so the analysis can
+move to a script unchanged.  Combine the Kaplan-Meier plot and the Cox table in
+an R Markdown report.
+
+## See also
+
+The in-app **Help** tab lists the plugin topics under **Plugins**, and
+`topic:plugins` explains how plugins are loaded.

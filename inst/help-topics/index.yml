@@ -1,0 +1,560 @@
+version: 1
+language: en
+
+categories:
+  - id: getting-started
+    title: Getting started
+    order: 10
+  - id: data
+    title: Data
+    order: 20
+  - id: statistics
+    title: Statistics
+    order: 30
+  - id: models
+    title: Models
+    order: 40
+  - id: graphs
+    title: Graphs
+    order: 50
+  - id: distributions
+    title: Distributions
+    order: 60
+  - id: tools
+    title: Tools
+    order: 65
+  - id: plugins
+    title: Plugins
+    order: 70
+  - id: help
+    title: Using the help
+    order: 80
+  - id: troubleshooting
+    title: Troubleshooting
+    order: 90
+
+topics:
+  - id: getting-started
+    file: topics/getting-started.md
+    category: getting-started
+    order: 100
+  - id: data-editing
+    file: topics/data-editing.md
+    category: data
+    order: 100
+  - id: exporting-results
+    file: topics/exporting-results.md
+    category: data
+    order: 100
+  - id: data-import
+    file: topics/data-import.md
+    category: data
+    order: 100
+  - id: Setwd
+    file: topics/Setwd.md
+    category: data
+    order: 250
+  - id: loadDataSet
+    file: topics/loadDataSet.md
+    category: data
+    order: 260
+  - id: newDataSet
+    file: topics/newDataSet.md
+    category: data
+    order: 270
+  - id: selectActiveDataSet
+    file: topics/selectActiveDataSet.md
+    category: data
+    order: 280
+  - id: filterNA
+    file: topics/filterNA.md
+    category: data
+    order: 290
+  - id: setCaseNames
+    file: topics/setCaseNames.md
+    category: data
+    order: 300
+  - id: setContrasts
+    file: topics/setContrasts.md
+    category: data
+    order: 310
+  - id: Stack
+    file: topics/Stack.md
+    category: data
+    order: 320
+  - id: RemoveRows
+    file: topics/RemoveRows.md
+    category: data
+    order: 330
+  - id: SelectRows
+    file: topics/SelectRows.md
+    category: data
+    order: 340
+  - id: mergeDataSets
+    file: topics/mergeDataSets.md
+    category: data
+    order: 350
+  - id: Aggregate
+    file: topics/Aggregate.md
+    category: data
+    order: 360
+  - id: dropUnusedFactorLevels
+    file: topics/dropUnusedFactorLevels.md
+    category: data
+    order: 370
+  - id: sortDataSet
+    file: topics/sortDataSet.md
+    category: data
+    order: 380
+  - id: reshapeLong2Wide
+    file: topics/reshapeLong2Wide.md
+    category: data
+    order: 390
+  - id: reshapeWide2Long
+    file: topics/reshapeWide2Long.md
+    category: data
+    order: 400
+  - id: correlation
+    file: topics/correlation.md
+    category: statistics
+    order: 100
+  - id: cross-tables
+    file: topics/cross-tables.md
+    category: statistics
+    order: 100
+  - id: frequency-distributions
+    file: topics/frequency-distributions.md
+    category: statistics
+    order: 100
+  - id: numerical-summaries
+    file: topics/numerical-summaries.md
+    category: statistics
+    order: 100
+  - id: one-way-anova
+    file: topics/one-way-anova.md
+    category: statistics
+    order: 100
+  - id: t-tests
+    file: topics/t-tests.md
+    category: statistics
+    order: 100
+  - id: statisticsTable
+    file: topics/statisticsTable.md
+    category: statistics
+    order: 410
+  - id: NormalityTest
+    file: topics/NormalityTest.md
+    category: statistics
+    order: 420
+  - id: transformVariables
+    file: topics/transformVariables.md
+    category: statistics
+    order: 430
+  - id: twoWayRepeatedMeasures
+    file: topics/twoWayRepeatedMeasures.md
+    category: statistics
+    order: 440
+  - id: twoVariancesFTest
+    file: topics/twoVariancesFTest.md
+    category: statistics
+    order: 450
+  - id: BartlettTest
+    file: topics/BartlettTest.md
+    category: statistics
+    order: 460
+  - id: LeveneTest
+    file: topics/LeveneTest.md
+    category: statistics
+    order: 470
+  - id: sigmaTestMenu
+    file: topics/sigmaTestMenu.md
+    category: statistics
+    order: 480
+  - id: singleProportionTest
+    file: topics/singleProportionTest.md
+    category: statistics
+    order: 490
+  - id: twoSampleProportionsTest
+    file: topics/twoSampleProportionsTest.md
+    category: statistics
+    order: 500
+  - id: twoSampleWilcoxonTest
+    file: topics/twoSampleWilcoxonTest.md
+    category: statistics
+    order: 510
+  - id: pairedWilcoxonTest
+    file: topics/pairedWilcoxonTest.md
+    category: statistics
+    order: 520
+  - id: KruskalWallisTest
+    file: topics/KruskalWallisTest.md
+    category: statistics
+    order: 530
+  - id: FriedmanTest
+    file: topics/FriedmanTest.md
+    category: statistics
+    order: 540
+  - id: onesampleWilcoxonTest
+    file: topics/onesampleWilcoxonTest.md
+    category: statistics
+    order: 550
+  - id: Reliability
+    file: topics/Reliability.md
+    category: statistics
+    order: 560
+  - id: principalComponents
+    file: topics/principalComponents.md
+    category: statistics
+    order: 570
+  - id: factorAnalysis
+    file: topics/factorAnalysis.md
+    category: statistics
+    order: 580
+  - id: CFA
+    file: topics/CFA.md
+    category: statistics
+    order: 590
+  - id: kmeansClustering
+    file: topics/kmeansClustering.md
+    category: statistics
+    order: 600
+  - id: hierarchicalCluster
+    file: topics/hierarchicalCluster.md
+    category: statistics
+    order: 610
+  - id: hclustSummary
+    file: topics/hclustSummary.md
+    category: statistics
+    order: 620
+  - id: appendHclustGroup
+    file: topics/appendHclustGroup.md
+    category: statistics
+    order: 630
+  - id: multinomialLogitModel
+    file: topics/multinomialLogitModel.md
+    category: statistics
+    order: 640
+  - id: ordinalRegressionModel
+    file: topics/ordinalRegressionModel.md
+    category: statistics
+    order: 650
+  - id: linearMixedModel
+    file: topics/linearMixedModel.md
+    category: statistics
+    order: 660
+  - id: generalizedLinearMixedModel
+    file: topics/generalizedLinearMixedModel.md
+    category: statistics
+    order: 670
+  - id: generalized-linear-model
+    file: topics/generalized-linear-model.md
+    category: models
+    order: 100
+  - id: linear-model
+    file: topics/linear-model.md
+    category: models
+    order: 100
+  - id: selectActiveModel
+    file: topics/selectActiveModel.md
+    category: models
+    order: 960
+  - id: compareCoefficients
+    file: topics/compareCoefficients.md
+    category: models
+    order: 970
+  - id: addObservationStatistics
+    file: topics/addObservationStatistics.md
+    category: models
+    order: 980
+  - id: stepwiseRegression
+    file: topics/stepwiseRegression.md
+    category: models
+    order: 990
+  - id: subsetRegression
+    file: topics/subsetRegression.md
+    category: models
+    order: 1000
+  - id: confidenceIntervals
+    file: topics/confidenceIntervals.md
+    category: models
+    order: 1010
+  - id: Bootstrap
+    file: topics/Bootstrap.md
+    category: models
+    order: 1020
+  - id: DeltaMethodConfInt
+    file: topics/DeltaMethodConfInt.md
+    category: models
+    order: 1030
+  - id: anovaTable
+    file: topics/anovaTable.md
+    category: models
+    order: 1040
+  - id: compareModels
+    file: topics/compareModels.md
+    category: models
+    order: 1050
+  - id: testLinearHypothesis
+    file: topics/testLinearHypothesis.md
+    category: models
+    order: 1060
+  - id: BreuschPaganTest
+    file: topics/BreuschPaganTest.md
+    category: models
+    order: 1070
+  - id: DurbinWatsonTest
+    file: topics/DurbinWatsonTest.md
+    category: models
+    order: 1080
+  - id: RESETtest
+    file: topics/RESETtest.md
+    category: models
+    order: 1090
+  - id: transformResponse
+    file: topics/transformResponse.md
+    category: models
+    order: 1100
+  - id: residualQQPlot
+    file: topics/residualQQPlot.md
+    category: models
+    order: 1110
+  - id: CRPlots
+    file: topics/CRPlots.md
+    category: models
+    order: 1120
+  - id: CRPlot3D
+    file: topics/CRPlot3D.md
+    category: models
+    order: 1130
+  - id: AVPlots
+    file: topics/AVPlots.md
+    category: models
+    order: 1140
+  - id: AVPlot3D
+    file: topics/AVPlot3D.md
+    category: models
+    order: 1150
+  - id: InfluencePlot
+    file: topics/InfluencePlot.md
+    category: models
+    order: 1160
+  - id: InfluenceIndexPlot
+    file: topics/InfluenceIndexPlot.md
+    category: models
+    order: 1170
+  - id: effectPlots
+    file: topics/effectPlots.md
+    category: models
+    order: 1180
+  - id: predictorEffectPlots
+    file: topics/predictorEffectPlots.md
+    category: models
+    order: 1190
+  - id: histogram
+    file: topics/histogram.md
+    category: graphs
+    order: 100
+  - id: scatterplot
+    file: topics/scatterplot.md
+    category: graphs
+    order: 100
+  - id: indexPlot
+    file: topics/indexPlot.md
+    category: graphs
+    order: 680
+  - id: boxPlot
+    file: topics/boxPlot.md
+    category: graphs
+    order: 690
+  - id: DotPlot
+    file: topics/DotPlot.md
+    category: graphs
+    order: 700
+  - id: barGraph
+    file: topics/barGraph.md
+    category: graphs
+    order: 710
+  - id: pieChart
+    file: topics/pieChart.md
+    category: graphs
+    order: 720
+  - id: linePlot
+    file: topics/linePlot.md
+    category: graphs
+    order: 730
+  - id: QQPlot
+    file: topics/QQPlot.md
+    category: graphs
+    order: 740
+  - id: PlotMeans
+    file: topics/PlotMeans.md
+    category: graphs
+    order: 750
+  - id: stripChart
+    file: topics/stripChart.md
+    category: graphs
+    order: 760
+  - id: DiscretePlot
+    file: topics/DiscretePlot.md
+    category: graphs
+    order: 770
+  - id: Symbox
+    file: topics/Symbox.md
+    category: graphs
+    order: 780
+  - id: setPalette
+    file: topics/setPalette.md
+    category: graphs
+    order: 790
+  - id: normal-distribution
+    file: topics/normal-distribution.md
+    category: distributions
+    order: 100
+  - id: t-distribution
+    file: topics/t-distribution.md
+    category: distributions
+    order: 110
+  - id: chi-squared-distribution
+    file: topics/chi-squared-distribution.md
+    category: distributions
+    order: 120
+  - id: f-distribution
+    file: topics/f-distribution.md
+    category: distributions
+    order: 130
+  - id: exponential-distribution
+    file: topics/exponential-distribution.md
+    category: distributions
+    order: 140
+  - id: uniform-distribution
+    file: topics/uniform-distribution.md
+    category: distributions
+    order: 150
+  - id: beta-distribution
+    file: topics/beta-distribution.md
+    category: distributions
+    order: 160
+  - id: cauchy-distribution
+    file: topics/cauchy-distribution.md
+    category: distributions
+    order: 170
+  - id: logistic-distribution
+    file: topics/logistic-distribution.md
+    category: distributions
+    order: 180
+  - id: lognormal-distribution
+    file: topics/lognormal-distribution.md
+    category: distributions
+    order: 190
+  - id: gamma-distribution
+    file: topics/gamma-distribution.md
+    category: distributions
+    order: 200
+  - id: weibull-distribution
+    file: topics/weibull-distribution.md
+    category: distributions
+    order: 210
+  - id: binomial-distribution
+    file: topics/binomial-distribution.md
+    category: distributions
+    order: 220
+  - id: poisson-distribution
+    file: topics/poisson-distribution.md
+    category: distributions
+    order: 230
+  - id: geomQuantiles
+    file: topics/geomQuantiles.md
+    category: distributions
+    order: 800
+  - id: geomProbabilities
+    file: topics/geomProbabilities.md
+    category: distributions
+    order: 810
+  - id: geomDistributionPlot
+    file: topics/geomDistributionPlot.md
+    category: distributions
+    order: 820
+  - id: geomDistributionSamples
+    file: topics/geomDistributionSamples.md
+    category: distributions
+    order: 830
+  - id: geomMass
+    file: topics/geomMass.md
+    category: distributions
+    order: 840
+  - id: hyperQuantiles
+    file: topics/hyperQuantiles.md
+    category: distributions
+    order: 850
+  - id: hyperProbabilities
+    file: topics/hyperProbabilities.md
+    category: distributions
+    order: 860
+  - id: hyperDistributionPlot
+    file: topics/hyperDistributionPlot.md
+    category: distributions
+    order: 870
+  - id: hyperDistributionSamples
+    file: topics/hyperDistributionSamples.md
+    category: distributions
+    order: 880
+  - id: hyperMass
+    file: topics/hyperMass.md
+    category: distributions
+    order: 890
+  - id: negbinomialQuantiles
+    file: topics/negbinomialQuantiles.md
+    category: distributions
+    order: 900
+  - id: negbinomialProbabilities
+    file: topics/negbinomialProbabilities.md
+    category: distributions
+    order: 910
+  - id: negbinomialDistributionPlot
+    file: topics/negbinomialDistributionPlot.md
+    category: distributions
+    order: 920
+  - id: negbinomialDistributionSamples
+    file: topics/negbinomialDistributionSamples.md
+    category: distributions
+    order: 930
+  - id: negbinomialMass
+    file: topics/negbinomialMass.md
+    category: distributions
+    order: 940
+  - id: setRandomSeed
+    file: topics/setRandomSeed.md
+    category: distributions
+    order: 950
+  - id: Options
+    file: topics/Options.md
+    category: tools
+    order: 240
+  - id: loadPackages
+    file: topics/loadPackages.md
+    category: tools
+    order: 1200
+  - id: plugins
+    file: topics/plugins.md
+    category: plugins
+    order: 100
+  - id: writing-plugins
+    file: topics/writing-plugins.md
+    category: plugins
+    order: 100
+  - id: keyboard-shortcuts
+    file: topics/keyboard-shortcuts.md
+    category: help
+    order: 100
+  - id: help-center
+    file: topics/help-center.md
+    category: help
+    order: 100
+  - id: writing-help-topics
+    file: topics/writing-help-topics.md
+    category: help
+    order: 100
+  - id: troubleshooting
+    file: topics/troubleshooting.md
+    category: troubleshooting
+    order: 100

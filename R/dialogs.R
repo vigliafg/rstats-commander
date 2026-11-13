@@ -8,7 +8,8 @@
 #' @keywords internal
 dialog_spec <- function(id, title, ui, on_ok, on_open = NULL,
                         observers = NULL, size = "l",
-                        help = NULL, help_package = NULL) {
+                        help = NULL, help_package = NULL,
+                        help_topic = NULL) {
   structure(
     list(
       id = id,
@@ -19,7 +20,8 @@ dialog_spec <- function(id, title, ui, on_ok, on_open = NULL,
       observers = observers,
       size = size,
       help = help,
-      help_package = help_package
+      help_package = help_package,
+      help_topic = help_topic
     ),
     class = "RcmdrShinyDialog"
   )
@@ -206,6 +208,38 @@ base_direct_commands <- function() {
         footer = modalButton(tr("Close"))
       ))
     },
+    helpCenter = function(state) {
+      if (!is.null(state$show_tab)) state$show_tab(tr("Help"))
+      invisible(NULL)
+    },
+    helpSearch = function(state) {
+      if (!is.null(state$show_tab)) state$show_tab(tr("Help"))
+      if (!is.null(state$session)) {
+        state$session$sendCustomMessage("rcmdr-focus", "help_query")
+      }
+      invisible(NULL)
+    },
+    helpTutorials = function(state) {
+      open_help_topic(state, "getting-started")
+    },
+    helpShortcuts = function(state) {
+      open_help_topic(state, "keyboard-shortcuts")
+    },
+    helpPluginsTopic = function(state) {
+      open_help_topic(state, "plugins")
+    },
+    helpDiagnostics = function(state) {
+      report <- tryCatch(format_diagnostics(), error = function(e) {
+        paste("Diagnostics unavailable:", conditionMessage(e))
+      })
+      showModal(modalDialog(
+        title = tr("Diagnostics"),
+        htmltools::tags$pre(class = "rcmdr-help-text",
+                            paste(report, collapse = "\n")),
+        easyClose = TRUE,
+        footer = modalButton(tr("Close"))
+      ))
+    },
     helpAboutCommander = function(state) {
       version <- tryCatch(
         as.character(utils::packageVersion("RcmdrShiny")),
@@ -342,11 +376,14 @@ command_enabled <- function(state, command) {
 #' Modal for a dialog specification
 #' @keywords internal
 dialog_modal <- function(spec) {
+  has_help <- !is.null(spec$help) ||
+    !is.null(help_topic_for_dialog(spec))
   modalDialog(
     title = spec$title,
     uiOutput("dialog_body"),
+    uiOutput("dialog_help_panel"),
     footer = htmltools::tagList(
-      if (!is.null(spec$help)) {
+      if (has_help) {
         actionButton("dialog_help", tr("Help"), class = "btn-outline-secondary")
       },
       actionButton("dialog_reset", tr("Reset"), class = "btn-outline-secondary"),

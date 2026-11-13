@@ -10,13 +10,13 @@ RcmdrShiny is a fork of the Rcmdr 2.15.0 engine: it keeps the R command
 generation semantics of Rcmdr, so every action in the graphical interface
 produces a reproducible command in the script log and in the output pane.
 
-> **Status: 1.5 plugins complete.** All user-facing Rcmdr dialogs are ported
+> **Status: 1.6 help infrastructure.** All user-facing Rcmdr dialogs are ported
 > (138 of 142 inventory entries; the remaining four are internal Tk
 > utilities). The package includes the Shiny shell, File/Data, Statistics,
-> Graphs/Distributions, Models and Tools/Help menus, the plugin-package
+> Graphs/Distributions, Models and Tools/Help menus, a searchable in-app help
+> centre with Markdown topics and plugin help, the plugin-package
 > protocol and helpers, accessibility landmarks, vignettes and release
-> engineering. All 15 general-purpose plugins are ported and tested;
-> the remaining plugins are being ported in waves.
+> engineering. All 15 general-purpose plugins are ported and tested.
 
 ## Requirements
 
@@ -84,11 +84,16 @@ RcmdrShiny::run(env = env)
 | 3D graphs with rgl and plot export/snapshot | done |
 | Models: diagnostics, influence, hypotheses, model selection, effect plots | done |
 | Tools and Help menus | done |
+| Help tab: search, categories, topic pane, recent and contextual help | done |
+| Markdown help topics for the core and every plugin | done |
+| Help API: `help_search()`, `help_topic()`, `help_index()` and plugin registration | done |
+| Help inventory and link checker in CI | done |
 | Plugin API: menus, direct commands, Shiny dialogs | done |
 | Plugin packages (`RcmdrShinyPlugin.*`), predicates, menu merge and tooling | done |
 | Legacy Tk plugin detection and warning | done |
 | Accessibility landmarks and keyboard pass | done |
 | Vignettes, pkgdown and release checklist | done |
+| Help authoring guide and diagnostic report | done |
 | Remaining 4 internal utilities (no user-facing dialog) | backlog |
 | Wave 1 plugins: Export, sos, PcaRobust, ROC, UCA | done |
 | Wave 2 plugins: TeachingDemos, HH, KMggplot2, TeachStat | done |
@@ -101,6 +106,55 @@ The inventory is regenerated from an Rcmdr source tree with:
 ```sh
 Rscript tools/inventory_dialogs.R /path/to/Rcmdr
 ```
+
+## Help and documentation
+
+The **Help** tab is a small offline documentation browser: search, categories,
+recent topics and a topic pane. Every dialog has a **Help** button that opens
+its topic inside the dialog, with a link to the R reference and to the full
+help centre.
+
+Help topics are Markdown files with a YAML front matter, shipped in
+`inst/help-topics/` and in each plugin's `inst/help-topics/`. The same API is available from
+R:
+
+```r
+RcmdrShiny::help_search("logistic regression")
+RcmdrShiny::help_topic("linear-model")
+RcmdrShiny::help_index()
+RcmdrShiny::help_catalog()
+```
+
+Plugins are discovered automatically, and can also register help explicitly:
+
+```r
+RcmdrShiny::RcmdrShiny.plugin(
+  name = "RcmdrShinyPlugin.Example",
+  dialogs = my_dialogs(),
+  help = system.file("help", package = "RcmdrShinyPlugin.Example")
+)
+```
+
+Rendering uses `commonmark` when installed and falls back to a plain `<pre>`
+block otherwise, so the help works with no optional dependency. Topics can be
+translated by adding `topics/<language>/<id>.md`; missing translations fall back
+to English.
+
+Tools:
+
+```sh
+Rscript tools/new_help_topic.R my-topic --title "My topic" --category statistics
+Rscript tools/generate_help_topics.R --core
+Rscript tools/inventory_help.R
+Rscript tools/check_help_links.R --strict
+```
+
+`inventory_help.R` writes `inst/etc/help-inventory.csv` with one row per dialog
+(`documented`, `draft`, `fallback` or `missing`) and the continuous integration
+job fails when a dialog has neither a topic nor an Rd fallback.
+
+`RcmdrShiny::format_diagnostics()` produces the report shown by
+**Help > Diagnostics**, ready to paste into an issue.
 
 ## Test
 

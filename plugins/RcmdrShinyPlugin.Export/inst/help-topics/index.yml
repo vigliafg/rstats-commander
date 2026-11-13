@@ -1,0 +1,25 @@
+version: 1
+language: en
+
+categories:
+  - id: plugins
+    title: Plugins
+    order: 70
+
+topics:
+  - id: export-overview
+    file: topics/export-overview.md
+    category: plugins
+    order: 10
+  - id: xtableExport
+    file: topics/xtableExport.md
+    category: plugins
+    order: 100
+  - id: latexExport
+    file: topics/latexExport.md
+    category: plugins
+    order: 110
+  - id: formatdfExport
+    file: topics/formatdfExport.md
+    category: plugins
+    order: 120

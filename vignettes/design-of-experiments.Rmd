@@ -1,0 +1,67 @@
+---
+title: "Design of experiments with RcmdrShinyPlugin.DoE"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Design of experiments}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(eval = FALSE, comment = "#>")
+```
+
+## Install and load
+
+```{r}
+remotes::install_github("vigliafg/rstats-commander",
+                        subdir = "plugins/RcmdrShinyPlugin.DoE")
+RcmdrShiny::run(plugins = "RcmdrShinyPlugin.DoE")
+```
+
+The plugin adds a **Design** menu.
+
+## Choosing a design
+
+| Design | When |
+|---|---|
+| Screening | Many factors, few runs: identify the important ones |
+| Full factorial | Few factors, estimate interactions |
+| Orthogonal array | Taguchi-style robust design |
+| Central composite | Response surface with curvature |
+| Box-Behnken | Response surface without corner runs |
+| Latin hypercube | Computer experiments |
+| D-optimal | Constraints on the feasible region |
+
+## Example: full factorial
+
+```{r}
+design <- expand.grid(A = c(-1, 1), B = c(-1, 1), C = c(-1, 1))
+design$y <- c(12, 18, 14, 22, 11, 17, 15, 24)
+```
+
+The dialog writes the design to a new data set, which then becomes active.
+
+## Analysis
+
+After the experiment is entered:
+
+1. **Models > Linear model...** with the response and all factors.
+2. **Models > ANOVA table** to test main effects and interactions.
+3. **Design > Effects plot** for a visual summary.
+4. **Design > Contour plot** or **Perspective plot** for the response surface.
+
+```{r}
+fit <- lm(y ~ A * B * C, data = design)
+car::Anova(fit, type = "III")
+```
+
+## Limits
+
+The plugin implements the designs listed above.  Import and export of
+experiment plans and some advanced optimality criteria remain disabled and are
+marked "In porting" in the menu.
+
+## See also
+
+In-app topic: `plugins`.  `topic:linear-model` covers the model side.

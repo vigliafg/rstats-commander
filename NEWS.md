@@ -1,3 +1,32 @@
+# RcmdrShiny 1.6.0
+
+## Help and documentation infrastructure
+
+- New **Help** tab with offline search, categories, recent topics and a topic
+  pane; every dialog's **Help** button opens its topic inline.
+- Help topics are Markdown files with YAML front matter, shipped in
+  `inst/help-topics/` and discovered automatically in plugin packages.
+- New API: `help_search()`, `help_topic()`, `help_topics()`, `help_index()`,
+  `help_catalog()`, `help_render()`, `help_topic_html()`, `help_register()`,
+  `help_unregister()`, `help_registry()`, `help_topic_for_dialog()`,
+  `help_topics_for_dialog()`, `register_plugin_help()`, `help_center_ui()` and
+  `help_server()`.
+- `dialog_spec()` and `plugin_dialog()` accept `help_topic`; the default is the
+  dialog id, then a topic that declares the dialog, then the Rd fallback.
+- 131 core topics and 297 plugin topics; the distribution dialogs are grouped
+  by family (normal, t, chi-squared, F, ...).
+- Italian translations for the pilot topics, with English fallback.
+- New **Help** menu entries: Help centre, Search help, Tutorials, Keyboard
+  shortcuts, Plugin help and Diagnostics.
+- `diagnostics_report()` and `format_diagnostics()` back the Diagnostics entry.
+- New tools: `tools/new_help_topic.R`, `tools/generate_help_topics.R`,
+  `tools/inventory_help.R` and `tools/check_help_links.R`.
+- New CI workflow `help.yaml`; `commonmark` and `yaml` are optional
+  (Suggests) dependencies with internal fallbacks.
+- New vignettes: data import, descriptive statistics, linear models, graphs,
+  survival, design of experiments, FactoMineR, EZR, troubleshooting and
+  contributing help topics.
+
 # RcmdrShiny 1.5.0
 
 ## Plugin Wave 4 and completion

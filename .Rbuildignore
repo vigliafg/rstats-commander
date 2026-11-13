@@ -27,3 +27,4 @@
 ^tools$
 ^plugins$
 ^vignettes/\.gitkeep$
+^HELP-CHECKLIST\.md$

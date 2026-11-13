@@ -1,0 +1,69 @@
+version: 1
+language: en
+
+categories:
+  - id: plugins
+    title: Plugins
+    order: 70
+
+topics:
+  - id: survival-overview
+    file: topics/survival-overview.md
+    category: plugins
+    order: 10
+  - id: Survfit
+    file: topics/Survfit.md
+    category: plugins
+    order: 100
+  - id: Survdiff
+    file: topics/Survdiff.md
+    category: plugins
+    order: 110
+  - id: SurvivalData
+    file: topics/SurvivalData.md
+    category: plugins
+    order: 120
+  - id: Unfold
+    file: topics/Unfold.md
+    category: plugins
+    order: 130
+  - id: toDate
+    file: topics/toDate.md
+    category: plugins
+    order: 140
+  - id: CoxModel
+    file: topics/CoxModel.md
+    category: plugins
+    order: 150
+  - id: survregModel
+    file: topics/survregModel.md
+    category: plugins
+    order: 160
+  - id: CoxZPH
+    file: topics/CoxZPH.md
+    category: plugins
+    order: 170
+  - id: PlotCoxph
+    file: topics/PlotCoxph.md
+    category: plugins
+    order: 180
+  - id: TermPlots
+    file: topics/TermPlots.md
+    category: plugins
+    order: 190
+  - id: CoxDfbetas
+    file: topics/CoxDfbetas.md
+    category: plugins
+    order: 200
+  - id: CoxDfbeta
+    file: topics/CoxDfbeta.md
+    category: plugins
+    order: 210
+  - id: MartingalePlotsDialog
+    file: topics/MartingalePlotsDialog.md
+    category: plugins
+    order: 220
+  - id: PartialResPlots
+    file: topics/PartialResPlots.md
+    category: plugins
+    order: 230

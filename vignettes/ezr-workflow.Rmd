@@ -1,0 +1,105 @@
+---
+title: "The EZR workflow"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{The EZR workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(eval = FALSE, comment = "#>")
+```
+
+## What the plugin is
+
+`RcmdrShinyPlugin.EZR` rebuilds the core clinical-statistics workflow of the
+EZR plug-in on top of RcmdrShiny: data preparation, descriptive tables, common
+tests, regression, survival analysis, diagnostic accuracy and graphics.
+
+```{r}
+remotes::install_github("vigliafg/rstats-commander",
+                        subdir = "plugins/RcmdrShinyPlugin.EZR")
+RcmdrShiny::run(plugins = "RcmdrShinyPlugin.EZR")
+```
+
+EZR replaces the core menus with its own layout.  Load it alone, or last, to keep
+the interface predictable.
+
+## Data preparation
+
+- **Variables in active data set** prints the structure of the data.
+- **Create dummy variables** expands a factor into indicator columns.
+- **Missing observations to a group** turns `NA` into an explicit level.
+- **Training-test data split** creates two data sets with a fixed seed.
+
+```{r}
+set.seed(123)
+.n <- nrow(dataset)
+.train <- sample(seq_len(.n), size = floor(0.7 * .n))
+train <- dataset[.train, ]
+test <- dataset[-.train, ]
+```
+
+## Descriptive statistics
+
+- **Summary table of sample characteristics** wraps `tableone::CreateTableOne()`
+  and produces the "Table 1" of a clinical paper.
+- **Confidence interval for a mean or a proportion** uses the exact dialogs.
+
+```{r}
+tableone::CreateTableOne(vars = c("age", "sex"), strata = "group",
+                         data = dataset)
+```
+
+## Tests
+
+The EZR menu groups the tests by question:
+
+| Question | Dialog |
+|---|---|
+| Two groups, numeric | Two-sample t-test, Mann-Whitney |
+| Paired measurements | Paired t-test, Wilcoxon signed rank |
+| Three or more groups | One-way ANOVA, Kruskal-Wallis |
+| Two categorical variables | Two-way table, McNemar |
+| Association between numerics | Pearson, Spearman |
+
+```{r}
+t.test(response ~ group, data = dataset, var.equal = FALSE)
+wilcox.test(response ~ group, data = dataset)
+```
+
+## Regression
+
+```{r}
+.model <- glm(outcome ~ age + treatment, data = dataset, family = binomial)
+summary(.model)
+exp(cbind(OR = coef(.model), confint(.model)))
+```
+
+## Survival
+
+Kaplan-Meier and Cox dialogs build `survival::survfit()` and `survival::coxph()`
+calls; the log-rank test is included with the Kaplan-Meier output.
+
+## Diagnostic accuracy
+
+ROC curves use `pROC`:
+
+```{r}
+.roc <- pROC::roc(outcome ~ marker, data = dataset)
+plot(.roc, print.auc = TRUE)
+```
+
+Kappa and the two-by-two accuracy table cover agreement and screening tests.
+
+## Limits
+
+This is a core workflow, not a line-by-line port of the 639 menu rows of the
+original EZR plug-in.  Meta-analysis, matched-pair analysis, sample-size
+calculators and the most advanced survival models remain disabled and are marked
+"In porting".
+
+## See also
+
+In-app topics under **Plugins** start from `ezr-overview`.

@@ -1,0 +1,89 @@
+version: 1
+language: en
+
+categories:
+  - id: plugins
+    title: Plugins
+    order: 70
+
+topics:
+  - id: doe-overview
+    file: topics/doe-overview.md
+    category: plugins
+    order: 10
+  - id: Menu.pb2level
+    file: topics/Menu.pb2level.md
+    category: plugins
+    order: 100
+  - id: Menu.FrF2level
+    file: topics/Menu.FrF2level.md
+    category: plugins
+    order: 110
+  - id: Menu.fac
+    file: topics/Menu.fac.md
+    category: plugins
+    order: 120
+  - id: Menu.oa
+    file: topics/Menu.oa.md
+    category: plugins
+    order: 130
+  - id: Menu.ccd
+    file: topics/Menu.ccd.md
+    category: plugins
+    order: 140
+  - id: Menu.bbd
+    file: topics/Menu.bbd.md
+    category: plugins
+    order: 150
+  - id: Menu.lhs
+    file: topics/Menu.lhs.md
+    category: plugins
+    order: 160
+  - id: Menu.Dopt
+    file: topics/Menu.Dopt.md
+    category: plugins
+    order: 170
+  - id: Menu.display
+    file: topics/Menu.display.md
+    category: plugins
+    order: 180
+  - id: summarize.design
+    file: topics/summarize.design.md
+    category: plugins
+    order: 190
+  - id: Menu.plot
+    file: topics/Menu.plot.md
+    category: plugins
+    order: 200
+  - id: design.info.design
+    file: topics/design.info.design.md
+    category: plugins
+    order: 210
+  - id: Menu.addresponse
+    file: topics/Menu.addresponse.md
+    category: plugins
+    order: 220
+  - id: Menu.colremove
+    file: topics/Menu.colremove.md
+    category: plugins
+    order: 230
+  - id: Menu.model
+    file: topics/Menu.model.md
+    category: plugins
+    order: 240
+  - id: Menu.rsmmodel
+    file: topics/Menu.rsmmodel.md
+    category: plugins
+    order: 250
+  - id: Menu.EffectPlots
+    file: topics/Menu.EffectPlots.md
+    category: plugins
+    order: 260
+  - id: Menu.IAPlot
+    file: topics/Menu.IAPlot.md
+    category: plugins
+    order: 270
+  - id: Menu.contour
+    file: topics/Menu.contour.md
+    category: plugins
+    order: 280

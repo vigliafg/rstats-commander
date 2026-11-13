@@ -9,10 +9,11 @@
 \usage{
 RcmdrShiny.plugin(name, menus = NULL, dialogs = list(),
   commands = list(), description = NULL, version = NULL,
-  tcltk = FALSE, predicates = list(), replace = FALSE)
+  tcltk = FALSE, predicates = list(), replace = FALSE, help = NULL)
 
 plugin_dialog(id, title, ui, on_ok, on_open = NULL,
-  observers = NULL, size = "l", help = NULL, help_package = NULL)
+  observers = NULL, size = "l", help = NULL, help_package = NULL,
+  help_topic = NULL)
 
 list_plugins()
 
@@ -64,7 +65,14 @@ so they should guard on \code{state$current_dialog}.}
 
 \item{size}{Modal size.}
 
-\item{help, help_package}{Optional R help topic and package.}
+\item{help, help_package}{For \code{plugin_dialog()}, an optional R help topic
+and package.  For \code{RcmdrShiny.plugin()}, the path to a directory with
+\code{index.yml} and Markdown topics; it is registered with the plugin and
+shown in the Help tab.}
+
+\item{help_topic}{Optional help-topic id opened by the dialog's Help button.
+When \code{NULL}, the dialog id is tried first, then any topic that declares the
+dialog in its \code{dialogs} front matter.}
 
 \item{file}{Path to an R script that calls \code{RcmdrShiny.plugin()}.}
 

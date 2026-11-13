@@ -1,0 +1,125 @@
+version: 1
+language: en
+
+categories:
+  - id: plugins
+    title: Plugins
+    order: 70
+
+topics:
+  - id: kmggplot2-overview
+    file: topics/kmggplot2-overview.md
+    category: plugins
+    order: 10
+  - id: windowKM
+    file: topics/windowKM.md
+    category: plugins
+    order: 100
+  - id: windowHist
+    file: topics/windowHist.md
+    category: plugins
+    order: 110
+  - id: windowQQ
+    file: topics/windowQQ.md
+    category: plugins
+    order: 120
+  - id: windowBox
+    file: topics/windowBox.md
+    category: plugins
+    order: 130
+  - id: windowScatter
+    file: topics/windowScatter.md
+    category: plugins
+    order: 140
+  - id: windowScattermat
+    file: topics/windowScattermat.md
+    category: plugins
+    order: 150
+  - id: windowLine
+    file: topics/windowLine.md
+    category: plugins
+    order: 160
+  - id: windowPie
+    file: topics/windowPie.md
+    category: plugins
+    order: 170
+  - id: windowDiscretebar
+    file: topics/windowDiscretebar.md
+    category: plugins
+    order: 180
+  - id: windowContour
+    file: topics/windowContour.md
+    category: plugins
+    order: 190
+  - id: windowFactorize
+    file: topics/windowFactorize.md
+    category: plugins
+    order: 200
+  - id: windowDistNorm
+    file: topics/windowDistNorm.md
+    category: plugins
+    order: 210
+  - id: windowDistT
+    file: topics/windowDistT.md
+    category: plugins
+    order: 220
+  - id: windowDistChisq
+    file: topics/windowDistChisq.md
+    category: plugins
+    order: 230
+  - id: windowDistF
+    file: topics/windowDistF.md
+    category: plugins
+    order: 240
+  - id: windowDistExp
+    file: topics/windowDistExp.md
+    category: plugins
+    order: 250
+  - id: windowDistUnif
+    file: topics/windowDistUnif.md
+    category: plugins
+    order: 260
+  - id: windowDistBeta
+    file: topics/windowDistBeta.md
+    category: plugins
+    order: 270
+  - id: windowDistCauchy
+    file: topics/windowDistCauchy.md
+    category: plugins
+    order: 280
+  - id: windowDistLogis
+    file: topics/windowDistLogis.md
+    category: plugins
+    order: 290
+  - id: windowDistLnorm
+    file: topics/windowDistLnorm.md
+    category: plugins
+    order: 300
+  - id: windowDistGamma
+    file: topics/windowDistGamma.md
+    category: plugins
+    order: 310
+  - id: windowDistWeibull
+    file: topics/windowDistWeibull.md
+    category: plugins
+    order: 320
+  - id: windowDistBinom
+    file: topics/windowDistBinom.md
+    category: plugins
+    order: 330
+  - id: windowDistPois
+    file: topics/windowDistPois.md
+    category: plugins
+    order: 340
+  - id: windowDistGeom
+    file: topics/windowDistGeom.md
+    category: plugins
+    order: 350
+  - id: windowDistHyper
+    file: topics/windowDistHyper.md
+    category: plugins
+    order: 360
+  - id: windowDistNbinom
+    file: topics/windowDistNbinom.md
+    category: plugins
+    order: 370

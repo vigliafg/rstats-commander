@@ -1,0 +1,84 @@
+---
+title: "Linear models and diagnostics"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Linear models and diagnostics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(eval = FALSE, comment = "#>")
+```
+
+## Fitting a model
+
+**Models > Linear model...** fits `lm()` and stores the result as the active
+model, so every model menu item can refer to it.
+
+```{r}
+LinearModel.1 <- lm(mpg ~ wt + hp + factor(cyl), data = mtcars)
+summary(LinearModel.1)
+```
+
+The dialog accepts a subset expression (`cyl != 8`), weights and interaction
+terms.  Interactions written in the dialog appear explicitly in the command.
+
+## Reading the summary
+
+| Column | Meaning |
+|---|---|
+| `Estimate` | Change in the response per unit change in the predictor |
+| `Std. Error` | Uncertainty of the estimate |
+| `t value` | Estimate divided by its standard error |
+| `Pr(>|t|)` | Two-sided p-value for a zero coefficient |
+| `R-squared` | Share of variance explained |
+
+For factors, the first level is the reference.  Change it with **Data > Manage
+variables > Reorder factor levels...** rather than renaming coefficients by hand.
+
+## Hypothesis tests
+
+After fitting, **Models > Hypothesis tests** offers:
+
+- **ANOVA table** — `car::Anova()` with type II or III sums of squares.
+- **Linear hypothesis** — `car::linearHypothesis()` for a named constraint.
+- **Compare models** — an F test between nested models.
+
+```{r}
+car::Anova(LinearModel.1, type = "II")
+```
+
+## Diagnostics
+
+**Models > Graphs** produces the four standard plots and the influence
+diagnostics:
+
+```{r}
+plot(LinearModel.1)
+car::influenceIndexPlot(LinearModel.1)
+car::avPlots(LinearModel.1)
+```
+
+Look for:
+
+- curvature in residuals versus fitted values;
+- funnelling (non-constant variance);
+- points with high leverage or large Cook's distance;
+- a QQ plot that departs from the line at the tails.
+
+## Collinearity and functional form
+
+- `car::vif()` reports variance inflation factors above 5–10.
+- `car::crPlots()` shows partial residuals and can reveal a missing curve.
+- `car::boxTidwell()` suggests power transformations of predictors.
+
+## Reporting
+
+Use `Export` for a LaTeX table of coefficients, or copy the script into an R
+Markdown document.  The model object is in the **Environment** tab, so it can be
+referenced by later commands such as predictions.
+
+## See also
+
+In-app topics: `linear-model`, `generalized-linear-model`, `one-way-anova`.

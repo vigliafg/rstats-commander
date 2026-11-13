@@ -23,6 +23,12 @@ RcmdrShiny::run(plugins = "RcmdrShinyPlugin.KMggplot2")
 
 histograms, Q-Q, box/violin/CI, scatter, line, pie/bar, contour, KM, distribution plots.
 
+## Help
+
+The package ships in-app help topics in `inst/help-topics/`.  They appear
+in the **Help** tab once the plugin is loaded, and each dialog's **Help**
+button opens its own topic.
+
 ## Status
 
 - [x] menus ported

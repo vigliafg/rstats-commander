@@ -1,0 +1,29 @@
+version: 1
+language: en
+
+categories:
+  - id: plugins
+    title: Plugins
+    order: 70
+
+topics:
+  - id: arnova-overview
+    file: topics/arnova-overview.md
+    category: plugins
+    order: 10
+  - id: oneWayAnova_
+    file: topics/oneWayAnova_.md
+    category: plugins
+    order: 100
+  - id: multiWayAnova_
+    file: topics/multiWayAnova_.md
+    category: plugins
+    order: 110
+  - id: repMeasAnovaSetup
+    file: topics/repMeasAnovaSetup.md
+    category: plugins
+    order: 120
+  - id: generalizedLinearModel_
+    file: topics/generalizedLinearModel_.md
+    category: plugins
+    order: 130

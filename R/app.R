@@ -38,6 +38,41 @@ app_css <- function() {
     .rcmdr-gallery img.rcmdr-thumb.active { border-color: #0d6efd; }
     .rcmdr-help-text { white-space: pre-wrap; max-height: 60vh; overflow-y: auto;
       background: #fbfbfc; border: 1px solid #e2e6ea; padding: .75rem; }
+    .rcmdr-help-search { margin-bottom: .75rem; }
+    .rcmdr-help-sidebar { background: #fff; border: 1px solid #e2e6ea;
+      border-radius: .4rem; padding: .75rem; }
+    .rcmdr-help-sidebar h6 { text-transform: uppercase; letter-spacing: .04em;
+      font-size: .75rem; color: #6b7785; }
+    .rcmdr-help-category { display: flex; justify-content: space-between;
+      align-items: center; gap: .5rem; padding: .3rem .4rem;
+      border-radius: .3rem; color: #2c4a6b; text-decoration: none; }
+    .rcmdr-help-category:hover, .rcmdr-help-category.active {
+      background: #eaf1fa; color: #0d6efd; }
+    .rcmdr-help-result { display: block; padding: .55rem .6rem; margin-bottom: .35rem;
+      border: 1px solid #e2e6ea; border-radius: .4rem; background: #fff;
+      color: inherit; text-decoration: none; }
+    .rcmdr-help-result:hover { border-color: #0d6efd; }
+    .rcmdr-help-result-title { font-weight: 600; color: #1f3a5f; }
+    .rcmdr-help-result-category { float: right; font-size: .75rem;
+      text-transform: uppercase; color: #6b7785; }
+    .rcmdr-help-result-snippet { margin: .25rem 0 0; font-size: .88rem;
+      color: #52606d; }
+    .rcmdr-help-topic { margin-top: 1rem; background: #fff;
+      border: 1px solid #e2e6ea; border-radius: .4rem; padding: 1rem 1.25rem; }
+    .rcmdr-help-topic:focus-visible { outline: 3px solid #0d6efd; }
+    .rcmdr-help-body { max-width: 70ch; }
+    .rcmdr-help-body pre { background: #f4f6f8; border: 1px solid #e2e6ea;
+      border-radius: .35rem; padding: .6rem .75rem; overflow-x: auto; }
+    .rcmdr-help-body table { border-collapse: collapse; margin: .75rem 0; }
+    .rcmdr-help-body th, .rcmdr-help-body td {
+      border: 1px solid #dde2e8; padding: .3rem .5rem; }
+    .rcmdr-help-footer { display: flex; gap: .5rem; flex-wrap: wrap;
+      margin-top: 1rem; padding-top: .75rem; border-top: 1px solid #e2e6ea; }
+    .rcmdr-help-related ul { padding-left: 1.1rem; }
+    .rcmdr-help-inline { margin-top: 1rem; padding-top: .75rem;
+      border-top: 2px solid #dde2e8; max-height: 45vh; overflow-y: auto; }
+    .rcmdr-help-language { text-transform: uppercase; font-size: .75rem;
+      color: #6b7785; }
     .rcmdr-busy { color: #d97706; font-weight: 600; }
     .rcmdr-skip-link { position: absolute; left: .5rem; top: .5rem;
       background: #fff; color: #1f3a5f; padding: .4rem .7rem;
@@ -47,8 +82,15 @@ app_css <- function() {
     body.rcmdr-dark .rcmdr-sidebar,
     body.rcmdr-dark pre.shiny-text-output,
     body.rcmdr-dark .rcmdr-help-text,
+    body.rcmdr-dark .rcmdr-help-sidebar,
+    body.rcmdr-dark .rcmdr-help-result,
+    body.rcmdr-dark .rcmdr-help-topic,
+    body.rcmdr-dark .rcmdr-help-body pre,
     body.rcmdr-dark .rcmdr-gallery img.rcmdr-thumb,
     body.rcmdr-dark .nav-tabs .nav-link.active { background: #1d242d; color: #d7dde5; }
+    body.rcmdr-dark .rcmdr-help-result-title { color: #cfe0f3; }
+    body.rcmdr-dark .rcmdr-help-category:hover,
+    body.rcmdr-dark .rcmdr-help-category.active { background: #24303d; }
     body.rcmdr-dark .rcmdr-menu-group > summary,
     body.rcmdr-dark .rcmdr-menu-item { color: #bfcbd9; }
     body.rcmdr-dark .rcmdr-menu-item.disabled { color: #5d6874; }
@@ -73,6 +115,19 @@ app_js <- function(lang = current_language()) {
         return a.textContent.trim() === label;
       });
       if (link) link.click();
+    });
+    Shiny.addCustomMessageHandler('rcmdr-focus', function(id) {
+      var el = document.getElementById(id);
+      if (el) el.focus();
+    });
+    document.addEventListener('click', function(event) {
+      var link = event.target.closest('[data-help-topic]');
+      if (!link) return;
+      event.preventDefault();
+      Shiny.setInputValue('help_open',
+        link.getAttribute('data-help-topic'), {priority: 'event'});
+      var pane = document.getElementById('help_topic_pane');
+      if (pane) pane.focus();
     });
     (function() {
       var stored = window.localStorage.getItem('rcmdr-theme');
@@ -230,7 +285,8 @@ app_ui <- function() {
             tabPanel(tr("Messages"), messages_pane_ui()),
             tabPanel(tr("Plots"), plots_pane_ui()),
             tabPanel(tr("Data"), data_pane_ui()),
-            tabPanel(tr("Environment"), uiOutput("environment_pane"))
+            tabPanel(tr("Environment"), uiOutput("environment_pane")),
+            tabPanel(tr("Help"), help_center_ui())
           )
         )
       )
@@ -269,6 +325,8 @@ app_server <- function(env = globalenv()) {
       session$sendCustomMessage("rcmdr-tab", label)
     }
 
+    help_server(input, output, session, state)
+
     # Per-session directory for plot thumbnails and downloads.
     plot_dir <- file.path(tempdir(), paste0("rcmdrshiny-", session$token))
     dir.create(plot_dir, showWarnings = FALSE, recursive = TRUE)
@@ -291,6 +349,7 @@ app_server <- function(env = globalenv()) {
     open_dialog <- function(spec) {
       if (!is.null(spec$on_open)) spec$on_open(state)
       state$current_dialog <- spec$id
+      if (!is.null(state$help_reset_dialog)) state$help_reset_dialog()
       dialog_revision(dialog_revision() + 1L)
       showModal(dialog_modal(spec))
     }
@@ -403,6 +462,7 @@ app_server <- function(env = globalenv()) {
     observeEvent(input$dialog_cancel, {
       removeModal()
       state$current_dialog <- NULL
+      if (!is.null(state$help_reset_dialog)) state$help_reset_dialog()
       dialog_revision(dialog_revision() + 1L)
     })
 
@@ -412,15 +472,10 @@ app_server <- function(env = globalenv()) {
       spec <- get_dialog_spec(id)
       req(spec)
       clear_dialog_memory(state, id)
+      if (!is.null(state$help_reset_dialog)) state$help_reset_dialog()
       if (!is.null(spec$on_open)) spec$on_open(state)
       dialog_revision(dialog_revision() + 1L)
       showModal(dialog_modal(spec))
-    })
-
-    observeEvent(input$dialog_help, {
-      spec <- get_dialog_spec(state$current_dialog %||% "")
-      req(spec, spec$help)
-      show_help_modal(spec$help, spec$help_package)
     })
 
     observeEvent(input$dialog_retry, {
@@ -430,6 +485,7 @@ app_server <- function(env = globalenv()) {
       spec <- get_dialog_spec(failed$id)
       req(spec)
       state$current_dialog <- failed$id
+      if (!is.null(state$help_reset_dialog)) state$help_reset_dialog()
       if (!is.null(failed$memory)) {
         set_dialog_memory(state, failed$id, failed$memory)
       }

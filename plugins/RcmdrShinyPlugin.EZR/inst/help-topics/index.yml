@@ -1,0 +1,201 @@
+version: 1
+language: en
+
+categories:
+  - id: plugins
+    title: Plugins
+    order: 70
+
+topics:
+  - id: ezr-overview
+    file: topics/ezr-overview.md
+    category: plugins
+    order: 10
+  - id: StatMedVariableCheck
+    file: topics/StatMedVariableCheck.md
+    category: plugins
+    order: 100
+  - id: StatMedTrainTestSplit
+    file: topics/StatMedTrainTestSplit.md
+    category: plugins
+    order: 110
+  - id: StatMedDummy
+    file: topics/StatMedDummy.md
+    category: plugins
+    order: 120
+  - id: StatMedDatediff
+    file: topics/StatMedDatediff.md
+    category: plugins
+    order: 130
+  - id: StatMedNAgroup
+    file: topics/StatMedNAgroup.md
+    category: plugins
+    order: 140
+  - id: StatMedProbCI
+    file: topics/StatMedProbCI.md
+    category: plugins
+    order: 150
+  - id: StatMedProbSingle
+    file: topics/StatMedProbSingle.md
+    category: plugins
+    order: 160
+  - id: StatMedTwoWayTable
+    file: topics/StatMedTwoWayTable.md
+    category: plugins
+    order: 170
+  - id: StatMedMcNemar
+    file: topics/StatMedMcNemar.md
+    category: plugins
+    order: 180
+  - id: StatMedLogisticRegression
+    file: topics/StatMedLogisticRegression.md
+    category: plugins
+    order: 190
+  - id: StatMedMeanCI
+    file: topics/StatMedMeanCI.md
+    category: plugins
+    order: 200
+  - id: StatMedSingleSampleTTest
+    file: topics/StatMedSingleSampleTTest.md
+    category: plugins
+    order: 210
+  - id: StatMedTtest
+    file: topics/StatMedTtest.md
+    category: plugins
+    order: 220
+  - id: StatMedPairedTtest
+    file: topics/StatMedPairedTtest.md
+    category: plugins
+    order: 230
+  - id: StatMedBartlett
+    file: topics/StatMedBartlett.md
+    category: plugins
+    order: 240
+  - id: StatMedANOVA
+    file: topics/StatMedANOVA.md
+    category: plugins
+    order: 250
+  - id: StatMedMultiANOVA
+    file: topics/StatMedMultiANOVA.md
+    category: plugins
+    order: 260
+  - id: StatMedCorrelation
+    file: topics/StatMedCorrelation.md
+    category: plugins
+    order: 270
+  - id: StatMedLinearMixedModel
+    file: topics/StatMedLinearMixedModel.md
+    category: plugins
+    order: 280
+  - id: StatMedMannW
+    file: topics/StatMedMannW.md
+    category: plugins
+    order: 290
+  - id: StatMedWilSign
+    file: topics/StatMedWilSign.md
+    category: plugins
+    order: 300
+  - id: StatMedKruWalli
+    file: topics/StatMedKruWalli.md
+    category: plugins
+    order: 310
+  - id: StatMedFriedman
+    file: topics/StatMedFriedman.md
+    category: plugins
+    order: 320
+  - id: StatMedSpearman
+    file: topics/StatMedSpearman.md
+    category: plugins
+    order: 330
+  - id: StatMedKaplanMeier
+    file: topics/StatMedKaplanMeier.md
+    category: plugins
+    order: 340
+  - id: StatMedCoxRegression
+    file: topics/StatMedCoxRegression.md
+    category: plugins
+    order: 350
+  - id: StatMedTest
+    file: topics/StatMedTest.md
+    category: plugins
+    order: 360
+  - id: StatMedKappa
+    file: topics/StatMedKappa.md
+    category: plugins
+    order: 370
+  - id: StatMedROC
+    file: topics/StatMedROC.md
+    category: plugins
+    order: 380
+  - id: StatMedHistogram
+    file: topics/StatMedHistogram.md
+    category: plugins
+    order: 390
+  - id: StatMedBoxPlot
+    file: topics/StatMedBoxPlot.md
+    category: plugins
+    order: 400
+  - id: StatMedBarGraph
+    file: topics/StatMedBarGraph.md
+    category: plugins
+    order: 410
+  - id: StatMedScatterPlot
+    file: topics/StatMedScatterPlot.md
+    category: plugins
+    order: 420
+  - id: StatMedTableOne
+    file: topics/StatMedTableOne.md
+    category: plugins
+    order: 430
+  - id: StatMedReadDataSet
+    file: topics/StatMedReadDataSet.md
+    category: plugins
+    order: 440
+  - id: StatMedCompute
+    file: topics/StatMedCompute.md
+    category: plugins
+    order: 450
+  - id: StatMedNumericToFactor
+    file: topics/StatMedNumericToFactor.md
+    category: plugins
+    order: 460
+  - id: StatMedReorderFactor
+    file: topics/StatMedReorderFactor.md
+    category: plugins
+    order: 470
+  - id: StatMedRecodeDialog
+    file: topics/StatMedRecodeDialog.md
+    category: plugins
+    order: 480
+  - id: StatMedDeleteVariable
+    file: topics/StatMedDeleteVariable.md
+    category: plugins
+    order: 490
+  - id: StatMedSubsetDataSet
+    file: topics/StatMedSubsetDataSet.md
+    category: plugins
+    order: 500
+  - id: StatMedSort
+    file: topics/StatMedSort.md
+    category: plugins
+    order: 510
+  - id: StatMedFrequency
+    file: topics/StatMedFrequency.md
+    category: plugins
+    order: 520
+  - id: StatMedNumericalSummaries
+    file: topics/StatMedNumericalSummaries.md
+    category: plugins
+    order: 530
+  - id: StatMedLinearRegression
+    file: topics/StatMedLinearRegression.md
+    category: plugins
+    order: 540
+  - id: StatMedOrdinalRegressionModel
+    file: topics/StatMedOrdinalRegressionModel.md
+    category: plugins
+    order: 550
+  - id: StatMedMultinomialLogitModel
+    file: topics/StatMedMultinomialLogitModel.md
+    category: plugins
+    order: 560

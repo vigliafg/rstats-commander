@@ -23,6 +23,12 @@ RcmdrShiny::run(plugins = "RcmdrShinyPlugin.aRnova")
 
 one-way, multi-way and repeated-measures ANOVA.
 
+## Help
+
+The package ships in-app help topics in `inst/help-topics/`.  They appear
+in the **Help** tab once the plugin is loaded, and each dialog's **Help**
+button opens its own topic.
+
 ## Status
 
 - [x] menus ported

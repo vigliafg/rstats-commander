@@ -23,6 +23,12 @@ RcmdrShiny::run(plugins = "RcmdrShinyPlugin.ROC")
 
 single, paired and unpaired ROC curves, logistic-model ROC, HL test.
 
+## Help
+
+The package ships in-app help topics in `inst/help-topics/`.  They appear
+in the **Help** tab once the plugin is loaded, and each dialog's **Help**
+button opens its own topic.
+
 ## Status
 
 - [x] menus ported

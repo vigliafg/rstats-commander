@@ -1,0 +1,17 @@
+version: 1
+language: en
+
+categories:
+  - id: plugins
+    title: Plugins
+    order: 70
+
+topics:
+  - id: pcarobust-overview
+    file: topics/pcarobust-overview.md
+    category: plugins
+    order: 10
+  - id: pcaRobust
+    file: topics/pcaRobust.md
+    category: plugins
+    order: 100

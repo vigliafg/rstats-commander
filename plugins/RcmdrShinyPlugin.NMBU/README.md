@@ -23,6 +23,12 @@ RcmdrShiny::run(plugins = "RcmdrShinyPlugin.NMBU")
 
 t/z tests, proportions, ANOVA, PLS, principal components, stepwise selection, diagnostics.
 
+## Help
+
+The package ships in-app help topics in `inst/help-topics/`.  They appear
+in the **Help** tab once the plugin is loaded, and each dialog's **Help**
+button opens its own topic.
+
 ## Status
 
 - [x] menus ported

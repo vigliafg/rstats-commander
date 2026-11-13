@@ -1,0 +1,109 @@
+version: 1
+language: en
+
+categories:
+  - id: plugins
+    title: Plugins
+    order: 70
+
+topics:
+  - id: hh-overview
+    file: topics/hh-overview.md
+    category: plugins
+    order: 10
+  - id: twoWayTable.HH
+    file: topics/twoWayTable.HH.md
+    category: plugins
+    order: 100
+  - id: enterTable.HH
+    file: topics/enterTable.HH.md
+    category: plugins
+    order: 110
+  - id: analyzeTwoWayTable.HH
+    file: topics/analyzeTwoWayTable.HH.md
+    category: plugins
+    order: 120
+  - id: bestSubsetsRegressionModel.HH
+    file: topics/bestSubsetsRegressionModel.HH.md
+    category: plugins
+    order: 130
+  - id: confidenceIntervalsPlot
+    file: topics/confidenceIntervalsPlot.md
+    category: plugins
+    order: 140
+  - id: PredictModel
+    file: topics/PredictModel.md
+    category: plugins
+    order: 150
+  - id: scatterPlot.HH
+    file: topics/scatterPlot.HH.md
+    category: plugins
+    order: 160
+  - id: scatterPlotMatrix.HH
+    file: topics/scatterPlotMatrix.HH.md
+    category: plugins
+    order: 170
+  - id: Xyplot.HH
+    file: topics/Xyplot.HH.md
+    category: plugins
+    order: 180
+  - id: Xyplot.HH2
+    file: topics/Xyplot.HH2.md
+    category: plugins
+    order: 190
+  - id: LikertFormula
+    file: topics/LikertFormula.md
+    category: plugins
+    order: 200
+  - id: ResizeEtcDialog
+    file: topics/ResizeEtcDialog.md
+    category: plugins
+    order: 210
+  - id: Interaction2wtRcmdr
+    file: topics/Interaction2wtRcmdr.md
+    category: plugins
+    order: 220
+  - id: DotplottbRcmdr
+    file: topics/DotplottbRcmdr.md
+    category: plugins
+    order: 230
+  - id: Regr1Plot
+    file: topics/Regr1Plot.md
+    category: plugins
+    order: 240
+  - id: QQPlot.HH
+    file: topics/QQPlot.HH.md
+    category: plugins
+    order: 250
+  - id: Scatter3DDialog.HH
+    file: topics/Scatter3DDialog.HH.md
+    category: plugins
+    order: 260
+  - id: anovaTableII.HH
+    file: topics/anovaTableII.HH.md
+    category: plugins
+    order: 270
+  - id: anovaTableI.HH
+    file: topics/anovaTableI.HH.md
+    category: plugins
+    order: 280
+  - id: normal.and.t.hypotheses.plot
+    file: topics/normal.and.t.hypotheses.plot.md
+    category: plugins
+    order: 290
+  - id: FHypothesesPlot
+    file: topics/FHypothesesPlot.md
+    category: plugins
+    order: 300
+  - id: ChisqHypothesesPlot
+    file: topics/ChisqHypothesesPlot.md
+    category: plugins
+    order: 310
+  - id: R_options
+    file: topics/R_options.md
+    category: plugins
+    order: 320
+  - id: MMCmenu
+    file: topics/MMCmenu.md
+    category: plugins
+    order: 330

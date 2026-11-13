@@ -1,0 +1,121 @@
+version: 1
+language: en
+
+categories:
+  - id: plugins
+    title: Plugins
+    order: 70
+
+topics:
+  - id: nmbu-overview
+    file: topics/nmbu-overview.md
+    category: plugins
+    order: 10
+  - id: singleSampleTTestNMBU
+    file: topics/singleSampleTTestNMBU.md
+    category: plugins
+    order: 100
+  - id: independentSamplesTTestNMBU
+    file: topics/independentSamplesTTestNMBU.md
+    category: plugins
+    order: 110
+  - id: pairedTTestNMBU
+    file: topics/pairedTTestNMBU.md
+    category: plugins
+    order: 120
+  - id: twoSamplesTTest
+    file: topics/twoSamplesTTest.md
+    category: plugins
+    order: 130
+  - id: oneSamplesTTestSum
+    file: topics/oneSamplesTTestSum.md
+    category: plugins
+    order: 140
+  - id: twoSamplesTTestSum
+    file: topics/twoSamplesTTestSum.md
+    category: plugins
+    order: 150
+  - id: powerTtest
+    file: topics/powerTtest.md
+    category: plugins
+    order: 160
+  - id: singleSampleZTestNMBU
+    file: topics/singleSampleZTestNMBU.md
+    category: plugins
+    order: 170
+  - id: independentSamplesZTestNMBU
+    file: topics/independentSamplesZTestNMBU.md
+    category: plugins
+    order: 180
+  - id: pairedZTestNMBU
+    file: topics/pairedZTestNMBU.md
+    category: plugins
+    order: 190
+  - id: proportionTest
+    file: topics/proportionTest.md
+    category: plugins
+    order: 200
+  - id: twoProportionTest
+    file: topics/twoProportionTest.md
+    category: plugins
+    order: 210
+  - id: oneWayAnovaNMBU
+    file: topics/oneWayAnovaNMBU.md
+    category: plugins
+    order: 220
+  - id: multiWayAnovaNMBU
+    file: topics/multiWayAnovaNMBU.md
+    category: plugins
+    order: 230
+  - id: plsRegressionModel
+    file: topics/plsRegressionModel.md
+    category: plugins
+    order: 240
+  - id: predictRegressionModel
+    file: topics/predictRegressionModel.md
+    category: plugins
+    order: 250
+  - id: coefNMBU
+    file: topics/coefNMBU.md
+    category: plugins
+    order: 260
+  - id: forwardAdd
+    file: topics/forwardAdd.md
+    category: plugins
+    order: 270
+  - id: backwardDrop
+    file: topics/backwardDrop.md
+    category: plugins
+    order: 280
+  - id: forwardBackward
+    file: topics/forwardBackward.md
+    category: plugins
+    order: 290
+  - id: plotModelNMBU
+    file: topics/plotModelNMBU.md
+    category: plugins
+    order: 300
+  - id: addObservationStatisticsNMBU
+    file: topics/addObservationStatisticsNMBU.md
+    category: plugins
+    order: 310
+  - id: linearModelNMBU
+    file: topics/linearModelNMBU.md
+    category: plugins
+    order: 320
+  - id: generalizedLinearModelNMBU
+    file: topics/generalizedLinearModelNMBU.md
+    category: plugins
+    order: 330
+  - id: multinomialLogitModelNMBU
+    file: topics/multinomialLogitModelNMBU.md
+    category: plugins
+    order: 340
+  - id: ordinalRegressionModelNMBU
+    file: topics/ordinalRegressionModelNMBU.md
+    category: plugins
+    order: 350
+  - id: principalComponentsStat
+    file: topics/principalComponentsStat.md
+    category: plugins
+    order: 360

@@ -214,6 +214,32 @@ test_that("the full Phase 0 flow works in a real browser", {
   app$wait_for_idle()
   app$wait_for_js("document.querySelector('.modal') === null", timeout = 30000)
 
+  # -- help centre -------------------------------------------------------
+  switch_tab("Help")
+  app$wait_for_js("document.querySelector('#help_query') !== null",
+                  timeout = 30000)
+  app$set_inputs(help_query = "numerical summaries")
+  app$wait_for_idle()
+  app$wait_for_js("document.querySelector('.rcmdr-help-result') !== null",
+                  timeout = 30000)
+  app$run_js("document.querySelector('.rcmdr-help-result').click()")
+  app$wait_for_js(
+    "document.querySelector('#help_topic_pane').innerText.includes('Numerical summaries')",
+    timeout = 30000
+  )
+  expect_match(app$get_text("#help_topic_pane"), "numSummary")
+
+  # -- inline help from a dialog -----------------------------------------
+  click_menu("linearModel")
+  app$click("dialog_help")
+  app$wait_for_js("document.querySelector('.rcmdr-help-inline') !== null",
+                  timeout = 30000)
+  expect_match(app$get_text(".rcmdr-help-inline"), "Linear model")
+  app$click("dialog_help_close")
+  app$wait_for_idle()
+  app$click("dialog_cancel")
+  app$wait_for_idle()
+
   # -- about dialog ------------------------------------------------------
   click_menu("helpAboutCommander")
   expect_match(app$get_js("document.querySelector('.modal').innerText"), "RcmdrShiny")

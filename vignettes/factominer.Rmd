@@ -1,0 +1,92 @@
+---
+title: "Multivariate analysis with RcmdrShinyPlugin.FactoMineR"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Multivariate analysis with FactoMineR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(eval = FALSE, comment = "#>")
+```
+
+## Install and load
+
+```{r}
+remotes::install_github("vigliafg/rstats-commander",
+                        subdir = "plugins/RcmdrShinyPlugin.FactoMineR")
+RcmdrShiny::run(plugins = "RcmdrShinyPlugin.FactoMineR")
+```
+
+## Principal component analysis
+
+```{r}
+.pca <- FactoMineR::PCA(decathlon[, c("100m", "Long.jump", "Shot.put",
+                                       "High.jump", "400m")], graph = TRUE)
+summary(.pca)
+```
+
+Supplementary quantitative or categorical variables can be added in the dialog;
+they appear in the output but do not drive the components.
+
+## Correspondence analysis
+
+**FactoMineR > Correspondence analysis...** works on a contingency table:
+
+```{r}
+.ca <- FactoMineR::CA(table(dataset$row, dataset$column), graph = TRUE)
+```
+
+## Multiple correspondence analysis
+
+For a set of factors:
+
+```{r}
+.mca <- FactoMineR::MCA(dataset[, c("f1", "f2", "f3")], graph = TRUE)
+```
+
+## Multiple factor analysis
+
+MFA and DMFA group the variables; enter the group sizes in the dialog, in the
+same order as the selected variables.
+
+```{r}
+.mfa <- FactoMineR::MFA(dataset[, variables], group = c(3, 2, 4),
+                        graph = TRUE)
+```
+
+## Clustering
+
+HCPC takes an existing FactoMineR result:
+
+```{r}
+.hcpc <- FactoMineR::HCPC(.pca)
+summary(.hcpc)
+```
+
+The dialog expects the name of the object in the R session, for example `.pca`.
+
+## Category description
+
+```{r}
+FactoMineR::catdes(dataset, num.var = dataset$group)
+```
+
+## Reading the output
+
+- The **eigenvalues** table gives the share of variance per dimension.
+- **Variable coordinates** show which variables contribute to each axis.
+- **Individuals** with large cos2 drive the shape of the cloud.
+- Plots are captured in the **Plots** tab.
+
+## Limits
+
+HCPC operates on an existing result object rather than fitting the analysis from
+scratch, and the graphical options exposed in the dialog are a subset of
+FactoMineR's.
+
+## See also
+
+In-app topics under **Plugins**: `factominer-overview` and the topic of each
+dialog.

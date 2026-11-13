@@ -16,6 +16,30 @@ reference:
     desc: Evaluate and capture R code.
     contents:
       - run_command
+  - title: Help and documentation
+    desc: Browse, search and extend the in-app help.
+    contents:
+      - help_center_ui
+      - help_server
+      - help_topic
+      - help_topics
+      - help_search
+      - help_index
+      - help_catalog
+      - help_render
+      - help_topic_html
+      - help_topic_available
+      - help_topic_for_dialog
+      - help_topics_for_dialog
+      - help_register
+      - help_unregister
+      - help_registry
+      - register_plugin_help
+  - title: Diagnostics
+    desc: Collect a report for bug reports.
+    contents:
+      - diagnostics_report
+      - format_diagnostics
   - title: Plugins
     desc: Extend menus, commands and dialogs.
     contents:
@@ -32,9 +56,25 @@ reference:
       - popOutput
 
 articles:
-  - title: User guide
+  - title: Getting started
     navbar: ~
     contents:
       - getting-started
-      - migrating
+      - data-import
+  - title: Analysis
+    contents:
+      - descriptive-statistics
+      - linear-models
+      - graphs
+      - survival
+  - title: Specialised workflows
+    contents:
+      - design-of-experiments
+      - factominer
+      - ezr-workflow
+  - title: Extending and maintaining
+    contents:
       - plugins
+      - help-authoring
+      - migrating
+      - troubleshooting

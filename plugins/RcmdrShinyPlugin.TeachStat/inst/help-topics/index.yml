@@ -1,0 +1,253 @@
+version: 1
+language: en
+
+categories:
+  - id: plugins
+    title: Plugins
+    order: 70
+
+topics:
+  - id: teachstat-overview
+    file: topics/teachstat-overview.md
+    category: plugins
+    order: 10
+  - id: tDistrQuantiles
+    file: topics/tDistrQuantiles.md
+    category: plugins
+    order: 160
+  - id: tProbabilitiesInter
+    file: topics/tProbabilitiesInter.md
+    category: plugins
+    order: 170
+  - id: tDistrPlot
+    file: topics/tDistrPlot.md
+    category: plugins
+    order: 180
+  - id: tDistrCharac
+    file: topics/tDistrCharac.md
+    category: plugins
+    order: 190
+  - id: tDistrSamples
+    file: topics/tDistrSamples.md
+    category: plugins
+    order: 200
+  - id: FDistrQuantiles
+    file: topics/FDistrQuantiles.md
+    category: plugins
+    order: 210
+  - id: FProbabilitiesInter
+    file: topics/FProbabilitiesInter.md
+    category: plugins
+    order: 220
+  - id: FDistrPlot
+    file: topics/FDistrPlot.md
+    category: plugins
+    order: 230
+  - id: FDistrCharac
+    file: topics/FDistrCharac.md
+    category: plugins
+    order: 240
+  - id: FDistrSamples
+    file: topics/FDistrSamples.md
+    category: plugins
+    order: 250
+  - id: geomDistrQuantiles
+    file: topics/geomDistrQuantiles.md
+    category: plugins
+    order: 260
+  - id: geomProbabilitiesInter
+    file: topics/geomProbabilitiesInter.md
+    category: plugins
+    order: 270
+  - id: geomDistrMass
+    file: topics/geomDistrMass.md
+    category: plugins
+    order: 280
+  - id: geomDistrPlot
+    file: topics/geomDistrPlot.md
+    category: plugins
+    order: 290
+  - id: geomDistrCharac
+    file: topics/geomDistrCharac.md
+    category: plugins
+    order: 300
+  - id: geomDistrSamples
+    file: topics/geomDistrSamples.md
+    category: plugins
+    order: 310
+  - id: negbinomialDistrQuantiles
+    file: topics/negbinomialDistrQuantiles.md
+    category: plugins
+    order: 320
+  - id: negbinomialProbabilitiesInter
+    file: topics/negbinomialProbabilitiesInter.md
+    category: plugins
+    order: 330
+  - id: negbinomialDistrMass
+    file: topics/negbinomialDistrMass.md
+    category: plugins
+    order: 340
+  - id: negbinomialDistrPlot
+    file: topics/negbinomialDistrPlot.md
+    category: plugins
+    order: 350
+  - id: negbinomialDistrCharac
+    file: topics/negbinomialDistrCharac.md
+    category: plugins
+    order: 360
+  - id: negbinomialDistrSamples
+    file: topics/negbinomialDistrSamples.md
+    category: plugins
+    order: 370
+  - id: intervaloConfianzaMedia
+    file: topics/intervaloConfianzaMedia.md
+    category: plugins
+    order: 380
+  - id: intervaloConfianzaVarianza
+    file: topics/intervaloConfianzaVarianza.md
+    category: plugins
+    order: 390
+  - id: intervaloConfianzaProporcion
+    file: topics/intervaloConfianzaProporcion.md
+    category: plugins
+    order: 400
+  - id: intervaloConfianzaMediasIndependientes
+    file: topics/intervaloConfianzaMediasIndependientes.md
+    category: plugins
+    order: 410
+  - id: intervaloConfianzaMediasPareadas
+    file: topics/intervaloConfianzaMediasPareadas.md
+    category: plugins
+    order: 420
+  - id: intervaloConfianza2Varianzas
+    file: topics/intervaloConfianza2Varianzas.md
+    category: plugins
+    order: 430
+  - id: intervaloConfianzaDiferenciaProporciones
+    file: topics/intervaloConfianzaDiferenciaProporciones.md
+    category: plugins
+    order: 440
+  - id: contrasteHipotesisMedia
+    file: topics/contrasteHipotesisMedia.md
+    category: plugins
+    order: 450
+  - id: contrasteHipotesisVarianza
+    file: topics/contrasteHipotesisVarianza.md
+    category: plugins
+    order: 460
+  - id: contrastHipotesisProporcion
+    file: topics/contrastHipotesisProporcion.md
+    category: plugins
+    order: 470
+  - id: contrasteHipotesisMediasIndependientes
+    file: topics/contrasteHipotesisMediasIndependientes.md
+    category: plugins
+    order: 480
+  - id: contrasteHipotesisMediasPareadas
+    file: topics/contrasteHipotesisMediasPareadas.md
+    category: plugins
+    order: 490
+  - id: contrasteHipotesis2Varianzas
+    file: topics/contrasteHipotesis2Varianzas.md
+    category: plugins
+    order: 500
+  - id: contrasteHipotesisDiferenciaProporciones
+    file: topics/contrasteHipotesisDiferenciaProporciones.md
+    category: plugins
+    order: 510
+  - id: resumenVariablesCualitativas
+    file: topics/resumenVariablesCualitativas.md
+    category: plugins
+    order: 520
+  - id: resumenNumericoVDiscreta
+    file: topics/resumenNumericoVDiscreta.md
+    category: plugins
+    order: 530
+  - id: resumenNumericoVContinua
+    file: topics/resumenNumericoVContinua.md
+    category: plugins
+    order: 540
+  - id: resumenNumericoPonderada
+    file: topics/resumenNumericoPonderada.md
+    category: plugins
+    order: 550
+  - id: resumenDatosTabulados
+    file: topics/resumenDatosTabulados.md
+    category: plugins
+    order: 560
+  - id: Sindexnumbers
+    file: topics/Sindexnumbers.md
+    category: plugins
+    order: 570
+  - id: Cindexnumbers
+    file: topics/Cindexnumbers.md
+    category: plugins
+    order: 580
+  - id: BCindexnumbers
+    file: topics/BCindexnumbers.md
+    category: plugins
+    order: 590
+  - id: Pindexnumbers
+    file: topics/Pindexnumbers.md
+    category: plugins
+    order: 600
+  - id: Deflation
+    file: topics/Deflation.md
+    category: plugins
+    order: 610
+  - id: oneWayAnovaRE
+    file: topics/oneWayAnovaRE.md
+    category: plugins
+    order: 620
+  - id: randomnessFTest
+    file: topics/randomnessFTest.md
+    category: plugins
+    order: 630
+  - id: randomnessNTest
+    file: topics/randomnessNTest.md
+    category: plugins
+    order: 640
+  - id: newDataSet2
+    file: topics/newDataSet2.md
+    category: plugins
+    order: 650
+  - id: ConvertVariables
+    file: topics/ConvertVariables.md
+    category: plugins
+    order: 660
+  - id: numericToFactor2
+    file: topics/numericToFactor2.md
+    category: plugins
+    order: 670
+  - id: binVariable2
+    file: topics/binVariable2.md
+    category: plugins
+    order: 680
+  - id: reorderFactors
+    file: topics/reorderFactors.md
+    category: plugins
+    order: 690
+  - id: normal-distribution
+    file: topics/normal-distribution.md
+    category: distributions
+    order: 100
+  - id: chi-squared-distribution
+    file: topics/chi-squared-distribution.md
+    category: distributions
+    order: 110
+  - id: exponential-distribution
+    file: topics/exponential-distribution.md
+    category: distributions
+    order: 120
+  - id: uniform-distribution
+    file: topics/uniform-distribution.md
+    category: distributions
+    order: 130
+  - id: binomial-distribution
+    file: topics/binomial-distribution.md
+    category: distributions
+    order: 140
+  - id: poisson-distribution
+    file: topics/poisson-distribution.md
+    category: distributions
+    order: 150

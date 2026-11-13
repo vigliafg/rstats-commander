@@ -1,0 +1,57 @@
+version: 1
+language: en
+
+categories:
+  - id: plugins
+    title: Plugins
+    order: 70
+
+topics:
+  - id: factominer-overview
+    file: topics/factominer-overview.md
+    category: plugins
+    order: 10
+  - id: FactoPCA
+    file: topics/FactoPCA.md
+    category: plugins
+    order: 100
+  - id: FactoCA
+    file: topics/FactoCA.md
+    category: plugins
+    order: 110
+  - id: FactoMCA
+    file: topics/FactoMCA.md
+    category: plugins
+    order: 120
+  - id: FactoMFA
+    file: topics/FactoMFA.md
+    category: plugins
+    order: 130
+  - id: FactoDMFA
+    file: topics/FactoDMFA.md
+    category: plugins
+    order: 140
+  - id: FactoFAMD
+    file: topics/FactoFAMD.md
+    category: plugins
+    order: 150
+  - id: FactoHCPC
+    file: topics/FactoHCPC.md
+    category: plugins
+    order: 160
+  - id: FactoGPA
+    file: topics/FactoGPA.md
+    category: plugins
+    order: 170
+  - id: Factocatdes
+    file: topics/Factocatdes.md
+    category: plugins
+    order: 180
+  - id: Factoprefpls
+    file: topics/Factoprefpls.md
+    category: plugins
+    order: 190
+  - id: readDataSetFacto
+    file: topics/readDataSetFacto.md
+    category: plugins
+    order: 200

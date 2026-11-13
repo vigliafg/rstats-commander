@@ -1,0 +1,64 @@
+name: Help
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  help:
+    runs-on: ubuntu-latest
+    name: Help infrastructure
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+      _R_CHECK_FORCE_SUGGESTS_: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: |
+            any::testthat
+            any::commonmark
+            any::yaml
+            any::knitr
+            any::rmarkdown
+          needs: check
+
+      - name: Install the package
+        run: R CMD INSTALL --no-multiarch .
+
+      - name: Help tests
+        run: Rscript -e 'testthat::test_local(".", filter = "help", reporter = "summary")'
+
+      - name: Help inventory
+        run: Rscript tools/inventory_help.R
+
+      - name: Check help links
+        run: Rscript tools/check_help_links.R --strict
+
+      - name: Verify topics load
+        run: |
+          Rscript -e '
+          topics <- RcmdrShiny::help_topics()
+          stopifnot(length(topics) > 100)
+          results <- RcmdrShiny::help_search("linear model")
+          stopifnot(nrow(results) > 0)
+          cat("Topics:", length(topics), "\n")
+          '
+
+      - name: Upload inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: help-inventory
+          path: inst/etc/help-inventory.csv

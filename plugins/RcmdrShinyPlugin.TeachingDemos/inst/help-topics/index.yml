@@ -1,0 +1,57 @@
+version: 1
+language: en
+
+categories:
+  - id: plugins
+    title: Plugins
+    order: 70
+
+topics:
+  - id: teachingdemos-overview
+    file: topics/teachingdemos-overview.md
+    category: plugins
+    order: 10
+  - id: centralLimitTheorem
+    file: topics/centralLimitTheorem.md
+    category: plugins
+    order: 100
+  - id: simulateConfidenceIntervals
+    file: topics/simulateConfidenceIntervals.md
+    category: plugins
+    order: 110
+  - id: powerExample
+    file: topics/powerExample.md
+    category: plugins
+    order: 120
+  - id: flipCoin
+    file: topics/flipCoin.md
+    category: plugins
+    order: 130
+  - id: rollDie
+    file: topics/rollDie.md
+    category: plugins
+    order: 140
+  - id: linearRegressionExample
+    file: topics/linearRegressionExample.md
+    category: plugins
+    order: 150
+  - id: correlationExample
+    file: topics/correlationExample.md
+    category: plugins
+    order: 160
+  - id: visBinom
+    file: topics/visBinom.md
+    category: plugins
+    order: 170
+  - id: visNormal
+    file: topics/visNormal.md
+    category: plugins
+    order: 180
+  - id: vist
+    file: topics/vist.md
+    category: plugins
+    order: 190
+  - id: visGamma
+    file: topics/visGamma.md
+    category: plugins
+    order: 200
