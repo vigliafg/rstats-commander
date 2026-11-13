@@ -63,6 +63,12 @@ app_js <- function() {
       var el = document.getElementById(id);
       if (el) el.click();
     });
+    Shiny.addCustomMessageHandler('rcmdr-tab', function(label) {
+      var link = Array.from(document.querySelectorAll('.nav-link')).find(function(a) {
+        return a.textContent.trim() === label;
+      });
+      if (link) link.click();
+    });
     (function() {
       var stored = window.localStorage.getItem('rcmdr-theme');
       if (stored === 'dark') document.body.classList.add('rcmdr-dark');
@@ -128,6 +134,8 @@ data_pane_ui <- function() {
       actionButton("data_refresh", tr("Refresh"), class = "btn-sm btn-outline-secondary"),
       actionButton("data_apply", tr("Apply changes"), class = "btn-sm btn-primary"),
       downloadButton("download_dataset", tr("Download CSV"),
+                     class = "btn-sm btn-outline-secondary"),
+      downloadButton("download_dataset_rdata", tr("Save .RData"),
                      class = "btn-sm btn-outline-secondary"),
       uiOutput("data_info", inline = TRUE)
     ),
@@ -233,6 +241,9 @@ app_server <- function(env = globalenv()) {
     state$set_script <- function(value) {
       script_value(value)
       shinyAce::updateAceEditor(session, "script", value = value)
+    }
+    state$show_tab <- function(label) {
+      session$sendCustomMessage("rcmdr-tab", label)
     }
 
     # Per-session directory for plot thumbnails and downloads.
@@ -654,6 +665,18 @@ app_server <- function(env = globalenv()) {
         df <- isolate(dataset(state))
         req(df)
         utils::write.csv(df, file, row.names = FALSE)
+      }
+    )
+
+    output$download_dataset_rdata <- downloadHandler(
+      filename = function() {
+        name <- active_dataset(state) %||% "dataset"
+        paste0(name, ".RData")
+      },
+      content = function(file) {
+        name <- isolate(active_dataset(state))
+        req(name)
+        save(list = name, file = file, envir = state$env)
       }
     )
 

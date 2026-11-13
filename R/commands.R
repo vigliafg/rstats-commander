@@ -31,6 +31,9 @@ run_command <- function(state, code, log = TRUE, echo = TRUE, plot = "auto") {
 
   if (isTRUE(log)) state$log <- c(state$log, code)
 
+  packages <- required_packages(code)
+  if (length(packages) > 0L) attach_packages(packages)
+
   if (is_rgl_command(code)) {
     return(invisible(run_rgl_command(state, code, echo = echo)))
   }
@@ -157,6 +160,26 @@ assignment_name <- function(expr) {
   }
   if (!is.name(expr[[2L]])) return(NULL)
   as.character(expr[[2L]])
+}
+
+# Packages assumed attached by Rcmdr-generated commands.  They are attached
+# lazily, only when a command actually uses one of their functions.
+required_packages <- function(code) {
+  packages <- character()
+  if (grepl(
+    "\\b(numSummary|binnedCounts|discreteCounts|mergeRows|binVariable|reshapeL2W|reshapeW2L|readXL|readSPSS|readStata|readSAS)\\s*\\(",
+    code
+  )) {
+    packages <- c(packages, "RcmdrMisc")
+  }
+  if (grepl("\\b(Recode|recode|Anova|scatterplot|scatterplotMatrix|avPlots|crPlots|influencePlot)\\s*\\(",
+            code)) {
+    packages <- c(packages, "car")
+  }
+  if (grepl("\\b(read\\.mtp|read\\.xport)\\s*\\(", code)) {
+    packages <- c(packages, "foreign")
+  }
+  unique(packages)
 }
 
 # Plot capture --------------------------------------------------------------

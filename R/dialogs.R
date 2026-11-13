@@ -25,7 +25,7 @@ dialog_spec <- function(id, title, ui, on_ok, on_open = NULL,
 #' Available dialog specifications
 #' @keywords internal
 dialog_catalog <- function() {
-  list(
+  base <- list(
     readDataSet = import_text_dialog(),
     numericalSummaries = numerical_summaries_dialog(),
     linearModel = linear_model_dialog(),
@@ -34,6 +34,7 @@ dialog_catalog <- function() {
     loadDataSet = load_dataset_dialog(),
     loadLog = load_script_dialog()
   )
+  c(base, phase2_dialogs())
 }
 
 #' @keywords internal
@@ -68,6 +69,29 @@ direct_commands <- function() {
       if (is.null(ds)) return(NULL)
       run_command(state, paste0("summary(", ds, ")"))
     },
+    viewData = function(state) {
+      if (!is.null(state$show_tab)) state$show_tab("Data")
+      invisible(NULL)
+    },
+    variablesDataSet = function(state) {
+      ds <- active_dataset(state)
+      if (is.null(ds)) return(NULL)
+      run_command(state, paste0("names(", ds, ")"))
+    },
+    refreshActiveDataSet = function(state) {
+      ds <- active_dataset(state)
+      if (!is.null(ds)) active_dataset(state, ds)
+      invisible(NULL)
+    },
+    addObsNumbers = function(state) {
+      ds <- active_dataset(state)
+      if (is.null(ds)) return(NULL)
+      run_command(state, cmd_add_obs_numbers(ds, nrow(dataset(state))))
+    },
+    listDataSetsInPackages = function(state) {
+      run_command(state, "data()")
+    },
+    saveDataSet = function(state) request_download(state, "download_dataset_rdata"),
     saveLog = function(state) request_download(state, "download_script"),
     saveLogAs = function(state) request_download(state, "download_script"),
     saveOutput = function(state) request_download(state, "download_output"),
@@ -274,6 +298,9 @@ apply_dialog_result <- function(state, result) {
   }
   if (!is.null(result$script) && is.function(state$set_script)) {
     state$set_script(result$script)
+  }
+  if (!is.null(result$tab) && is.function(state$show_tab)) {
+    state$show_tab(result$tab)
   }
   state_touch(state)
   ok

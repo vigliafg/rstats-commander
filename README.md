@@ -7,15 +7,16 @@ RcmdrShiny is a fork of the Rcmdr 2.15.0 engine: it keeps the R command
 generation semantics of Rcmdr, so every action in the graphical interface
 produces a reproducible command in the script log and in the output pane.
 
-> **Status: Phase 1 (shell and infrastructure).** The application runs with a
-> complete shell: reactive menu activation, dialog runtime (OK/Apply/Reset/
-> Help/Retry), data editor, plot history and export, rgl 3D view, options,
-> help and file utilities. Four Rcmdr dialogs are ported end to end:
-> *Read Text Data*, *Numerical Summaries*, *Linear Model* and *Options*, plus
-> the `Setwd`, `Load Data Set` and `Open Script File` utilities. The remaining
-> dialogs are listed in
+> **Status: Phase 2 (File and Data).** The application has a complete File/Data
+> workflow: imports (text, Excel, SPSS, Stata, SAS, Minitab), compute, recode,
+> factor conversions, binning, standardization, missing-data filtering,
+> subsetting, case names, rename, contrasts, stack, remove/select rows, merge,
+> aggregate, drop levels, sort, reshape and export. The complete shell from
+> Phase 1 (menu activation, dialog runtime, data editor, plot history, rgl,
+> options and help) remains in place. Thirty-seven Rcmdr dialogs are ported;
+> the remaining ones are listed in
 > [`inst/etc/dialogs-inventory.csv`](inst/etc/dialogs-inventory.csv) and are
-> disabled in the sidebar with an "In porting" tooltip.
+> disabled with an "In porting" tooltip.
 
 ## Requirements
 
@@ -68,7 +69,12 @@ RcmdrShiny::run(env = env)
 | Linear Model (formula builder, subset, weights, row removal) | done |
 | Options, Setwd, Load Data Set, Open Script File | done |
 | Environment view, workspace download, dark mode, language selector | done |
-| Remaining 138 dialog functions | backlog |
+| File/Data: imports (text/Excel/SPSS/Stata/SAS/Minitab) | done |
+| Data: compute, recode, factors, binning, standardize | done |
+| Data: missing values, subset, case names, rename, contrasts, stack | done |
+| Data: remove/select rows, merge, aggregate, drop levels, sort, reshape | done |
+| Data: export, save `.RData`, workspace, editor | done |
+| Remaining 105 dialog functions | backlog |
 | Plugin API, full i18n coverage, CRAN hardening | later phases |
 
 The inventory is regenerated from an Rcmdr source tree with:

@@ -65,7 +65,15 @@ for (file in files) {
 
 inventory <- do.call(rbind, rows)
 ported <- c(
-  "readDataSet", "numericalSummaries", "linearModel", "Options"
+  "readDataSet", "numericalSummaries", "linearModel", "Options",
+  "newDataSet", "selectActiveDataSet", "readDataFromPackage", "importExcel",
+  "importSPSS", "importSTATA", "importSAS", "importSASb7dat", "importMinitab",
+  "Compute", "deleteVariable", "RecodeDialog", "numericToFactor",
+  "characterToFactor", "binVariable", "reorderFactor", "standardize",
+  "exportDataSet", "filterNA", "subsetDataSet", "setCaseNames",
+  "renameVariables", "setContrasts", "Stack", "RemoveRows", "SelectRows",
+  "mergeDataSets", "Aggregate", "dropUnusedFactorLevels", "viewData",
+  "sortDataSet", "reshapeLong2Wide", "reshapeWide2Long"
 )
 inventory$status <- ifelse(
   inventory$function_name %in% ported, "ported", "todo"

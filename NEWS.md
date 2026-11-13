@@ -1,3 +1,24 @@
+# RcmdrShiny 0.3.0
+
+## Phase 2 — File and Data
+
+- Complete Data menu coverage: 34 dialogs ported (new data set, select data
+  set, package data, text/Excel/SPSS/Stata/SAS/Minitab imports, compute,
+  delete, recode, factor conversions, binning, standardize, export, missing
+  data, subset, case names, rename, contrasts, stack, remove/select rows,
+  merge, aggregate, drop levels, sort, reshape long/wide, view data).
+- Command builders reproduce the Rcmdr `data-menu.R` code, with unit and
+  execution tests.
+- Lazy attachment of RcmdrMisc/car/foreign so generated commands work
+  without slowing application startup.
+- New data set creates an editable data frame; Data tab remains the editor.
+- Import dialogs accept a typed path or `shinyFiles` browsing and validate
+  the data set name and file.
+- Direct File/Data actions: view data, refresh, variables, add observation
+  numbers, help, list data sets in packages, save `.RData`, export/workspace
+  downloads.
+- Phase 2 checklist and 36-dialog porting inventory.
+
 # RcmdrShiny 0.2.0
 
 ## Phase 1 — shell and infrastructure

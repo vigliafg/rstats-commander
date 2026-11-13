@@ -109,6 +109,37 @@ test_that("the Phase 0 vertical slice works end to end", {
     session$setInputs(data_mode = "edit")
     data_ui <- htmltools::renderTags(output$data_pane)$html
     expect_match(data_ui, "data_editor")
+
+    # -- Phase 2 data dialogs --------------------------------------------
+    click(session, key("Compute"))
+    session$setInputs(Compute_name = "z", Compute_expression = "y + x")
+    click(session, "dialog_ok")
+    expect_true("z" %in% names(env$Dataset))
+    expect_equal(env$Dataset$z, env$Dataset$y + env$Dataset$x)
+
+    click(session, key("subsetDataSet"))
+    session$setInputs(
+      subsetDataSet_all = FALSE,
+      subsetDataSet_variables = c("y", "x", "z", "g"),
+      subsetDataSet_cases = "y > 2",
+      subsetDataSet_name = "Subset"
+    )
+    click(session, "dialog_ok")
+    expect_true(exists("Subset", envir = env, inherits = FALSE))
+    expect_true(all(env$Subset$y > 2))
+    expect_match(htmltools::renderTags(output$dataset_badge)$html, "Subset")
+
+    click(session, key("Aggregate"))
+    session$setInputs(
+      Aggregate_dataset = "Aggregated",
+      Aggregate_variables = c("y", "x"),
+      Aggregate_by = "g",
+      Aggregate_statistic = "mean",
+      Aggregate_other = ""
+    )
+    click(session, "dialog_ok")
+    expect_true(exists("Aggregated", envir = env, inherits = FALSE))
+    expect_equal(nrow(env$Aggregated), 2L)
   })
 })
 
