@@ -322,7 +322,7 @@ plot_call_pattern <- paste0(
   "stripchart|stem|stem\\.leaf|scatterplot|scatterplotMatrix|plotMeans|plotmeans|indexplot|lineplot|",
   "xyplot|bwplot|densityplot|histogram|qqplot|qplot|ggplot|discretePlot|symbox|",
   "scatter3d|rgl\\.(points|lines|planes|spheres|surface3d)|monitor|",
-  "plotModel|crPlots|avPlots|influencePlot|screeplot|biplot|qcc|paretochart",
+  "plotModel|crPlots|avPlots|influencePlot|screeplot|biplot|qcc|paretochart|F.curve|chisq.curve|normal.and.t.dist",
   ")[[:space:]]*\\("
 )
 

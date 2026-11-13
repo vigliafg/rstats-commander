@@ -142,15 +142,26 @@ build_hh_anova <- function(model, type = c("II", "I")) {
 build_hh_hypothesis_plot <- function(kind, values = list()) {
   switch(
     kind,
-    normal = sprintf(
-      "HH::normal.and.t.dist(mu = c(%s), sd = %s, alpha = %s, digits = 4)",
-      values$mu %||% "0", values$sd %||% "1", values$alpha %||% "0.05"
+    normal = paste(
+      "plot.new()",
+      sprintf("HH::normal.and.t.dist(mu.H0 = %s, std.dev = %s, alpha.right = %s)",
+              values$mu %||% "0", values$sd %||% "1",
+              values$alpha %||% "0.05"),
+      sep = "\n"
     ),
-    f = sprintf("HH::F.dist(df1 = %s, df2 = %s, alpha = %s)",
-                values$df1 %||% "3", values$df2 %||% "20",
-                values$alpha %||% "0.05"),
-    chisq = sprintf("HH::chisq.dist(df = %s, alpha = %s)",
-                    values$df %||% "3", values$alpha %||% "0.05")
+    f = paste(
+      "plot.new()",
+      sprintf("HH::F.curve(df1 = %s, df2 = %s, alpha = %s)",
+              values$df1 %||% "3", values$df2 %||% "20",
+              values$alpha %||% "0.05"),
+      sep = "\n"
+    ),
+    chisq = paste(
+      "plot.new()",
+      sprintf("HH::chisq.curve(df = %s, alpha = %s)",
+              values$df %||% "3", values$alpha %||% "0.05"),
+      sep = "\n"
+    )
   )
 }
 

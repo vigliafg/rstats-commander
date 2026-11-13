@@ -33,7 +33,7 @@ test_that("HH command builders produce R commands", {
   expect_match(build_hh_anova("m", "II"), "Anova")
   expect_match(build_hh_anova("m", "I"), "anova")
   expect_match(build_hh_hypothesis_plot("f", list(df1 = 3, df2 = 20)),
-               "F.dist")
+               "F.curve")
   expect_match(build_hh_mmc("m"), "mmc")
 })
 
