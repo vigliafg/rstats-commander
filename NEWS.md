@@ -1,3 +1,26 @@
+# RcmdrShiny 1.4.0
+
+## Plugin Wave 3
+
+- Added `RcmdrShinyPlugin.survival`: survival functions, comparisons, Cox and
+  parametric models, proportional-hazards tests and diagnostics, plus survival
+  data definitions, wide-to-long conversion and date conversion.
+- Added `RcmdrShinyPlugin.aRnova`: one-way, multi-way and repeated-measures
+  ANOVA, with the generalized linear model dialog reused from the core.
+- Added `RcmdrShinyPlugin.NMBU`: t and z tests, proportion tests, power,
+  one-way and multi-way ANOVA, PLS regression, principal components, stepwise
+  selection, predictions and model diagnostics.
+- Added `RcmdrShinyPlugin.DoE`: screening, fractional and full factorial,
+  orthogonal array, central composite, Box-Behnken, latin hypercube and
+  D-optimal designs, with inspection, modification and analysis dialogs.
+- Core: plugin `etc/model-capabilities.txt` files are merged into the model
+  capability table.
+- Core: `AOVModelsP()`, `coxphP()`, `survregP()` and `highOrderTermsP()`
+  activation predicates.
+- Core: plugin predicates can receive the application state plus their own
+  arguments.
+- Fourteen plugins now load together (616 menu leaves).
+
 # RcmdrShiny 1.3.0
 
 ## Plugin Wave 2

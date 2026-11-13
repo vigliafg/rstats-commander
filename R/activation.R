@@ -81,18 +81,33 @@ model_capabilities <- function() {
   if (!is.null(.model_capabilities_cache$table)) {
     return(.model_capabilities_cache$table)
   }
-  path <- system.file("etc", "Rcmdr-model-capabilities.txt",
-                      package = "RcmdrShiny")
-  table <- if (nzchar(path) && file.exists(path)) {
+  read_table <- function(path) {
+    if (!nzchar(path) || !file.exists(path)) return(NULL)
     tryCatch(
-      utils::read.table(path, header = TRUE, comment.char = "#", fill = TRUE),
+      utils::read.table(path, header = TRUE, comment.char = "#", fill = TRUE,
+                        stringsAsFactors = FALSE),
       error = function(e) NULL
     )
-  } else {
-    NULL
   }
-  if (is.null(table)) {
+  base_path <- system.file("etc", "Rcmdr-model-capabilities.txt",
+                           package = "RcmdrShiny")
+  tables <- list(read_table(base_path))
+  for (plugin in .plugin_registry$plugins) {
+    path <- system.file("etc", "model-capabilities.txt", package = plugin$name)
+    table <- read_table(path)
+    if (!is.null(table)) tables[[length(tables) + 1L]] <- table
+  }
+  tables <- tables[!vapply(tables, is.null, logical(1))]
+  if (length(tables) == 0L) {
     table <- data.frame(default = logical(0))
+  } else {
+    all_columns <- unique(unlist(lapply(tables, names)))
+    tables <- lapply(tables, function(table) {
+      missing <- setdiff(all_columns, names(table))
+      for (name in missing) table[[name]] <- FALSE
+      table
+    })
+    table <- do.call(rbind, tables)
   }
   .model_capabilities_cache$table <- table
   table
@@ -184,6 +199,10 @@ activation_environment <- function(state) {
   env$aovModelsP <- function(n = 1) {
     count_objects(state, function(x) inherits(x, c("aov", "lm"))) >= n
   }
+  env$AOVModelsP <- env$aovModelsP
+  env$coxphP <- function() inherits(active_model_object(state), "coxph")
+  env$survregP <- function() inherits(active_model_object(state), "survreg")
+  env$highOrderTermsP <- function() FALSE
   env$AbscontDistrsP <- function(n = 1) {
     count_objects(state, function(x) inherits(x, "AbscontDistribution")) >= n
   }
@@ -228,7 +247,7 @@ activation_environment <- function(state) {
       local({
         fn <- predicate
         st <- state
-        function() fn(st)
+        function(...) fn(st, ...)
       })
     }
   }

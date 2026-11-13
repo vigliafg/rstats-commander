@@ -1,0 +1,30 @@
+Package: RcmdrShinyPlugin.DoE
+Type: Package
+Title: Design of Experiments for RcmdrShiny
+Version: 0.1.0
+Authors@R: c(
+    person("RcmdrShiny", "Contributors", role = c("aut", "cre"),
+           email = "vigliafg@gmail.com"),
+    person("Ulrike", "Grömping", role = "ctb",
+           comment = "Author of RcmdrPlugin.DoE")
+  )
+Description: RcmdrShiny dialogs for creating, inspecting, modifying and
+    analysing experimental designs: screening, fractional factorial, full
+    factorial, orthogonal arrays, central composite, Box-Behnken, latin
+    hypercube and D-optimal designs.  Derived from RcmdrPlugin.DoE 0.12-6.
+License: GPL (>= 2)
+Encoding: UTF-8
+Depends: R (>= 4.1.0)
+Imports:
+    RcmdrShiny (>= 1.1.0),
+    htmltools
+Suggests:
+    testthat (>= 3.0.0),
+    DoE.base,
+    FrF2,
+    rsm,
+    lhs,
+    AlgDesign
+Config/testthat/edition: 3
+URL: https://github.com/vigliafg/rstats-commander
+BugReports: https://github.com/vigliafg/rstats-commander/issues

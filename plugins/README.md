@@ -39,10 +39,10 @@ RcmdrShiny::run(plugins = c(
 | RcmdrShinyPlugin.HH | 2 | done |
 | RcmdrShinyPlugin.KMggplot2 | 2 | done |
 | RcmdrShinyPlugin.TeachStat | 2 | done |
-| RcmdrShinyPlugin.survival | 3 | planned |
-| RcmdrShinyPlugin.aRnova | 3 | planned |
-| RcmdrShinyPlugin.NMBU | 3 | planned |
-| RcmdrShinyPlugin.DoE | 3 | planned |
+| RcmdrShinyPlugin.survival | 3 | done |
+| RcmdrShinyPlugin.aRnova | 3 | done |
+| RcmdrShinyPlugin.NMBU | 3 | done |
+| RcmdrShinyPlugin.DoE | 3 | done |
 | RcmdrShinyPlugin.FactoMineR | 4 | planned |
 | RcmdrShinyPlugin.EZR | 4 | planned |
 

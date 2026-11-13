@@ -21,7 +21,8 @@
 .base_predicate_names <- c(
   "activeDataSetP", "activeModelP", "dataSetsP", "numericP",
   "numericPositiveP", "factorsP", "characterP", "twoLevelFactorsP",
-  "discreteNumericP", "modelsP", "glmP", "lmP", "aovModelsP", "nonFactorsP",
+  "discreteNumericP", "modelsP", "glmP", "lmP", "aovModelsP", "AOVModelsP",
+  "coxphP", "survregP", "highOrderTermsP", "nonFactorsP",
   "twoOrMoreLevelFactorsP", "AbscontDistrsP", "DiscreteDistrsP",
   "hclustSolutionsP", "modelCapability",
   "CoefficientsP", "PredictorsP", "packageAvailable", "getRcmdr",
@@ -186,6 +187,7 @@ RcmdrShiny.plugin <- function(name, menus = NULL, dialogs = list(),
   .plugin_registry$plugins[[name]] <- plugin
   .plugin_registry$version <- .plugin_registry$version + 1L
   .implemented_commands_cache$names <- NULL
+  .model_capabilities_cache$table <- NULL
   invisible(plugin)
 }
 
@@ -205,6 +207,7 @@ unload_plugins <- function() {
   .plugin_registry$plugins <- list()
   .plugin_registry$version <- .plugin_registry$version + 1L
   .implemented_commands_cache$names <- NULL
+  .model_capabilities_cache$table <- NULL
   invisible(NULL)
 }
 

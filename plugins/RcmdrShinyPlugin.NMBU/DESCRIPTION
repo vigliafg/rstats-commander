@@ -1,0 +1,30 @@
+Package: RcmdrShinyPlugin.NMBU
+Type: Package
+Title: NMBU Statistics Extensions for RcmdrShiny
+Version: 0.1.0
+Authors@R: c(
+    person("RcmdrShiny", "Contributors", role = c("aut", "cre"),
+           email = "vigliafg@gmail.com"),
+    person("NMBU", "Contributors", role = "ctb",
+           comment = "Authors of RcmdrPlugin.NMBU")
+  )
+Description: RcmdrShiny dialogs for t and z tests, proportion tests, ANOVA,
+    linear and partial least squares models, principal components, stepwise
+    selection and model diagnostics.  Derived from RcmdrPlugin.NMBU 1.8.15.
+License: GPL (>= 2)
+Encoding: UTF-8
+Depends: R (>= 4.1.0)
+Imports:
+    RcmdrShiny (>= 1.1.0),
+    htmltools
+Suggests:
+    testthat (>= 3.0.0),
+    pls,
+    MASS,
+    leaps,
+    car,
+    effects,
+    multcomp
+Config/testthat/edition: 3
+URL: https://github.com/vigliafg/rstats-commander
+BugReports: https://github.com/vigliafg/rstats-commander/issues

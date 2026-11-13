@@ -1,0 +1,31 @@
+# menus for the RcmdrPlugin.survival package
+
+# last modified: 2017-01-31 by J. Fox
+
+# type  menu/item       operation/parent  label                                 command/menu                activation         			install?
+
+menu    survivalMenu    statisticsMenu  ""                                      ""                          ""                 			""
+item    survivalMenu    command         "Estimate survival function..."         Survfit                     "activeDataSetP()"			"packageAvailable('survival')"
+item    survivalMenu    command         "Compare survival functions..."         Survdiff                    "factorsP()"				"packageAvailable('survival')"
+item    statisticsMenu	cascade         "Survival analysis"                     survivalMenu                "" 							"packageAvailable('survival')" 
+menu	survDataMenu	dataMenu		""										""							""							""
+item	survDataMenu	command			"Survival data definition..."			SurvivalData				"activeDataSetP()" 			"packageAvailable('survival')"
+item	survDataMenu	command			"Convert wide to long data..."			Unfold						"activeDataSetP()" 			"packageAvailable('survival')"
+item	survDataMenu	command			"Convert variable to date..."			toDate						"activeDataSetP()"			"packageAvailable('survival')"
+item	dataMenu		cascade			"Survival data"						    survDataMenu				""							"packageAvailable('survival')"
+
+item    statModelsMenu  separator       ""                                      ""                          ""                          ""
+item    statModelsMenu  command         "Cox regression model..."           	CoxModel                    "activeDataSetP()"			"packageAvailable('survival')"
+item    statModelsMenu  command         "Parametric survival model..."      	survregModel                "activeDataSetP()"			"packageAvailable('survival')"
+
+item    diagnosticsMenu separator       ""                                      ""                          ""                          ""
+item	diagnosticsMenu	command			"Test proportional hazards"				CoxZPH						"modelCapability('tph')"	"packageAvailable('survival')"
+
+item    modelsGraphsMenu separator       ""                                     ""                          ""                          ""
+item	modelsGraphsMenu command		"Cox-model survival function..."		PlotCoxph					"coxphP()"					"packageAvailable('survival')"
+item	modelsGraphsMenu command		"Plot terms in Cox model"				TermPlots					"coxphP() && !highOrderTermsP()" "packageAvailable('survival')"
+item	modelsGraphsMenu command		"Plot survival-regression dfbetas"		CoxDfbetas					"coxphP() || survregP()"	"packageAvailable('survival')"
+item	modelsGraphsMenu command		"Plot survival-regression dfbeta"		CoxDfbeta					"coxphP() || survregP()"	"packageAvailable('survival')"
+item	modelsGraphsMenu command		"Plot null Martingale residuals"		MartingalePlotsDialog				"coxphP()"					"packageAvailable('survival')"
+item	modelsGraphsMenu command		"Cox-model partial-residual plots" 		PartialResPlots				"coxphP()"					"packageAvailable('survival')"
+
