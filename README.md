@@ -17,7 +17,7 @@ produces a reproducible command in the script log and in the output pane.
 > `identify()`, `Identify3D`), 2 EZR exit duplicates and 13 TeachStat generic
 > distribution helpers.  EZR, NMBU and DoE implement every plugin-specific
 > entry.  The package includes the
-> Shiny shell, a searchable offline help centre with 619 documented topics,
+> Shiny shell, a searchable offline help centre with 442 topics covering every dialog,
 > interactive plotly versions of the main charts, R Markdown report export,
 > plugin command aliases, accessibility landmarks, vignettes and release
 > engineering.
@@ -89,7 +89,7 @@ RcmdrShiny::run(env = env)
 | Models: diagnostics, influence, hypotheses, model selection, effect plots | done |
 | Tools and Help menus | done |
 | Help tab: search, categories, topic pane, recent and contextual help | done |
-| Markdown help topics for the core and every plugin (619 documented) | done |
+| Markdown help topics for the core and every plugin (442 topics, every dialog documented) | done |
 | Italian translations for 21 core topics, with English fallback | done |
 | Interactive plots (plotly) for histogram, boxplot, scatterplot and line graph | done |
 | Session report export (R Markdown, HTML when rmarkdown is installed) | done |

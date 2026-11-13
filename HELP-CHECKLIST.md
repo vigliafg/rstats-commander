@@ -35,8 +35,9 @@ Date: 13 November 2026
 
 - 133 core topics: 20 hand-written, 113 generated and grouped by family for
   the distribution dialogs and the new Gumbel family.
-- 486 plugin topics across the 15 plugins, each with an overview topic.
-- 619 documented topics in total; no `draft` and no missing dialog topic.
+- 309 plugin topics across the 15 plugins, each with an overview topic.
+- 442 topics in total (133 core, 309 plugin); every one of the 619 dialog
+  entries has a documented topic, with no `draft` and no missing case.
 - Italian translations for 21 core topics; missing translations fall back to
   English.
 - Six screenshots, embedded in eight vignettes.

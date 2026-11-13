@@ -95,8 +95,9 @@ Date: 13 November 2026
 | Menu entries with all plugins | 900 | 900 |
 | Implemented entries | 715 | 850 |
 | Disabled entries | 185 | 50 |
-| Documented help topics | 63 | 619 |
-| Draft help topics | 443 | 0 |
+| Dialogs with a documented topic | 63 | 619 |
+| Help topics | 134 | 442 |
+| Draft dialog topics | 443 | 0 |
 | Italian topics | 3 | 21 |
 
 The 50 disabled entries correspond to 38 distinct commands: 23 core entries

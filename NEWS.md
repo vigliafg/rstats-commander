@@ -67,8 +67,9 @@
 
 ### Help and documentation
 
-- 619 documented topics across the core and the 15 plugins; no `draft` and no
-  missing dialog topic remain.  `tools/promote_help_topics.R` upgrades the
+- 442 help topics across the core (133) and the 15 plugins (309).  All 619
+  dialog entries have a documented topic; no `draft` and no missing topic
+  remain.  `tools/promote_help_topics.R` upgrades the
   template-generated topics after validation.
 - Italian translations for 21 core topics (up from 3), with English fallback.
 - `tools/help_screenshots.R` captures the main window, import and histogram
