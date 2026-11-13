@@ -197,6 +197,23 @@ required_packages <- function(code) {
   if (grepl("\\bsigma\\.test\\s*\\(", code)) {
     packages <- c(packages, "TeachingDemos")
   }
+  if (grepl("\\b(indexplot|Hist|Dotplot|Barplot|piechart|lineplot|plotMeans|discretePlot)\\s*\\(",
+            code)) {
+    packages <- c(packages, "RcmdrMisc")
+  }
+  if (grepl("\\b(Boxplot|scatterplot|scatterplotMatrix|qqPlot|scatter3d|symbox|densityPlot)\\s*\\(",
+            code)) {
+    packages <- c(packages, "car")
+  }
+  if (grepl("\\bstem\\.leaf\\s*\\(", code)) {
+    packages <- c(packages, "aplpack")
+  }
+  if (grepl("\\bxyplot\\s*\\(", code)) {
+    packages <- c(packages, "lattice")
+  }
+  if (grepl("\\bscatter3d\\s*\\(", code)) {
+    packages <- c(packages, "rgl")
+  }
   unique(packages)
 }
 
@@ -204,10 +221,10 @@ required_packages <- function(code) {
 
 plot_call_pattern <- paste0(
   "\\b(",
-  "plot|plot\\.default|hist|boxplot|barplot|barplot2|pie|piechart|curve|",
-  "density|dotchart|matplot|pairs|image|contour|persp|qqnorm|qqline|",
-  "stripchart|stem|scatterplot|scatterplotMatrix|plotMeans|plotmeans|",
-  "xyplot|bwplot|densityplot|histogram|qqplot|qplot|ggplot|plot3d|",
+  "plot|plot\\.default|hist|Hist|boxplot|Boxplot|barplot|Barplot|barplot2|pie|piechart|curve|",
+  "density|densityPlot|dotchart|Dotplot|matplot|pairs|image|contour|persp|qqnorm|qqline|qqPlot|",
+  "stripchart|stem|stem\\.leaf|scatterplot|scatterplotMatrix|plotMeans|plotmeans|indexplot|lineplot|",
+  "xyplot|bwplot|densityplot|histogram|qqplot|qplot|ggplot|discretePlot|symbox|",
   "scatter3d|rgl\\.(points|lines|planes|spheres|surface3d)|monitor|",
   "plotModel|crPlots|avPlots|influencePlot",
   ")[[:space:]]*\\("

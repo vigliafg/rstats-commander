@@ -7,13 +7,12 @@ RcmdrShiny is a fork of the Rcmdr 2.15.0 engine: it keeps the R command
 generation semantics of Rcmdr, so every action in the graphical interface
 produces a reproducible command in the script log and in the output pane.
 
-> **Status: Phase 3 (Statistics).** The application now covers the complete
-> Statistics menu: summaries and correlations, contingency tables, t-tests,
-> ANOVA (including repeated measures), variance and proportion tests,
-> nonparametric tests, dimensional analysis, clustering and regression models
-> (linear, GLM, multinomial, ordinal and mixed). The Phase 1 shell and Phase 2
-> File/Data workflow remain in place. Seventy-nine Rcmdr dialogs are ported;
-> the remaining ones are listed in
+> **Status: Phase 4 (Graphs, Distributions and 3D).** The application covers
+> the Graphs and Distributions menus: the main base/RcmdrMisc/car/lattice
+> graphs, 3D scatterplots through rgl, distribution quantiles/probabilities/
+> densities/samples, plot history and export. The Phase 1 shell, Phase 2
+> File/Data workflow and Phase 3 Statistics remain in place. One hundred and
+> seven Rcmdr dialogs are ported; the remaining ones are listed in
 > [`inst/etc/dialogs-inventory.csv`](inst/etc/dialogs-inventory.csv) and are
 > disabled with an "In porting" tooltip.
 
@@ -78,7 +77,10 @@ RcmdrShiny::run(env = env)
 | Statistics: variance, proportion and nonparametric tests | done |
 | Statistics: PCA, factor analysis, reliability, clustering | done |
 | Statistics: linear, GLM, multinomial, ordinal and mixed models | done |
-| Remaining 63 dialog functions | backlog |
+| Graphs: base, RcmdrMisc, car and lattice dialogs | done |
+| Distributions: quantiles, probabilities, plots and samples | done |
+| 3D graphs with rgl and plot export/snapshot | done |
+| Remaining 35 dialog functions | backlog |
 | Plugin API, full i18n coverage, CRAN hardening | later phases |
 
 The inventory is regenerated from an Rcmdr source tree with:

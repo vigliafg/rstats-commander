@@ -34,7 +34,7 @@ dialog_catalog <- function() {
     loadDataSet = load_dataset_dialog(),
     loadLog = load_script_dialog()
   )
-  c(base, phase2_dialogs(), phase3_dialogs())
+  c(base, phase2_dialogs(), phase3_dialogs(), phase4_dialogs())
 }
 
 #' @keywords internal
@@ -103,6 +103,9 @@ direct_commands <- function() {
     saveOutputAs = function(state) request_download(state, "download_output"),
     saveWorkspace = function(state) request_download(state, "download_workspace"),
     saveWorkspaceAs = function(state) request_download(state, "download_workspace"),
+    saveBitmap = function(state) request_download(state, "download_plot_png"),
+    savePDF = function(state) request_download(state, "download_plot_pdf"),
+    saveRglGraph = function(state) request_download(state, "download_rgl"),
     saveOptions = function(state) {
       path <- file.path(path.expand("~"), ".RcmdrShiny-options.rds")
       saveRDS(state$options, path)
@@ -287,7 +290,10 @@ dialog_modal <- function(spec) {
 apply_dialog_result <- function(state, result) {
   ok <- TRUE
   for (command in result$commands %||% character()) {
-    outcome <- run_command(state, command, plot = isTRUE(result$plot))
+    outcome <- run_command(
+      state, command,
+      plot = if (isTRUE(result$plot)) TRUE else "auto"
+    )
     if (!identical(outcome$status, "ok")) ok <- FALSE
   }
 

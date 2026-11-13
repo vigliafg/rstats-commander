@@ -150,7 +150,11 @@ plots_pane_ui <- function() {
       downloadButton("download_plot_png", tr("Save PNG"),
                      class = "btn-sm btn-outline-secondary"),
       downloadButton("download_plot_pdf", tr("Save PDF"),
-                     class = "btn-sm btn-outline-secondary")
+                     class = "btn-sm btn-outline-secondary"),
+      if (requireNamespace("rgl", quietly = TRUE)) {
+        downloadButton("download_rgl", tr("Save 3D PNG"),
+                       class = "btn-sm btn-outline-secondary")
+      }
     ),
     uiOutput("plot_gallery"),
     uiOutput("plot_header"),
@@ -695,6 +699,14 @@ app_server <- function(env = globalenv()) {
         plot <- isolate(current_plot())
         req(plot)
         file.copy(plot$file, file, overwrite = TRUE)
+      }
+    )
+
+    output$download_rgl <- downloadHandler(
+      filename = function() "RcmdrShiny-3D.png",
+      content = function(file) {
+        req(state$rgl_widget)
+        rgl::rgl.snapshot(file)
       }
     )
 

@@ -1,3 +1,25 @@
+# RcmdrShiny 0.5.0
+
+## Phase 4 — Graphs, Distributions and 3D
+
+- Complete Graphs menu: index plot, histogram, stem-and-leaf, boxplot, dot
+  plot, scatterplot and matrix, bar graph, pie chart, line graph,
+  quantile-comparison plot, plot of means, 3D scatterplot, XY conditioning
+  plot, strip chart, density estimate, discrete numeric plot, symmetry boxplot
+  and color palette.
+- Complete Distributions menu for the supported families (normal, t, chi-square,
+  F, exponential, uniform, beta, Cauchy, logistic, lognormal, gamma, Weibull,
+  binomial, Poisson, geometric, hypergeometric and negative binomial):
+  quantiles, probabilities, mass for discrete families, density/CDF plots and
+  random samples, plus random seed control.
+- Plot capture from dialogs, plot history gallery, PNG/PDF export and 3D
+  snapshot export.
+- Lazy attachment of RcmdrMisc/car/lattice/rgl for graph commands.
+- Command-builder golden tests and execution tests that verify plot capture.
+- Rendering and validation tests for all graph and distribution dialogs.
+- Browser E2E extended with a histogram dialog and plot-history assertions.
+- Inventory: 107 ported / 35 todo; Phase 4 checklist; version 0.5.0.
+
 # RcmdrShiny 0.4.0
 
 ## Phase 3 — Statistics

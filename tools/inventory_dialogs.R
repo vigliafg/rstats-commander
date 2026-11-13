@@ -86,7 +86,14 @@ ported <- c(
   "principalComponents", "factorAnalysis", "CFA", "kmeansClustering",
   "hierarchicalCluster", "hclustSummary", "appendHclustGroup",
   "linearRegressionModel", "generalizedLinearModel", "multinomialLogitModel",
-  "ordinalRegressionModel", "linearMixedModel", "generalizedLinearMixedModel"
+  "ordinalRegressionModel", "linearMixedModel", "generalizedLinearMixedModel",
+  "indexPlot", "Histogram", "stemAndLeaf", "boxPlot", "DotPlot",
+  "scatterPlot", "scatterPlotMatrix", "barGraph", "pieChart", "linePlot",
+  "QQPlot", "PlotMeans", "Scatter3D", "Xyplot", "stripChart",
+  "DensityPlot", "DiscretePlot", "Symbox", "setPalette", "saveBitmap",
+  "savePDF", "saveRglGraph", "setRandomSeed", "distributionMass",
+  "distributionProbabilities", "distributionQuantiles",
+  "discreteDistributionPlot", "distributionPlot", "distributionSamples"
 )
 inventory$status <- ifelse(
   inventory$function_name %in% ported, "ported", "todo"

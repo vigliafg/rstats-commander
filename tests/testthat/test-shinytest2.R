@@ -162,8 +162,21 @@ test_that("the full Phase 0 flow works in a real browser", {
     "Dataset\\$z <- with\\(Dataset, y \\+ x\\)"
   )
 
+  # -- Phase 4: histogram dialog ---------------------------------------
+  click_menu("Histogram")
+  app$set_inputs(
+    Histogram_variable = "y",
+    Histogram_group = "",
+    Histogram_scale = "frequency",
+    Histogram_breaks = "Sturges",
+    wait_ = FALSE
+  )
+  app$click("dialog_ok")
+  app$wait_for_idle()
+  app$wait_for_js("document.querySelector('.modal') === null", timeout = 30000)
+
   # -- plot capture and history -----------------------------------------
-  app$run_js("ace.edit(document.querySelector('.ace_editor')).setValue('plot(y ~ x)')")
+  app$run_js("ace.edit(document.querySelector('.ace_editor')).setValue('with(Dataset, plot(y ~ x))')")
   Sys.sleep(1.5)
   app$click("run_all")
   app$wait_for_idle()
@@ -182,7 +195,7 @@ test_that("the full Phase 0 flow works in a real browser", {
   )
   expect_equal(
     app$get_js("document.querySelectorAll('.rcmdr-gallery img.rcmdr-thumb').length"),
-    1L
+    2L
   )
 
   # -- data editor -------------------------------------------------------
