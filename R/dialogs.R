@@ -34,7 +34,7 @@ dialog_catalog <- function() {
     loadDataSet = load_dataset_dialog(),
     loadLog = load_script_dialog()
   )
-  c(base, phase2_dialogs())
+  c(base, phase2_dialogs(), phase3_dialogs())
 }
 
 #' @keywords internal
@@ -90,6 +90,11 @@ direct_commands <- function() {
     },
     listDataSetsInPackages = function(state) {
       run_command(state, "data()")
+    },
+    countMissing = function(state) {
+      ds <- active_dataset(state)
+      if (is.null(ds)) return(NULL)
+      run_command(state, cmd_count_missing(ds))
     },
     saveDataSet = function(state) request_download(state, "download_dataset_rdata"),
     saveLog = function(state) request_download(state, "download_script"),

@@ -1,3 +1,28 @@
+# RcmdrShiny 0.4.0
+
+## Phase 3 — Statistics
+
+- Complete Statistics menu coverage: 42 dialogs ported.
+- Summaries: frequency distributions with goodness-of-fit, table of
+  statistics, correlation matrix/test, normality tests, power transforms.
+- Contingency tables: two-way, two-way from counts, multi-way, entered table,
+  percentages, chi-square components, expected counts and Fisher tests.
+- Means: single, independent and paired t-tests; one-way and multi-way ANOVA;
+  one- and two-factor repeated-measures ANOVA through `car::Anova`.
+- Variances: F-test, Bartlett, Levene and single-sample variance test.
+- Proportions: single- and two-sample proportion tests.
+- Nonparametric: two-sample, paired and single-sample Wilcoxon,
+  Kruskal-Wallis and Friedman tests.
+- Dimensional analysis: reliability, principal components, factor analysis
+  and a simplified SEM-based confirmatory factor analysis.
+- Cluster analysis: k-means, hierarchical clustering and summaries/assignment.
+- Models: linear regression, GLM, multinomial logit, ordinal regression,
+  linear mixed models and generalized linear mixed models.
+- Lazy attachment of car, lme4, MASS, nnet, multcomp, sem and TeachingDemos.
+- Golden-command and execution tests for the main analyses; Statistics
+  dialogs registered and rendered in tests.
+- Inventory: 79 ported / 63 todo; version 0.4.0.
+
 # RcmdrShiny 0.3.0
 
 ## Phase 2 — File and Data

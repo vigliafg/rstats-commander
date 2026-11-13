@@ -125,6 +125,28 @@ test_that("the full Phase 0 flow works in a real browser", {
   expect_match(script, "numSummary\\(")
   expect_match(script, "LinearModel.1 <- lm\\(")
 
+  # -- Phase 3: independent-samples t-test ------------------------------
+  click_menu("independentSamplesTTest")
+  app$set_inputs(
+    independentSamplesTTest_group = "g",
+    independentSamplesTTest_response = "y",
+    independentSamplesTTest_alternative = "two.sided",
+    independentSamplesTTest_conf = 0.95,
+    independentSamplesTTest_var_equal = FALSE,
+    wait_ = FALSE
+  )
+  app$click("dialog_ok")
+  app$wait_for_idle()
+  app$wait_for_js("document.querySelector('.modal') === null", timeout = 30000)
+  app$wait_for_js(
+    "ace.edit(document.querySelector('.ace_editor')).getValue().includes(\"t.test(y~g\")",
+    timeout = 30000
+  )
+  expect_match(
+    app$get_js("ace.edit(document.querySelector('.ace_editor')).getValue()"),
+    "t.test\\(y~g"
+  )
+
   # -- Phase 2: compute a new variable ----------------------------------
   click_menu("Compute")
   app$set_inputs(Compute_name = "z", Compute_expression = "y + x")

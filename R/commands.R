@@ -167,17 +167,35 @@ assignment_name <- function(expr) {
 required_packages <- function(code) {
   packages <- character()
   if (grepl(
-    "\\b(numSummary|binnedCounts|discreteCounts|mergeRows|binVariable|reshapeL2W|reshapeW2L|readXL|readSPSS|readStata|readSAS)\\s*\\(",
+    "\\b(numSummary|binnedCounts|discreteCounts|mergeRows|binVariable|reshapeL2W|reshapeW2L|readXL|readSPSS|readStata|readSAS|reliability|KMeans|assignCluster|rowPercents|colPercents|totPercents|Tapply|partial\\.cor|rcorr\\.adjust)\\s*\\(",
     code
   )) {
     packages <- c(packages, "RcmdrMisc")
   }
-  if (grepl("\\b(Recode|recode|Anova|scatterplot|scatterplotMatrix|avPlots|crPlots|influencePlot)\\s*\\(",
+  if (grepl("\\b(Recode|recode|Anova|leveneTest|normalityTest|powerTransform|scatterplot|scatterplotMatrix|avPlots|crPlots|influencePlot)\\s*\\(",
             code)) {
     packages <- c(packages, "car")
   }
   if (grepl("\\b(read\\.mtp|read\\.xport)\\s*\\(", code)) {
     packages <- c(packages, "foreign")
+  }
+  if (grepl("\\b(lmer|glmer)\\s*\\(", code)) {
+    packages <- c(packages, "lme4")
+  }
+  if (grepl("\\bpolr\\s*\\(", code)) {
+    packages <- c(packages, "MASS")
+  }
+  if (grepl("\\bmultinom\\s*\\(", code)) {
+    packages <- c(packages, "nnet")
+  }
+  if (grepl("sem::", code, fixed = TRUE)) {
+    packages <- c(packages, "sem")
+  }
+  if (grepl("\\b(glht|cld)\\s*\\(", code)) {
+    packages <- c(packages, "multcomp")
+  }
+  if (grepl("\\bsigma\\.test\\s*\\(", code)) {
+    packages <- c(packages, "TeachingDemos")
   }
   unique(packages)
 }

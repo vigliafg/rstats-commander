@@ -73,7 +73,20 @@ ported <- c(
   "exportDataSet", "filterNA", "subsetDataSet", "setCaseNames",
   "renameVariables", "setContrasts", "Stack", "RemoveRows", "SelectRows",
   "mergeDataSets", "Aggregate", "dropUnusedFactorLevels", "viewData",
-  "sortDataSet", "reshapeLong2Wide", "reshapeWide2Long"
+  "sortDataSet", "reshapeLong2Wide", "reshapeWide2Long",
+  "frequencyDistribution", "statisticsTable", "correlationMatrix",
+  "correlationTest", "NormalityTest", "transformVariables", "twoWayTable",
+  "twoWayTableFromCounts", "multiWayTable", "enterTable",
+  "independentSamplesTTest", "pairedTTest", "singleSampleTTest",
+  "oneWayAnova", "multiWayAnova", "oneWayRepeatedMeasures",
+  "twoWayRepeatedMeasures", "twoVariancesFTest", "BartlettTest", "LeveneTest",
+  "sigmaTestMenu", "singleProportionTest", "twoSampleProportionsTest",
+  "twoSampleWilcoxonTest", "pairedWilcoxonTest", "KruskalWallisTest",
+  "FriedmanTest", "onesampleWilcoxonTest", "Reliability",
+  "principalComponents", "factorAnalysis", "CFA", "kmeansClustering",
+  "hierarchicalCluster", "hclustSummary", "appendHclustGroup",
+  "linearRegressionModel", "generalizedLinearModel", "multinomialLogitModel",
+  "ordinalRegressionModel", "linearMixedModel", "generalizedLinearMixedModel"
 )
 inventory$status <- ifelse(
   inventory$function_name %in% ported, "ported", "todo"
